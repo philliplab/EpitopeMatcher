@@ -1,0 +1,10 @@
+Package: EpitopeMatcher
+Title: Epitope Matcher
+Description: A package that can be used to find out how well the epitopes in a
+    patient's virus' will be recognized by the HLA's present in the patient.
+Version: 0.1
+Author: Someone@gmail.com
+Maintainer: Someone <Someone@gmail.com>
+Depends:
+    testthat
+License: GPL-3
