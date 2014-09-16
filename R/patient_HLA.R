@@ -38,3 +38,17 @@ read_patient_hla <- function(file_name = NULL){
   return(.Patient_HLA(x))
 }
 
+#' Returns the ids of the patients in the data structure
+#' @param data The data structure to interrogate
+#' @rdname get_patient_ids-methods
+#' @export get_patient_ids
+setGeneric("get_patient_ids",
+           function(x){standardGeneric("get_patient_ids")}
+)
+
+#' @rdname get_patient_ids-methods
+#' @aliases get_patient_ids
+setMethod("get_patient_ids", "Patient_HLA",
+          function(x){
+            return(unique(x$patient_id))
+          })
