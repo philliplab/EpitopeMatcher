@@ -7,5 +7,6 @@ Author: Someone@gmail.com
 Maintainer: Someone <Someone@gmail.com>
 Depends:
     testthat,
-    digest
+    digest,
+    Biostrings
 License: GPL-3
