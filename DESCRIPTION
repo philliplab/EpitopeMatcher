@@ -6,5 +6,6 @@ Version: 0.1
 Author: Someone@gmail.com
 Maintainer: Someone <Someone@gmail.com>
 Depends:
-    testthat
+    testthat,
+    digest
 License: GPL-3

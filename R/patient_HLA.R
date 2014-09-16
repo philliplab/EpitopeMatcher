@@ -50,6 +50,6 @@ read_patient_hla <- function(file_name){
                    'A*0205', 'A*6601', 'B*1516', 'B*5802', 'Cw*0602',
                    'Cw*1601'),
     stringsAsFactors = FALSE)
-  return(.Patient_HLA(x))
+  return(.Patient_HLA(data = x))
 }
 
