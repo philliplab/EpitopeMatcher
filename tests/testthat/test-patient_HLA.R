@@ -10,7 +10,7 @@ test_that("Patient_HLA Class Constructor works", {
 
 test_that("read_patient_hla works", {
   x <- read_patient_hla(file.path(find.package('EpitopeMatcher', .libPaths()), 
-                                  'inst/patient_hla_file.csv'))
+                                  'test_data/patient_hla_file.csv'))
   expect_that(x, is_a('Patient_HLA'))
-  expect_that(digest(x), equals("ca2fe1d32dffa598f2b605888c398f83"))
+  expect_that(digest(x), equals("b713f0e9f4e5b4f47b07dc324d7f7129"))
 })

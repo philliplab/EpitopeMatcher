@@ -3,7 +3,7 @@
 \alias{read_patient_hla}
 \title{A function that reads a patient HLA genotype specification file}
 \usage{
-read_patient_hla(file_name)
+read_patient_hla(file_name = NULL)
 }
 \arguments{
 \item{file_name}{Name of the file}
