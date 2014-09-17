@@ -15,7 +15,7 @@ test_that("read_patient_hla works", {
   expect_that(digest(x), equals("5b69bd79d227dc0c8268dd84c1f9463b"))
 })
 
-test_that("get_patient_id works", {
+test_that("get_patient_ids works", {
   x <- read_patient_hla(file.path(find.package('EpitopeMatcher', .libPaths()), 
                                   'test_data/patient_hla_file.csv'))
   ids <- get_patient_ids(x)

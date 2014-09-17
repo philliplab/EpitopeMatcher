@@ -11,6 +11,6 @@ test_that('the correct test data files are supplied', {
 
   x <- readAAMultipleAlignment(file.path(find.package('EpitopeMatcher', .libPaths()), 
                           'test_data/query_alignment.FASTA'))
-  expect_that(digest(x), equals("9012d510bcbdf2ec78b2ca4e2f154a73"))
+  expect_that(digest(x), equals("b6a4178dc682837e8cbd656a4395a8b2"))
 
 })

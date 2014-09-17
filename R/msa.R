@@ -1,3 +1,6 @@
+#' @include patient_HLA.R
+NULL
+
 #' Reads in the query alignment
 #' @param file_name Name of the file
 #' @export
@@ -11,3 +14,11 @@ read_query_alignment <- function(file_name = NULL){
   x <- readAAMultipleAlignment(file_name)
   return(x)
 }
+
+#' @rdname get_patient_ids-methods
+#' @aliases get_patient_ids
+setMethod("get_patient_ids", "AAMultipleAlignment",
+          function(x){
+            return(x@unmasked@ranges@NAMES[2:nrow(x)])
+#            return(rownames(x)[2:nrow(x)]) <- Does not work???
+          })

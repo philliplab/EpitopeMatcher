@@ -10,3 +10,7 @@ Depends:
     digest,
     Biostrings
 License: GPL-3
+Collate:
+    'lanl_hla_data.R'
+    'patient_HLA.R'
+    'msa.R'
