@@ -14,3 +14,12 @@ test_that("read_patient_hla works", {
   expect_that(x, is_a('Patient_HLA'))
   expect_that(digest(x), equals("5b69bd79d227dc0c8268dd84c1f9463b"))
 })
+
+test_that("get_patient_id works", {
+  x <- read_patient_hla(file.path(find.package('EpitopeMatcher', .libPaths()), 
+                                  'test_data/patient_hla_file.csv'))
+  ids <- get_patient_ids(x)
+  expect_that("P00885" %in% ids, is_true())
+  expect_that("V05130" %in% ids, is_true())
+  expect_that("A*4301" %in% ids, is_false())
+})

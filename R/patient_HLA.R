@@ -50,5 +50,5 @@ setGeneric("get_patient_ids",
 #' @aliases get_patient_ids
 setMethod("get_patient_ids", "Patient_HLA",
           function(x){
-            return(unique(x$patient_id))
+            return(x$patient_id)
           })
