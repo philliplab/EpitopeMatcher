@@ -12,5 +12,6 @@ Depends:
 License: GPL-3
 Collate:
     'lanl_hla_data.R'
+    'matcher.R'
     'patient_HLA.R'
     'msa.R'

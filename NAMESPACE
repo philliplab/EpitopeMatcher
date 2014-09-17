@@ -2,6 +2,7 @@
 
 export(.LANL_HLA_data)
 export(.Patient_HLA)
+export(get_matchable_patient_ids)
 export(get_patient_ids)
 export(read_lanl_hla)
 export(read_patient_hla)
