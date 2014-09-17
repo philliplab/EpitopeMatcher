@@ -2,6 +2,8 @@
 
 export(.LANL_HLA_data)
 export(.Patient_HLA)
+export(compute_epitope_scores)
+export(epitope_pos_in_ref)
 export(get_matchable_patient_ids)
 export(get_patient_ids)
 export(list_epitopes)
