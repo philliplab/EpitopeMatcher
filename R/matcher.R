@@ -79,10 +79,17 @@ epitope_pos_in_ref <- function(epitope, query_alignment){
   alignment <- pairwiseAlignment(pattern = epitope, subject = ref_seq, type = 'overlap')
   start_pos <- start(Views(alignment))
   end_pos <- end(Views(alignment))
+  aln_score <- score(alignment)
   return(list(start_pos = start_pos,
               end_pos = end_pos, 
               alignment = alignment))
 }
+
+#' Internal function used to compute the comparison between the epitope
+#' and the patients sequences
+#' Under development - The design for this portion of the code is not yet
+#' finalized
+#' @export
 
 .sequence_comparison_stats <- function(sequence_substr, pair_alignments, start_pos, end_pos){
   results <- NULL
@@ -105,6 +112,19 @@ epitope_pos_in_ref <- function(epitope, query_alignment){
   return(results)
 }
 
+#' A function that indicates if an alignment was successful
+#' @param alignment The alignment to check - usually the output from
+#' pairwiseAlignment
+#' @export
+
+alignment_successful <- function(alignment){
+  if (as.character(pattern(alignment)) == "" | as.character(subject(alignment)) == ""){
+    return(FALSE)
+  } else {
+    return(TRUE)
+  }
+}
+
 #' Computes the similarities between the epitope and the sequences in the
 #' alignment
 #' @param epitope The epitope to find in the sequence. Either a character
@@ -117,9 +137,41 @@ compute_epitope_scores <- function(epitope, query_alignment){
     epitope <- AAString(epitope)
   }
   ref_pos <- epitope_pos_in_ref(epitope, query_alignment)
-  sequence_substr <- substr(qa, ref_pos$start_pos, ref_pos$end_pos)
-  sequence_substr <- lapply(sequence_substr, AAString)
-  pair_alignments <- pairwiseAlignment(pattern = sequence_substr, subject = epitope)
-  results <- .sequence_comparison_stats(sequence_substr, pair_alignments, ref_pos$start_pos, ref_pos$end_pos)
+  if (alignment_successful(ref_pos$alignment)){
+    sequence_substr <- substr(query_alignment, ref_pos$start_pos, ref_pos$end_pos)
+    sequence_substr <- lapply(sequence_substr, AAString)
+    pair_alignments <- pairwiseAlignment(pattern = sequence_substr, subject = epitope)
+    results <- .sequence_comparison_stats(sequence_substr, pair_alignments, ref_pos$start_pos, ref_pos$end_pos)
+  } else {
+    warning('Alignment Unsuccessful - skipping it')
+    results <- NULL
+  }
+  return(results)
+}
+
+#' Scores how well the epitopes in a patient's virus' sequences will be recognized by 
+#' the patient's HLA genotype.
+#'
+#' Call for testing:
+#' score_sequence_epitopes(read_query_alignment(), read_patient_hla(),
+#' read_lanl_hla())
+#' @param query_alignment The query alignment
+#' @param patient_hla The data.frame (of class Patient_HLA) that contain lists
+#' all the HLA genotypes each patient has.
+#' @param lanl_hla_data The data.frame (of class LANL_HLA_data) that contains
+#' the descriptions of the different HLA genotypes
+#' @export
+
+score_sequence_epitopes <- function(query_alignment, patient_hla, lanl_hla_data, ncpu = 6){
+  epitopes <- list_epitopes(query_alignment, patient_hla, lanl_hla_data)
+  results <- NULL
+  i <- 0
+  for (epitope in epitopes$epitope){
+    i <- i+1
+    print(paste0(i, ' of ', length(epitopes$epitope)))
+    alignment_score <- compute_epitope_scores(epitope, query_alignment)
+    results <- rbind(results, alignment_score)
+  }
+
   return(results)
 }
