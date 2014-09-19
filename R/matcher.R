@@ -52,7 +52,7 @@ list_epitopes <- function(query_alignment, patient_hla, lanl_hla_data){
   hlas <- list_hlas(query_alignment, patient_hla)
 
   return(lanl_hla_data[lanl_hla_data$hla_genotype %in% hlas, 
-                       c('epitope', 'start_pos', 'end_pos')])
+                       c('epitope', 'start_pos', 'end_pos', 'hla_genotype')])
 }
 
 #' Finds the position of the epitope in the reference sequence
@@ -138,11 +138,14 @@ compute_epitope_scores <- function(epitope, query_alignment){
     sequence_substr <- lapply(sequence_substr, AAString)
     pair_alignments <- pairwiseAlignment(pattern = sequence_substr, subject = epitope)
     results <- .sequence_comparison_stats(sequence_substr, pair_alignments, ref_pos$start_pos, ref_pos$end_pos)
+    error_log <- NULL
   } else {
     warning('Alignment Unsuccessful - skipping it')
     results <- NULL
+    error_log <- as.character(epitope)
   }
-  return(results)
+  return(list(results = results,
+              error_log = error_log))
 }
 
 #' Scores how well the epitopes in a patient's virus' sequences will be recognized by 
@@ -161,13 +164,25 @@ compute_epitope_scores <- function(epitope, query_alignment){
 score_sequence_epitopes <- function(query_alignment, patient_hla, lanl_hla_data, ncpu = 6){
   epitopes <- list_epitopes(query_alignment, patient_hla, lanl_hla_data)
   results <- NULL
-  i <- 0
-  for (epitope in epitopes$epitope){
-    i <- i+1
+  error_log <- NULL
+  for (i in 1:nrow(epitopes)){
+    epitope <- epitopes$epitope[i]
     print(paste0(i, ' of ', length(epitopes$epitope)))
-    alignment_score <- compute_epitope_scores(epitope, query_alignment)
-    results <- rbind(results, alignment_score)
+    
+    x <- compute_epitope_scores(epitope, query_alignment)
+    error_log <- c(error_log, x$error_log)
+    alignment_score <- x$results
+
+    if (!is.null(alignment_score)){
+      alignment_score <- cbind(alignment_score, 
+                               data.frame(hla_genotype = epitopes$hla_genotype[i],
+                                          lanl_start_pos = epitopes$start_pos[i],
+                                          lanl_end_pos = epitopes$end_pos[i],
+                                          stringsAsFactors = FALSE))
+      results <- rbind(results, alignment_score)
+    }
   }
 
-  return(results)
+  return(list(results = results,
+              error_log = error_log))
 }
