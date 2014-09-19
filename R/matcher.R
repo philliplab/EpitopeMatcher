@@ -7,7 +7,7 @@
 get_matchable_patient_ids <- function(query_alignment, patient_hla){
 
   # These checks can be done better using OO features?
-  stopifnot(class(query_alignment) == 'AAMultipleAlignment')
+  stopifnot(class(query_alignment) == 'AAStringSet')
   stopifnot(class(patient_hla) == 'Patient_HLA')
 
   qa_ids <- get_patient_ids(query_alignment)
@@ -28,11 +28,12 @@ get_matchable_patient_ids <- function(query_alignment, patient_hla){
 list_hlas <- function(query_alignment, patient_hla){
   
   # These checks can be done better using OO features?
-  stopifnot(class(query_alignment) == 'AAMultipleAlignment')
+  stopifnot(class(query_alignment) == 'AAStringSet')
   stopifnot(class(patient_hla) == 'Patient_HLA')
 
   m_ids <- get_matchable_patient_ids(query_alignment, patient_hla)
-  return(patient_hla[patient_hla$patient_id %in% m_ids, 'hla_genotype'])
+  hla_genotypes <- patient_hla[patient_hla$patient_id %in% m_ids, 'hla_genotype']
+  return(hla_genotypes)
 }
 
 #' Lists all the hla genotypes that must be investigated
@@ -44,13 +45,11 @@ list_hlas <- function(query_alignment, patient_hla){
 list_epitopes <- function(query_alignment, patient_hla, lanl_hla_data){
   
   # These checks can be done better using OO features?
-  stopifnot(class(query_alignment) == 'AAMultipleAlignment')
+  stopifnot(class(query_alignment) == 'AAStringSet')
   stopifnot(class(patient_hla) == 'Patient_HLA')
   stopifnot(class(lanl_hla_data) == 'LANL_HLA_data')
 
   hlas <- list_hlas(query_alignment, patient_hla)
-    col_names <- c("epitope", "gene_name", "start_pos", "end_pos", 
-                   "sub_type", "organism", "hla_genotype")
 
   return(lanl_hla_data[lanl_hla_data$hla_genotype %in% hlas, 
                        c('epitope', 'start_pos', 'end_pos')])
@@ -71,10 +70,7 @@ epitope_pos_in_ref <- function(epitope, query_alignment){
     epitope <- AAString(epitope)
   }
 
-  # There must be a better way to do this - couldn't find it in Biostrings ref
-  # man
-  ref_seq <- as.character(query_alignment)[1]
-  ref_seq <- AAString(ref_seq)
+  ref_seq <- query_alignment[[1]]
 
   alignment <- pairwiseAlignment(pattern = epitope, subject = ref_seq, type = 'overlap')
   start_pos <- start(Views(alignment))

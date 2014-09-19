@@ -11,14 +11,15 @@ read_query_alignment <- function(file_name = NULL){
     file_name <- file.path(find.package('EpitopeMatcher', .libPaths()), 
                            'test_data/query_alignment.FASTA')
   }
-  x <- readAAMultipleAlignment(file_name)
+  x <- readAAStringSet(file_name)
   return(x)
 }
 
 #' @rdname get_patient_ids-methods
 #' @aliases get_patient_ids
-setMethod("get_patient_ids", "AAMultipleAlignment",
+setMethod("get_patient_ids", "AAStringSet",
           function(x){
-            return(x@unmasked@ranges@NAMES[2:nrow(x)])
-#            return(rownames(x)[2:nrow(x)]) <- Does not work???
+            return(names(x))
+#            return(x@unmasked@ranges@NAMES[2:nrow(x)])
+#            return(rownames(x)[2:nrow(x)]) #### Does not work???
           })

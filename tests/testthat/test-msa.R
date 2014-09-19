@@ -3,8 +3,8 @@ context("MSA")
 test_that("read_query_alignment works", {
   x <- read_query_alignment(file.path(find.package('EpitopeMatcher', .libPaths()), 
                                   'test_data/query_alignment.FASTA'))
-  expect_that(x, is_a('AAMultipleAlignment'))
-  expect_that(digest(x), equals("b6a4178dc682837e8cbd656a4395a8b2"))
+  expect_that(x, is_a('AAStringSet'))
+  expect_that(digest(x), equals("b2a9316b11da1c07d56e5846e88ce49c"))
 })
 
 test_that("get_patient_ids work", {
