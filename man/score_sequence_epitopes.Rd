@@ -4,7 +4,8 @@
 \title{Scores how well the epitopes in a patient's virus' sequences will be recognized by
 the patient's HLA genotype.}
 \usage{
-score_sequence_epitopes(query_alignment, patient_hla, lanl_hla_data, ncpu = 6)
+score_sequence_epitopes(query_alignment, patient_hla, lanl_hla_data,
+  range_expansion = 5)
 }
 \arguments{
 \item{query_alignment}{The query alignment}

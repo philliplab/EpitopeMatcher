@@ -4,13 +4,17 @@
 \title{Computes the similarities between the epitope and the sequences in the
 alignment}
 \usage{
-compute_epitope_scores(epitope, query_alignment)
+compute_epitope_scores(epitope, query_alignment, range_expansion = 0)
 }
 \arguments{
 \item{epitope}{The epitope to find in the sequence. Either a character
 string or an AAString}
 
 \item{query_alignment}{The query alignment}
+
+\item{range_expansion}{After the epitope is found in the reference
+seqeuence, search in each of the query sequences for the same epitope, but
+expand the range with this number of amino acids}
 }
 \description{
 Computes the similarities between the epitope and the sequences in the

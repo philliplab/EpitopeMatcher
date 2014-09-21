@@ -63,16 +63,18 @@ list_epitopes <- function(query_alignment, patient_hla, lanl_hla_data){
 #' @param epitope The epitope to find in the sequence. Either a character
 #' string or an AAString
 #' @param query_alignment The query alignment
+#' @param alignment_type The type of alignment to try. Defaults to 'overlap'
+#' use 'global' if 'overlap' alignment cannot be found
 #' @export
 
-epitope_pos_in_ref <- function(epitope, query_alignment){
+epitope_pos_in_ref <- function(epitope, query_alignment, alignment_type = 'overlap'){
   if (class(epitope) == 'character'){
     epitope <- AAString(epitope)
   }
 
   ref_seq <- query_alignment[[1]]
 
-  alignment <- pairwiseAlignment(pattern = epitope, subject = ref_seq, type = 'overlap')
+  alignment <- pairwiseAlignment(pattern = epitope, subject = ref_seq, type = alignment_type)
   start_pos <- start(Views(alignment))
   end_pos <- end(Views(alignment))
   aln_score <- score(alignment)
@@ -87,25 +89,26 @@ epitope_pos_in_ref <- function(epitope, query_alignment){
 #' finalized
 #' @export
 
-.sequence_comparison_stats <- function(sequence_substr, pair_alignments, start_pos, end_pos){
-  results <- NULL
-  for (i in 1:length(pair_alignments)){
-    x <- data.frame(name = names(sequence_substr)[i],
-                    score = score(pair_alignments[i]),
-                    score_type = type(pair_alignments[i]),
-                    epitope = as.character(subject(pair_alignments[i])),
-                    sub_sequence = as.character(pattern(pair_alignments[i])),
-                    comparison = compareStrings(pair_alignments[i]),
-                    pid = pid(pair_alignments[i]),
-                    nmatch = nmatch(pair_alignments[i]),
-                    nmismatch = nmismatch(pair_alignments[i]),
-                    leven.dist = nedit(pair_alignments[i]),
-                    start_pos = start_pos,
-                    end_pos = end_pos,
-                    stringsAsFactors = FALSE)
-    results <- rbind(results, x)
-  }
-  return(results)
+.sequence_comparison_stats <- function(sequence_substr_name, pair_alignment, start_pos, 
+                                       end_pos, range_expansion, candidate_substr){
+  x <- data.frame(name = sequence_substr_name,
+                  score = score(pair_alignment),
+                  score_type = type(pair_alignment),
+                  epitope = as.character(pattern(pair_alignment)),
+                  candidate_substr = candidate_substr,
+                  matched_substr = as.character(subject(pair_alignment)),
+                  comparison = compareStrings(pair_alignment),
+                  pid = pid(pair_alignment),
+                  nmatch = nmatch(pair_alignment),
+                  nmismatch = nmismatch(pair_alignment),
+                  leven.dist = nedit(pair_alignment),
+                  epitope_search_start_pos = start_pos,
+                  epitope_search_end_pos = end_pos,
+                  epitope_match_start_pos = start(Views(pair_alignment)),
+                  epitope_match_end_pos = end(Views(pair_alignment)),
+                  range_expansion = range_expansion,
+                  stringsAsFactors = FALSE)
+  return(x)
 }
 
 #' A function that indicates if an alignment was successful
@@ -126,23 +129,41 @@ alignment_successful <- function(alignment){
 #' @param epitope The epitope to find in the sequence. Either a character
 #' string or an AAString
 #' @param query_alignment The query alignment
+#' @param range_expansion After the epitope is found in the reference
+#' seqeuence, search in each of the query sequences for the same epitope, but
+#' expand the range with this number of amino acids
 #' @export
 
-compute_epitope_scores <- function(epitope, query_alignment){
+compute_epitope_scores <- function(epitope, query_alignment, range_expansion = 0){
   if (class(epitope) == 'character'){
     epitope <- AAString(epitope)
   }
   ref_pos <- epitope_pos_in_ref(epitope, query_alignment)
   if (alignment_successful(ref_pos$alignment)){
-    sequence_substr <- substr(query_alignment, ref_pos$start_pos, ref_pos$end_pos)
+#    sequence_substr <- substr(query_alignment, ref_pos$start_pos, ref_pos$end_pos)
+    sequence_substr <- substr(query_alignment, ref_pos$start_pos - range_expansion, 
+                              ref_pos$end_pos + range_expansion)
     sequence_substr <- lapply(sequence_substr, AAString)
-    pair_alignments <- pairwiseAlignment(pattern = sequence_substr, subject = epitope)
-    results <- .sequence_comparison_stats(sequence_substr, pair_alignments, ref_pos$start_pos, ref_pos$end_pos)
-    error_log <- NULL
-  } else {
-    warning('Alignment Unsuccessful - skipping it')
     results <- NULL
-    error_log <- as.character(epitope)
+    for (i in 1:length(sequence_substr)){
+      pair_alignment <- pairwiseAlignment(subject = sequence_substr[[i]], pattern = epitope, 
+                                           type = 'overlap')
+      results <- rbind(results,
+                       .sequence_comparison_stats(names(sequence_substr)[i], pair_alignment, 
+                                                  ref_pos$start_pos, ref_pos$end_pos,
+                                                  range_expansion, 
+                                                  as.character(sequence_substr[[i]])))
+      error_log <- NULL
+    }
+  } else {
+    global_alignment <- epitope_pos_in_ref(epitope, query_alignment, alignment_type = 'global')
+    alignment <- global_alignment$alignment
+    results <- NULL
+    error_log <- data.frame(epitope = as.character(epitope),
+                            pattern = as.character(pattern(alignment)),
+                            subject = as.character(subject(alignment)),
+                            global_alignment_start = global_alignment$start_pos,
+                            global_alignment_end = global_alignment$end_pos)
   }
   return(list(results = results,
               error_log = error_log))
@@ -161,24 +182,27 @@ compute_epitope_scores <- function(epitope, query_alignment){
 #' the descriptions of the different HLA genotypes
 #' @export
 
-score_sequence_epitopes <- function(query_alignment, patient_hla, lanl_hla_data, ncpu = 6){
+score_sequence_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
+                                    range_expansion = 5){
   epitopes <- list_epitopes(query_alignment, patient_hla, lanl_hla_data)
   results <- NULL
   error_log <- NULL
   for (i in 1:nrow(epitopes)){
     epitope <- epitopes$epitope[i]
-    print(paste0(i, ' of ', length(epitopes$epitope)))
+    print(paste0(i, ' of ', length(epitopes$epitope), epitope))
+    epitope_info <- data.frame(hla_genotype = epitopes$hla_genotype[i],
+                               lanl_start_pos = epitopes$start_pos[i],
+                               lanl_end_pos = epitopes$end_pos[i],
+                               stringsAsFactors = FALSE)
     
-    x <- compute_epitope_scores(epitope, query_alignment)
-    error_log <- c(error_log, x$error_log)
-    alignment_score <- x$results
-
+    epitope_match <- compute_epitope_scores(epitope, query_alignment, 
+                                            range_expansion)
+    if (!is.null(epitope_match$error_log)){
+      error_log <- rbind(error_log, cbind(epitope_match$error_log, epitope_info))
+    }
+    alignment_score <- epitope_match$results
     if (!is.null(alignment_score)){
-      alignment_score <- cbind(alignment_score, 
-                               data.frame(hla_genotype = epitopes$hla_genotype[i],
-                                          lanl_start_pos = epitopes$start_pos[i],
-                                          lanl_end_pos = epitopes$end_pos[i],
-                                          stringsAsFactors = FALSE))
+      alignment_score <- cbind(alignment_score, epitope_info)
       results <- rbind(results, alignment_score)
     }
   }
