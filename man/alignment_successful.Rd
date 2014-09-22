@@ -3,9 +3,11 @@
 \alias{alignment_successful}
 \title{A function that indicates if an alignment was successful}
 \usage{
-alignment_successful(alignment)
+alignment_successful(epitope, alignment)
 }
 \arguments{
+\item{epitope}{The epitope that was searched for in the reference}
+
 \item{alignment}{The alignment to check - usually the output from
 pairwiseAlignment}
 }

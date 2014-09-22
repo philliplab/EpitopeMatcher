@@ -113,12 +113,17 @@ epitope_pos_in_ref <- function(epitope, query_alignment, alignment_type = 'overl
 }
 
 #' A function that indicates if an alignment was successful
+#' @param epitope The epitope that was searched for in the reference
 #' @param alignment The alignment to check - usually the output from
 #' pairwiseAlignment
 #' @export
 
-alignment_successful <- function(alignment){
-  if (as.character(pattern(alignment)) == "" | as.character(subject(alignment)) == ""){
+alignment_successful <- function(epitope, alignment){
+  pat <- as.character(pattern(alignment))
+  subj <- as.character(subject(alignment))
+  epitope <- as.character(epitope)
+  print(paste(pat, subj, epitope, sep = ' - '))
+  if (pat == "" | subj == "" | nchar(pat) != nchar(epitope)){
     return(FALSE)
   } else {
     return(TRUE)
@@ -187,7 +192,7 @@ compute_epitope_scores <- function(epitope, query_alignment, range_expansion = 0
     epitope <- AAString(epitope)
   }
   ref_pos <- epitope_pos_in_ref(epitope, query_alignment)
-  if (alignment_successful(ref_pos$alignment)){
+  if (alignment_successful(epitope, ref_pos$alignment)){
     sequence_substr <- substr(query_alignment, ref_pos$start_pos - range_expansion, 
                               ref_pos$end_pos + range_expansion)
     sequence_substr <- lapply(sequence_substr, AAString)
