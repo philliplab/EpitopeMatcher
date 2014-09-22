@@ -99,6 +99,7 @@ epitope_pos_in_ref <- function(epitope, query_alignment, alignment_type = 'overl
                   matched_substr = as.character(subject(pair_alignment)),
                   comparison = compareStrings(pair_alignment),
                   pid = pid(pair_alignment),
+                  simple_distance = 100 - pid(pair_alignment),
                   nmatch = nmatch(pair_alignment),
                   nmismatch = nmismatch(pair_alignment),
                   leven.dist = nedit(pair_alignment),
@@ -144,6 +145,7 @@ alignment_successful <- function(alignment){
 #'  \item{matched_substr - The part of the candidate substring that was matched to the epitope as returned by pairwiseAlignment}
 #'  \item{comparison - A comparison between the epitope and the query sequence indicating where there were mismatches}
 #'  \item{pid - The percentage of amino acids that were identical (Percentage IDentity) between the epitope and query sequences}
+#'  \item{simple_distance - 100 - PID}
 #'  \item{nmatch - The number of matches in the alignment}
 #'  \item{nmismatch - The number of mismatches in the alignment}
 #'  \item{leven.dist - The Levenshtein distance (or edit distance) between the two sequences}
@@ -234,7 +236,7 @@ score_sequence_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
   error_log <- NULL
   for (i in 1:nrow(epitopes)){
     epitope <- epitopes$epitope[i]
-    print(paste0(i, ' of ', length(epitopes$epitope), epitope))
+    print(paste0(i, ' of ', length(epitopes$epitope), ': ', epitope))
     epitope_info <- data.frame(hla_genotype = epitopes$hla_genotype[i],
                                lanl_start_pos = epitopes$start_pos[i],
                                lanl_end_pos = epitopes$end_pos[i],

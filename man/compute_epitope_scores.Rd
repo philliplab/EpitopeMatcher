@@ -32,6 +32,7 @@ the results data.frame that contains these columns:
  \item{matched_substr - The part of the candidate substring that was matched to the epitope as returned by pairwiseAlignment}
  \item{comparison - A comparison between the epitope and the query sequence indicating where there were mismatches}
  \item{pid - The percentage of amino acids that were identical (Percentage IDentity) between the epitope and query sequences}
+ \item{simple_distance - 100 - PID}
  \item{nmatch - The number of matches in the alignment}
  \item{nmismatch - The number of mismatches in the alignment}
  \item{leven.dist - The Levenshtein distance (or edit distance) between the two sequences}
