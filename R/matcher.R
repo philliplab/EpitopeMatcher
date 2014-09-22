@@ -91,7 +91,7 @@ epitope_pos_in_ref <- function(epitope, query_alignment, alignment_type = 'overl
 
 .sequence_comparison_stats <- function(sequence_substr_name, pair_alignment, start_pos, 
                                        end_pos, range_expansion, candidate_substr){
-  x <- data.frame(name = sequence_substr_name,
+  x <- data.frame(sequence_id = sequence_substr_name,
                   score = score(pair_alignment),
                   score_type = type(pair_alignment),
                   epitope = as.character(pattern(pair_alignment)),
@@ -102,10 +102,10 @@ epitope_pos_in_ref <- function(epitope, query_alignment, alignment_type = 'overl
                   nmatch = nmatch(pair_alignment),
                   nmismatch = nmismatch(pair_alignment),
                   leven.dist = nedit(pair_alignment),
-                  epitope_search_start_pos = start_pos,
-                  epitope_search_end_pos = end_pos,
-                  epitope_match_start_pos = start(Views(pair_alignment)),
-                  epitope_match_end_pos = end(Views(pair_alignment)),
+                  start_pos_in_ref = start_pos,
+                  end_pos_in_ref = end_pos,
+                  start_pos_in_candidate = start(Views(pair_alignment)),
+                  end_pos_in_candidate = end(Views(pair_alignment)),
                   range_expansion = range_expansion,
                   stringsAsFactors = FALSE)
   return(x)
@@ -126,12 +126,58 @@ alignment_successful <- function(alignment){
 
 #' Computes the similarities between the epitope and the sequences in the
 #' alignment
+#'
 #' @param epitope The epitope to find in the sequence. Either a character
 #' string or an AAString
 #' @param query_alignment The query alignment
 #' @param range_expansion After the epitope is found in the reference
 #' seqeuence, search in each of the query sequences for the same epitope, but
 #' expand the range with this number of amino acids
+#' @details The output from this function is a list with two data.frames. The first is
+#' the results data.frame that contains these columns:
+#' \itemize{
+#'  \item{sequence_id - The sequence description from the FASTA file}
+#'  \item{score - The similarity score produced by the alignment}
+#'  \item{score_type - The type of similarity score as returned by pairwiseAlignment}
+#'  \item{epitope - The epitope that was attempted to be aligned to the query sequence as returned by pairwiseAlignment}
+#'  \item{candidate_substr - The candidate substring that was obtained by expanding the coordinates found in the reference sequence by 5 AAs on each side (unless at the end or beginning of the sequence)}
+#'  \item{matched_substr - The part of the candidate substring that was matched to the epitope as returned by pairwiseAlignment}
+#'  \item{comparison - A comparison between the epitope and the query sequence indicating where there were mismatches}
+#'  \item{pid - The percentage of amino acids that were identical (Percentage IDentity) between the epitope and query sequences}
+#'  \item{nmatch - The number of matches in the alignment}
+#'  \item{nmismatch - The number of mismatches in the alignment}
+#'  \item{leven.dist - The Levenshtein distance (or edit distance) between the two sequences}
+#'  \item{start_pos_in_ref - The starting position in the reference sequence of the matching substring that was found for the epitope}
+#'  \item{end_pos_in_ref - The end position in the reference sequence of the matching substring that was found for the epitope}
+#'  \item{start_pos_in_candidate - The starting position in the candidate subsequence of the query sequence that was obtained by expanding the range of the reference that matches the epitope by starting a number of amino acids earlier in the query sequence. The number of amino acids is controlled by the range_extention parameter.}
+#'  \item{end_pos_in_candidate - The end position in the candidate subsequence of the query sequence that was obtained by expanding the range of the reference that matches the epitope by stopping a number of amino acids later in the query sequence. The number of amino acids is controlled by the range_extention parameter.}
+#'  \item{range_expansion - The number of amino acids by which the range of the query sequence that is compared to the epitope is larger than then match found for the epitope in the reference sequence.}
+#'  \item{These three column are usually added to the table by the score_sequence_epitopes function:
+#'  \itemize{
+#'   \item{hla_genotype - The name of the hla genotype the epitope is associated with}
+#'   \item{lanl_start_pos - The start position of the epitope according to the lanl file}
+#'   \item{lanl_end_pos - The end position of the epitope according to the lanl file}
+#'   }
+#'  }
+#' }
+#' The second element of the list is the error log data.frame that contains
+#' these columns:
+#' 
+#' \itemize{
+#'  \item{epitope - The epitope from the lanl file that was searched for in the reference sequence}
+#'  \item{pattern - The epitope as aligned to the reference sequence when a less restrictive alignment algorithm is used than the one that failed when aligning to the reference sequence the first time}
+#'  \item{subject - The portion of the reference sequence to which the epitope was aligned to when a less restrictive alignment algorithm is used than the one that failed when aligning to the reference sequence the first time}
+#'  \item{global_alignment_start - The starting position in the reference sequence of the subsequence of the reference sequence that the epitope was aligned to when a less restrictive alignment algorithm is used than the one that failed when aligning to the reference sequence the first time}
+#'  \item{global_alignment_end - The end position in the reference sequence of the subsequence of the reference sequence that the epitope was aligned to when a less restrictive alignment algorithm is used than the one that failed when aligning to the reference sequence the first time}
+#'  \item{These three column are usually added to the table by the score_sequence_epitopes function:
+#'  \itemize{
+#'   \item{hla_genotype - The name of the hla genotype the epitope is associated with}
+#'   \item{lanl_start_pos - The start position of the epitope according to the lanl file}
+#'   \item{lanl_end_pos - The end position of the epitope according to the lanl file}
+#'   }
+#'  }
+#' }
+#' 
 #' @export
 
 compute_epitope_scores <- function(epitope, query_alignment, range_expansion = 0){
@@ -140,7 +186,6 @@ compute_epitope_scores <- function(epitope, query_alignment, range_expansion = 0
   }
   ref_pos <- epitope_pos_in_ref(epitope, query_alignment)
   if (alignment_successful(ref_pos$alignment)){
-#    sequence_substr <- substr(query_alignment, ref_pos$start_pos, ref_pos$end_pos)
     sequence_substr <- substr(query_alignment, ref_pos$start_pos - range_expansion, 
                               ref_pos$end_pos + range_expansion)
     sequence_substr <- lapply(sequence_substr, AAString)
