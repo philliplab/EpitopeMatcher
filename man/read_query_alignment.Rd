@@ -3,7 +3,7 @@
 \alias{read_query_alignment}
 \title{Reads in the query alignment}
 \usage{
-read_query_alignment(file_name = NULL)
+read_query_alignment(file_name)
 }
 \arguments{
 \item{file_name}{Name of the file}
