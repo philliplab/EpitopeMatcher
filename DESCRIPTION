@@ -8,6 +8,7 @@ Maintainer: Someone <Someone@gmail.com>
 Depends:
     testthat,
     digest,
+    shiny,
     Biostrings
 License: GPL-3
 Collate:
@@ -15,3 +16,4 @@ Collate:
     'matcher.R'
     'patient_HLA.R'
     'msa.R'
+    'shiny_app.R'
