@@ -27,7 +27,7 @@ the results data.frame that contains these columns:
  \item{sequence_id - The sequence description from the FASTA file}
  \item{score - The similarity score produced by the alignment}
  \item{score_type - The type of similarity score as returned by pairwiseAlignment}
- \item{epitope - The epitope that was attempted to be aligned to the query sequence as returned by pairwiseAlignment}
+ \item{eregion_in_refseq - The region of the reference sequence that was attempted to be aligned to the query sequence as returned by pairwiseAlignment}
  \item{candidate_substr - The candidate substring that was obtained by expanding the coordinates found in the reference sequence by 5 AAs on each side (unless at the end or beginning of the sequence)}
  \item{matched_substr - The part of the candidate substring that was matched to the epitope as returned by pairwiseAlignment}
  \item{comparison - A comparison between the epitope and the query sequence indicating where there were mismatches}
@@ -43,6 +43,7 @@ the results data.frame that contains these columns:
  \item{range_expansion - The number of amino acids by which the range of the query sequence that is compared to the epitope is larger than then match found for the epitope in the reference sequence.}
  \item{These three column are usually added to the table by the score_sequence_epitopes function:
  \itemize{
+ \item{epitope - The epitope from the lanl file that was searched for in the reference sequence}
   \item{hla_genotype - The name of the hla genotype the epitope is associated with}
   \item{lanl_start_pos - The start position of the epitope according to the lanl file}
   \item{lanl_end_pos - The end position of the epitope according to the lanl file}
@@ -53,13 +54,13 @@ The second element of the list is the error log data.frame that contains
 these columns:
 
 \itemize{
- \item{epitope - The epitope from the lanl file that was searched for in the reference sequence}
  \item{pattern - The epitope as aligned to the reference sequence when a less restrictive alignment algorithm is used than the one that failed when aligning to the reference sequence the first time}
  \item{subject - The portion of the reference sequence to which the epitope was aligned to when a less restrictive alignment algorithm is used than the one that failed when aligning to the reference sequence the first time}
  \item{global_alignment_start - The starting position in the reference sequence of the subsequence of the reference sequence that the epitope was aligned to when a less restrictive alignment algorithm is used than the one that failed when aligning to the reference sequence the first time}
  \item{global_alignment_end - The end position in the reference sequence of the subsequence of the reference sequence that the epitope was aligned to when a less restrictive alignment algorithm is used than the one that failed when aligning to the reference sequence the first time}
  \item{These three column are usually added to the table by the score_sequence_epitopes function:
  \itemize{
+ \item{epitope - The epitope from the lanl file that was searched for in the reference sequence}
   \item{hla_genotype - The name of the hla genotype the epitope is associated with}
   \item{lanl_start_pos - The start position of the epitope according to the lanl file}
   \item{lanl_end_pos - The end position of the epitope according to the lanl file}

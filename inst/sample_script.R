@@ -1,7 +1,13 @@
 library(EpitopeMatcher)
-ph <- read_patient_hla()
-ln <- read_lanl_hla()
-qa <- read_query_alignment()
+file_name <- file.path(find.package('EpitopeMatcher', .libPaths()), 
+                       'test_data/patient_hla_file.csv')
+ph <- read_patient_hla(file_name )
+file_name <- file.path(find.package('EpitopeMatcher', .libPaths()), 
+                       'test_data/lanl_hla_file.csv')
+ln <- read_lanl_hla(file_name )
+file_name <- file.path(find.package('EpitopeMatcher', .libPaths()), 
+                       'test_data/query_alignment.FASTA')
+qa <- read_query_alignment(file_name )
 
 query_alignment <- qa
 patient_hla <- ph

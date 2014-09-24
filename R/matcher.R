@@ -94,7 +94,7 @@ epitope_pos_in_ref <- function(epitope, query_alignment, alignment_type = 'overl
   x <- data.frame(sequence_id = sequence_substr_name,
                   score = score(pair_alignment),
                   score_type = type(pair_alignment),
-                  epitope = as.character(pattern(pair_alignment)),
+                  eregion_in_refseq = as.character(pattern(pair_alignment)),
                   candidate_substr = candidate_substr,
                   matched_substr = as.character(subject(pair_alignment)),
                   comparison = compareStrings(pair_alignment),
@@ -145,7 +145,7 @@ alignment_successful <- function(epitope, alignment){
 #'  \item{sequence_id - The sequence description from the FASTA file}
 #'  \item{score - The similarity score produced by the alignment}
 #'  \item{score_type - The type of similarity score as returned by pairwiseAlignment}
-#'  \item{epitope - The epitope that was attempted to be aligned to the query sequence as returned by pairwiseAlignment}
+#'  \item{eregion_in_refseq - The region of the reference sequence that was attempted to be aligned to the query sequence as returned by pairwiseAlignment}
 #'  \item{candidate_substr - The candidate substring that was obtained by expanding the coordinates found in the reference sequence by 5 AAs on each side (unless at the end or beginning of the sequence)}
 #'  \item{matched_substr - The part of the candidate substring that was matched to the epitope as returned by pairwiseAlignment}
 #'  \item{comparison - A comparison between the epitope and the query sequence indicating where there were mismatches}
@@ -161,6 +161,7 @@ alignment_successful <- function(epitope, alignment){
 #'  \item{range_expansion - The number of amino acids by which the range of the query sequence that is compared to the epitope is larger than then match found for the epitope in the reference sequence.}
 #'  \item{These three column are usually added to the table by the score_sequence_epitopes function:
 #'  \itemize{
+#'  \item{epitope - The epitope from the lanl file that was searched for in the reference sequence}
 #'   \item{hla_genotype - The name of the hla genotype the epitope is associated with}
 #'   \item{lanl_start_pos - The start position of the epitope according to the lanl file}
 #'   \item{lanl_end_pos - The end position of the epitope according to the lanl file}
@@ -171,13 +172,13 @@ alignment_successful <- function(epitope, alignment){
 #' these columns:
 #' 
 #' \itemize{
-#'  \item{epitope - The epitope from the lanl file that was searched for in the reference sequence}
 #'  \item{pattern - The epitope as aligned to the reference sequence when a less restrictive alignment algorithm is used than the one that failed when aligning to the reference sequence the first time}
 #'  \item{subject - The portion of the reference sequence to which the epitope was aligned to when a less restrictive alignment algorithm is used than the one that failed when aligning to the reference sequence the first time}
 #'  \item{global_alignment_start - The starting position in the reference sequence of the subsequence of the reference sequence that the epitope was aligned to when a less restrictive alignment algorithm is used than the one that failed when aligning to the reference sequence the first time}
 #'  \item{global_alignment_end - The end position in the reference sequence of the subsequence of the reference sequence that the epitope was aligned to when a less restrictive alignment algorithm is used than the one that failed when aligning to the reference sequence the first time}
 #'  \item{These three column are usually added to the table by the score_sequence_epitopes function:
 #'  \itemize{
+#'  \item{epitope - The epitope from the lanl file that was searched for in the reference sequence}
 #'   \item{hla_genotype - The name of the hla genotype the epitope is associated with}
 #'   \item{lanl_start_pos - The start position of the epitope according to the lanl file}
 #'   \item{lanl_end_pos - The end position of the epitope according to the lanl file}
@@ -193,13 +194,19 @@ compute_epitope_scores <- function(epitope, query_alignment, range_expansion = 0
   }
   ref_pos <- epitope_pos_in_ref(epitope, query_alignment)
   if (alignment_successful(epitope, ref_pos$alignment)){
+#    sequence_substr <- substr(query_alignment, ref_pos$start_pos, 
+#                              ref_pos$end_pos)
+#    sequence_substr <- lapply(sequence_substr, AAString)
+#    eregion_in_refseq <- sequence_substr[[1]]
+    eregion_in_refseq <- subject(ref_pos$alignment)
     sequence_substr <- substr(query_alignment, ref_pos$start_pos - range_expansion, 
                               ref_pos$end_pos + range_expansion)
     sequence_substr <- lapply(sequence_substr, AAString)
     results <- NULL
     for (i in 1:length(sequence_substr)){
-      pair_alignment <- pairwiseAlignment(subject = sequence_substr[[i]], pattern = epitope, 
-                                           type = 'overlap')
+      pair_alignment <- pairwiseAlignment(subject = sequence_substr[[i]], 
+                                          pattern = eregion_in_refseq, 
+                                          type = 'overlap')
       results <- rbind(results,
                        .sequence_comparison_stats(names(sequence_substr)[i], pair_alignment, 
                                                   ref_pos$start_pos, ref_pos$end_pos,
@@ -211,8 +218,7 @@ compute_epitope_scores <- function(epitope, query_alignment, range_expansion = 0
     global_alignment <- epitope_pos_in_ref(epitope, query_alignment, alignment_type = 'global')
     alignment <- global_alignment$alignment
     results <- NULL
-    error_log <- data.frame(epitope = as.character(epitope),
-                            pattern = as.character(pattern(alignment)),
+    error_log <- data.frame(pattern = as.character(pattern(alignment)),
                             subject = as.character(subject(alignment)),
                             global_alignment_start = global_alignment$start_pos,
                             global_alignment_end = global_alignment$end_pos)
@@ -242,7 +248,8 @@ score_sequence_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
   for (i in 1:nrow(epitopes)){
     epitope <- epitopes$epitope[i]
     print(paste0(i, ' of ', length(epitopes$epitope), ': ', epitope))
-    epitope_info <- data.frame(hla_genotype = epitopes$hla_genotype[i],
+    epitope_info <- data.frame(epitope = epitope,
+                               hla_genotype = epitopes$hla_genotype[i],
                                lanl_start_pos = epitopes$start_pos[i],
                                lanl_end_pos = epitopes$end_pos[i],
                                stringsAsFactors = FALSE)
