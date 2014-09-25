@@ -4,7 +4,7 @@ library(shiny)
 shinyUI(fluidPage(
 
   # Application title
-  titlePanel("Hello Shiny!"),
+  titlePanel("Epitope Matcher"),
 
   # Sidebar with a slider input for the number of bins
   sidebarLayout(
@@ -20,9 +20,13 @@ shinyUI(fluidPage(
     mainPanel(
       tabsetPanel(
         tabPanel("File Details",
+                 h5("Patient HLA File:"),
                  textOutput("patient_hla_file_details"),
+                 h5("LANL HLA File:"),
                  textOutput("lanl_hla_file_details"),
+                 h5("Query Alignment File:"),
                  textOutput("query_alignment_file_details"),
+                 h5("Epitope score computation status:"),
                  textOutput("epitope_score_status")
                  ),
         tabPanel("Patient HLA File", tableOutput("patient_hla")),
