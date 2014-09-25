@@ -20,11 +20,14 @@ shinyUI(fluidPage(
         tabPanel("File Details",
                  textOutput("patient_hla_file_details"),
                  textOutput("lanl_hla_file_details"),
-                 textOutput("query_alignment_file_details")
+                 textOutput("query_alignment_file_details"),
+                 textOutput("epitope_score_status")
                  ),
         tabPanel("Patient HLA File", tableOutput("patient_hla")),
         tabPanel("LANL HLA File", tableOutput("lanl_hla")),
-        tabPanel("Query Alignment", verbatimTextOutput("query_alignment"))
+        tabPanel("Query Alignment", verbatimTextOutput("query_alignment")),
+        tabPanel("Results", tableOutput("epitope_score_results")),
+        tabPanel("Error Log", tableOutput("epitope_score_error_log"))
         )
     )
   )

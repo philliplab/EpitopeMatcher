@@ -242,6 +242,13 @@ compute_epitope_scores <- function(epitope, query_alignment, range_expansion = 0
 
 score_sequence_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
                                     range_expansion = 5){
+  if ((class(query_alignment) != 'AAStringSet') |
+    (class(patient_hla) != 'Patient_HLA') |
+    (class(lanl_hla_data) != 'LANL_HLA_data')){
+    return(list(msg = 'Input Files Invalid',
+                results = data.frame(note = 'Input Files Invalid'),
+                error_log = data.frame(note = 'Input Files Invalid')))
+  }
   epitopes <- list_epitopes(query_alignment, patient_hla, lanl_hla_data)
   results <- NULL
   error_log <- NULL
@@ -267,5 +274,6 @@ score_sequence_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
   }
 
   return(list(results = results,
-              error_log = error_log))
+              error_log = error_log,
+              msg = 'Scores computed successfully'))
 }
