@@ -11,7 +11,9 @@ shinyUI(fluidPage(
     sidebarPanel(
       fileInput("patient_hla", label = h3("Patient HLA genotypes")),
       fileInput("lanl_hla", label = h3("LANL HLA genotype database")),
-      fileInput("query_alignment", label = h3("Query Alignment"))
+      fileInput("query_alignment", label = h3("Query Alignment")),
+      downloadButton('download_results', 'Download Results'),
+      downloadButton('download_error_log', 'Download Error Log')
     ),
 
     # Show a plot of the generated distribution
