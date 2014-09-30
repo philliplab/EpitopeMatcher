@@ -11,3 +11,9 @@ library(devtools)
 install_github('EpitopeMatcher', 'philliplab')
 library(EpitopeMatcher)
 ```
+
+To run the web UI:
+```r
+library(EpitopeMatcher)
+run_EpitopeMatcher_app()
+```
