@@ -1,22 +1,19 @@
 library(shiny)
 
-# Define UI for application that draws a histogram
 shinyUI(fluidPage(
 
-  # Application title
   titlePanel("Epitope Matcher"),
 
-  # Sidebar with a slider input for the number of bins
   sidebarLayout(
     sidebarPanel(
       fileInput("patient_hla", label = h3("Patient HLA genotypes")),
       fileInput("lanl_hla", label = h3("LANL HLA genotype database")),
       fileInput("query_alignment", label = h3("Query Alignment")),
+      actionButton('goButton', 'Compute Scores'),
       downloadButton('download_results', 'Download Results'),
       downloadButton('download_error_log', 'Download Error Log')
     ),
 
-    # Show a plot of the generated distribution
     mainPanel(
       tabsetPanel(
         tabPanel("File Details",
