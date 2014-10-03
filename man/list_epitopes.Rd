@@ -10,6 +10,9 @@ list_epitopes(query_alignment, patient_hla, lanl_hla_data)
 
 \item{patient_hla}{The data.frame (of class Patient_HLA) that contain lists
 all the HLA genotypes each patient has.}
+
+\item{lanl_hla_data}{The data.frame (of class LANL_HLA_data) that contains
+the descriptions of the different HLA genotypes}
 }
 \description{
 Lists all the hla genotypes that must be investigated

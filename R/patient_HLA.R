@@ -1,3 +1,6 @@
+#' @import Biostrings digest methods shiny testthat
+NULL
+
 #' The class for the data that describes which patients have which HLAs
 #' 
 #' @rdname Patient_HLA
@@ -50,7 +53,7 @@ get_test_patient_hla_data <- function(dataset_name = 'base'){
 }
 
 #' Returns the ids of the patients in the data structure
-#' @param data The data structure to interrogate
+#' @param x The data structure to interrogate
 #' @param sep The symbol used to separate elements in the sequence names
 #' @param id_position After the sequence name has been split on the 'sep'
 #' character, which element of the resulting vector contains the patient id?

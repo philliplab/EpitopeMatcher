@@ -15,6 +15,10 @@ all the HLA genotypes each patient has.}
 
 \item{lanl_hla_data}{The data.frame (of class LANL_HLA_data) that contains
 the descriptions of the different HLA genotypes}
+
+\item{range_expansion}{After the epitope is found in the reference
+seqeuence, search in each of the query sequences for the same epitope, but
+expand the range with this number of amino acids}
 }
 \description{
 Scores how well the epitopes in a patient's virus' sequences will be recognized by
