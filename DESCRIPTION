@@ -5,11 +5,12 @@ Description: A package that can be used to find out how well the epitopes in a
 Version: 0.1
 Author: philliplab@gmail.com
 Maintainer: Phillip Labuschagne <philliplab@gmail.com>
-Depends:
+Imports:
     testthat,
     digest,
     shiny,
-    Biostrings
+    Biostrings,
+    methods
 License: GPL-3
 Collate:
     'lanl_hla_data.R'

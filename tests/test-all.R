@@ -1,3 +1,4 @@
 library(testthat)
 library(EpitopeMatcher)
-test_check("EpitopeMatcher")
+
+test_package("EpitopeMatcher")
