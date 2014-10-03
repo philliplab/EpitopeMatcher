@@ -2,9 +2,9 @@ context('Matcher')
 
 test_that('get_matchable_patient_ids works', {
   qa <- read_query_alignment(file.path(find.package('EpitopeMatcher', .libPaths()), 
-                                  'test_data/query_alignment.FASTA'))
+                                  'test_data/query_alignment_test_file.fasta'))
   ph <- read_patient_hla(file.path(find.package('EpitopeMatcher', .libPaths()), 
-                                  'test_data/patient_hla_file.csv'))
+                                  'test_data/patient_hla_test_file.csv'))
   m_ids <- get_matchable_patient_ids(qa, ph)
   expect_that(sort(m_ids), equals(c("P00885", "P01288", "P02869", "P03257", "V05130", "V05649", 
     "V11204", "V11474")))
@@ -19,9 +19,9 @@ test_that('list_hlas works', {
                   "Cw*0602", "Cw*0701", "Cw*0704", "Cw*0704", "Cw*1203", "Cw*1601", 
                   "Cw*1601", "Cw*1601", "Cw*1701", "Cw*1701", "Cw*1801")
   qa <- read_query_alignment(file.path(find.package('EpitopeMatcher', .libPaths()), 
-                                  'test_data/query_alignment.FASTA'))
+                                  'test_data/query_alignment_test_file.fasta'))
   ph <- read_patient_hla(file.path(find.package('EpitopeMatcher', .libPaths()), 
-                                  'test_data/patient_hla_file.csv'))
+                                  'test_data/patient_hla_test_file.csv'))
   hlas_to_target <- list_hlas(qa, ph)
   expect_that(sort(hlas_to_target), equals(input_hlas))
 })
@@ -37,11 +37,11 @@ test_that('list_epitopes works', {
                       "TLNAWVKLV", "TLNAWVKW", "TLRAEQATQD", "VGFPVRPQV", "VHQAISPRTL", 
                       "VKVVEEKAF", "VLMWQFDSRL", "WKFDSRLAF", "YPGIKVKQL", "YVDRFFKTL")
   qa <- read_query_alignment(file.path(find.package('EpitopeMatcher', .libPaths()), 
-                                  'test_data/query_alignment.FASTA'))
+                                  'test_data/query_alignment_test_file.fasta'))
   ph <- read_patient_hla(file.path(find.package('EpitopeMatcher', .libPaths()), 
-                                  'test_data/patient_hla_file.csv'))
+                                  'test_data/patient_hla_test_file.csv'))
   ln <- read_lanl_hla(file.path(find.package('EpitopeMatcher', .libPaths()), 
-                                  'test_data/lanl_hla_file.csv'))
+                                  'test_data/lanl_hla_test_file.csv'))
   epitopes_to_target <- list_epitopes(qa, ph, ln)
   expect_that(sort(epitopes_to_target$epitope), equals(input_epitopes))
 })
