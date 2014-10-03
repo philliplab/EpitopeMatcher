@@ -12,6 +12,7 @@ before_install:
   - ./travis-tool.sh bootstrap
 install:
   - ./travis-tool.sh install_deps
+  - ./travis-tool.sh install_bioc Biostrings
 script: ./travis-tool.sh run_tests
 
 after_failure:
@@ -19,5 +20,5 @@ after_failure:
 
 notifications:
   email:
-    on_success: change
-    on_failure: change
+    on_success: philliplab@gmail.com
+    on_failure: philliplab@gmail.com
