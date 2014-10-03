@@ -1,15 +1,26 @@
-#' Gets all the patient ids that are in both the MSA and the patient_hla file
+#' @include patient_HLA.R
+#' @include msa.R
+#' @include lanl_hla_data.R
+NULL
+
+#' Returns the ids of the patients in the data structure
 #' @param query_alignment The query alignment
 #' @param patient_hla The data.frame (of class Patient_HLA) that contain lists
 #' all the HLA genotypes each patient has.
-#' @export
+#' @rdname get_matchable_patient_ids-methods
+#' @export get_matchable_patient_ids
+setGeneric("get_matchable_patient_ids",
+           function(query_alignment, patient_hla){
+             standardGeneric("get_matchable_patient_ids")
+           }
+)
 
-get_matchable_patient_ids <- function(query_alignment, patient_hla){
+#' @rdname get_matchable_patient_ids-methods
+#' @aliases get_matchable_patient_ids
+setMethod("get_matchable_patient_ids", 
+          c('AAStringSet', 'Patient_HLA'),
 
-  # These checks can be done better using OO features?
-  stopifnot(class(query_alignment) == 'AAStringSet')
-  stopifnot(class(patient_hla) == 'Patient_HLA')
-
+function(query_alignment, patient_hla){
   qa_ids <- get_patient_ids(query_alignment)
   ph_ids <- get_patient_ids(patient_hla)
   m_ids <- qa_ids[qa_ids %in% ph_ids]
@@ -18,6 +29,8 @@ get_matchable_patient_ids <- function(query_alignment, patient_hla){
             They will not be analyzed") }
   return(m_ids)
 }
+  
+)
 
 #' Lists all the hla genotypes that must be investigated
 #' @param query_alignment The query alignment
