@@ -64,20 +64,27 @@ function(query_alignment, patient_hla){
 #' all the HLA genotypes each patient has.
 #' @param lanl_hla_data The data.frame (of class LANL_HLA_data) that contains
 #' the descriptions of the different HLA genotypes
-#' @export
+#' @rdname list_epitopes-methods
+#' @export list_epitopes
+setGeneric("list_epitopes",
+           function(query_alignment, patient_hla, lanl_hla_data){
+             standardGeneric("list_epitopes")
+           }
+)
 
-list_epitopes <- function(query_alignment, patient_hla, lanl_hla_data){
-  
-  # These checks can be done better using OO features?
-  stopifnot(class(query_alignment) == 'AAStringSet')
-  stopifnot(class(patient_hla) == 'Patient_HLA')
-  stopifnot(class(lanl_hla_data) == 'LANL_HLA_data')
+#' @rdname list_epitopes-methods
+#' @aliases list_epitopes
+setMethod("list_epitopes", 
+          c('AAStringSet', 'Patient_HLA', 'LANL_HLA_data'),
 
+function(query_alignment, patient_hla, lanl_hla_data){
   hlas <- list_hlas(query_alignment, patient_hla)
 
   return(lanl_hla_data[lanl_hla_data$hla_genotype %in% hlas, 
                        c('epitope', 'start_pos', 'end_pos', 'hla_genotype')])
 }
+
+)
 
 #' Finds the position of the epitope in the reference sequence
 #'
