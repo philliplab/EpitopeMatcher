@@ -1,2 +1,4 @@
-^\.travis\.yml$
-^\.git*
+.travis.yml
+.gitignore
+.git
+*.swp
