@@ -17,8 +17,7 @@ all the HLA genotypes each patient has.}
 the descriptions of the different HLA genotypes}
 }
 \description{
-Call for testing:
-score_sequence_epitopes(read_query_alignment(), read_patient_hla(),
-read_lanl_hla())
+Scores how well the epitopes in a patient's virus' sequences will be recognized by
+the patient's HLA genotype.
 }
 

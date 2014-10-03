@@ -194,10 +194,6 @@ compute_epitope_scores <- function(epitope, query_alignment, range_expansion = 0
   }
   ref_pos <- epitope_pos_in_ref(epitope, query_alignment)
   if (alignment_successful(epitope, ref_pos$alignment)){
-#    sequence_substr <- substr(query_alignment, ref_pos$start_pos, 
-#                              ref_pos$end_pos)
-#    sequence_substr <- lapply(sequence_substr, AAString)
-#    eregion_in_refseq <- sequence_substr[[1]]
     eregion_in_refseq <- subject(ref_pos$alignment)
     sequence_substr <- substr(query_alignment, ref_pos$start_pos - range_expansion, 
                               ref_pos$end_pos + range_expansion)
@@ -230,9 +226,6 @@ compute_epitope_scores <- function(epitope, query_alignment, range_expansion = 0
 #' Scores how well the epitopes in a patient's virus' sequences will be recognized by 
 #' the patient's HLA genotype.
 #'
-#' Call for testing:
-#' score_sequence_epitopes(read_query_alignment(), read_patient_hla(),
-#' read_lanl_hla())
 #' @param query_alignment The query alignment
 #' @param patient_hla The data.frame (of class Patient_HLA) that contain lists
 #' all the HLA genotypes each patient has.

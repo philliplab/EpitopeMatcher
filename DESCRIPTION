@@ -3,8 +3,8 @@ Title: Epitope Matcher
 Description: A package that can be used to find out how well the epitopes in a
     patient's virus' will be recognized by the HLA's present in the patient.
 Version: 0.1
-Author: Someone@gmail.com
-Maintainer: Someone <Someone@gmail.com>
+Author: philliplab@gmail.com
+Maintainer: Phillip Labuschagne <philliplab@gmail.com>
 Depends:
     testthat,
     digest,
