@@ -6,19 +6,21 @@
 \title{Returns the patient_ids that are in both the query_alignment and the
 patient_hla file.}
 \usage{
-get_matchable_patient_ids(query_alignment, patient_hla)
+get_matchable_patient_ids(query_alignment, patient_hla, ...)
 
 \S4method{get_matchable_patient_ids}{AAStringSet,Patient_HLA}(query_alignment,
-  patient_hla)
+  patient_hla, ...)
 }
 \arguments{
 \item{query_alignment}{The query alignment}
 
 \item{patient_hla}{The data.frame (of class Patient_HLA) that contain lists
 all the HLA genotypes each patient has.}
+
+\item{...}{Extra arguments passed to the get_patient_ids method used on the
+query_alignment}
 }
 \description{
-Returns the patient_ids that are in both the query_alignment and the
-patient_hla file.
+Treats the patient_id column in the patient_hla file as a regular expression
 }
 
