@@ -6,11 +6,6 @@ NULL
 #' @export
 
 read_query_alignment <- function(file_name){
-#  if (is.null(file_name)){
-#    warning("No file name supplied to read_patient_hla - using test data")
-#    file_name <- file.path(find.package('EpitopeMatcher', .libPaths()), 
-#                           'test_data/query_alignment.FASTA')
-#  }
   x <- readAAStringSet(file_name)
   return(x)
 }
@@ -18,7 +13,10 @@ read_query_alignment <- function(file_name){
 #' @rdname get_patient_ids-methods
 #' @aliases get_patient_ids
 setMethod("get_patient_ids", "AAStringSet",
-          function(x, sep = '|', id_position = 1){
-            split_names <- strsplit(names(x), '\\|')[[1]]
-            return(split_names[id_position])
+          function(x, sep = '\\|', id_position = 1){
+            split_names <- strsplit(names(x), sep)
+            names_vector <- unlist(lapply(split_names, `[[`, id_position))
+            names_vector <- gsub("^ +", "", names_vector)
+            names_vector <- gsub(" +$", "", names_vector)
+            return(names_vector)
           })

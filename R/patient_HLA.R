@@ -41,7 +41,7 @@ read_patient_hla <- function(file_name){
 #' @rdname get_patient_ids-methods
 #' @export get_patient_ids
 setGeneric("get_patient_ids",
-           function(x, sep = '|', id_position = 1){standardGeneric("get_patient_ids")}
+           function(x, sep = '\\|', id_position = 1){standardGeneric("get_patient_ids")}
 )
 
 #' @rdname get_patient_ids-methods

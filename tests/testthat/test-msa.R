@@ -11,7 +11,7 @@ test_that("get_patient_ids work", {
   x <- read_query_alignment(file.path(find.package('EpitopeMatcher', .libPaths()), 
                                   'test_data/query_alignment_test_file.fasta'))
   ids <- get_patient_ids(x)
-  expect_that("P00885" %in% ids, is_true())
-  expect_that("V05130" %in% ids, is_true())
-  expect_that("A*4301" %in% ids, is_false())
+  expect_that("hxb2" %in% ids, is_true())
+  expect_that("hxb2 " %in% ids, is_false())
+  expect_that("pat02" %in% ids, is_true())
 })

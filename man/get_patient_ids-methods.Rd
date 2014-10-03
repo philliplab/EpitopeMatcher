@@ -6,9 +6,9 @@
 \alias{get_patient_ids,Patient_HLA-method}
 \title{Returns the ids of the patients in the data structure}
 \usage{
-\S4method{get_patient_ids}{AAStringSet}(x, sep = "|", id_position = 1)
+\S4method{get_patient_ids}{AAStringSet}(x, sep = "\\\\|", id_position = 1)
 
-get_patient_ids(x, sep = "|", id_position = 1)
+get_patient_ids(x, sep = "\\\\|", id_position = 1)
 
 \S4method{get_patient_ids}{Patient_HLA}(x)
 }
