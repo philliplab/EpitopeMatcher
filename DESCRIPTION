@@ -5,9 +5,9 @@ Description: A package that can be used to find out how well the epitopes in a
 Version: 0.1
 Author: philliplab@gmail.com
 Maintainer: Phillip Labuschagne <philliplab@gmail.com>
-Imports:
-    testthat,
+Depends:
     digest,
+    testthat,
     shiny,
     Biostrings,
     methods
