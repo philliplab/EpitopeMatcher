@@ -6,13 +6,18 @@
 \alias{get_patient_ids,Patient_HLA-method}
 \title{Returns the ids of the patients in the data structure}
 \usage{
-\S4method{get_patient_ids}{AAStringSet}(x)
+\S4method{get_patient_ids}{AAStringSet}(x, sep = "|", id_position = 1)
 
-get_patient_ids(x)
+get_patient_ids(x, sep = "|", id_position = 1)
 
 \S4method{get_patient_ids}{Patient_HLA}(x)
 }
 \arguments{
+\item{sep}{The symbol used to separate elements in the sequence names}
+
+\item{id_position}{After the sequence name has been split on the 'sep'
+character, which element of the resulting vector contains the patient id?}
+
 \item{data}{The data structure to interrogate}
 }
 \description{

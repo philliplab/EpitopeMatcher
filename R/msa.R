@@ -18,8 +18,7 @@ read_query_alignment <- function(file_name){
 #' @rdname get_patient_ids-methods
 #' @aliases get_patient_ids
 setMethod("get_patient_ids", "AAStringSet",
-          function(x){
-            return(names(x))
-#            return(x@unmasked@ranges@NAMES[2:nrow(x)])
-#            return(rownames(x)[2:nrow(x)]) #### Does not work???
+          function(x, sep = '|', id_position = 1){
+            split_names <- strsplit(names(x), '\\|')[[1]]
+            return(split_names[id_position])
           })

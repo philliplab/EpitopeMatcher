@@ -28,11 +28,6 @@
 #' @export
 
 read_patient_hla <- function(file_name){
-#  if (is.null(file_name)){
-#    warning("No file name supplied to read_patient_hla - using test data")
-#    file_name <- file.path(find.package('EpitopeMatcher', .libPaths()), 
-#                           'test_data/patient_hla_file.csv')
-#  }
   x <- read.csv(file_name,
                 stringsAsFactors = FALSE)
   return(.Patient_HLA(x))
@@ -40,10 +35,13 @@ read_patient_hla <- function(file_name){
 
 #' Returns the ids of the patients in the data structure
 #' @param data The data structure to interrogate
+#' @param sep The symbol used to separate elements in the sequence names
+#' @param id_position After the sequence name has been split on the 'sep'
+#' character, which element of the resulting vector contains the patient id?
 #' @rdname get_patient_ids-methods
 #' @export get_patient_ids
 setGeneric("get_patient_ids",
-           function(x){standardGeneric("get_patient_ids")}
+           function(x, sep = '|', id_position = 1){standardGeneric("get_patient_ids")}
 )
 
 #' @rdname get_patient_ids-methods
