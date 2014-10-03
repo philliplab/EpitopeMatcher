@@ -3,7 +3,8 @@
 \name{get_matchable_patient_ids}
 \alias{get_matchable_patient_ids}
 \alias{get_matchable_patient_ids,AAStringSet,Patient_HLA-method}
-\title{Returns the ids of the patients in the data structure}
+\title{Returns the patient_ids that are in both the query_alignment and the
+patient_hla file.}
 \usage{
 get_matchable_patient_ids(query_alignment, patient_hla)
 
@@ -17,6 +18,7 @@ get_matchable_patient_ids(query_alignment, patient_hla)
 all the HLA genotypes each patient has.}
 }
 \description{
-Returns the ids of the patients in the data structure
+Returns the patient_ids that are in both the query_alignment and the
+patient_hla file.
 }
 
