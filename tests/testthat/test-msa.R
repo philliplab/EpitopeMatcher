@@ -1,15 +1,17 @@
 context("MSA")
 
 test_that("read_query_alignment works", {
-  x <- read_query_alignment(file.path(find.package('EpitopeMatcher', .libPaths()), 
-                                  'test_data/query_alignment_test_file.fasta'))
+#  x <- read_query_alignment(file.path(find.package('EpitopeMatcher', .libPaths()), 
+#                                  'test_data/query_alignment_test_file.fasta'))
+  x <- get_test_query_alignment()
   expect_that(x, is_a('AAStringSet'))
   expect_that(digest(x), equals("9beaf63ab683c0353b9dea853b13ef9b"))
 })
 
 test_that("get_patient_ids work", {
-  x <- read_query_alignment(file.path(find.package('EpitopeMatcher', .libPaths()), 
-                                  'test_data/query_alignment_test_file.fasta'))
+#  x <- read_query_alignment(file.path(find.package('EpitopeMatcher', .libPaths()), 
+#                                  'test_data/query_alignment_test_file.fasta'))
+  x <- get_test_query_alignment()
   ids <- get_patient_ids(x)
   expect_that("hxb2" %in% ids, is_true())
   expect_that("hxb2 " %in% ids, is_false())

@@ -33,6 +33,22 @@ read_patient_hla <- function(file_name){
   return(.Patient_HLA(x))
 }
 
+#' A function that returns a test patient hla dataset
+#' @param dataset_name The name of the test dataset to return
+#' @export
+
+get_test_patient_hla_data <- function(dataset_name = 'base'){
+  data_sets <- list(
+    'base' = new("Patient_HLA", 
+                 .Data = list(c("pat01", "pat01", "pat02", "pat", "pat0[13]", "pat01"), 
+                              c("A*3002", "A*3003", "B40", "B63", "B27", "X67")), 
+            names = c("patient_id", "hla_genotype"), 
+            row.names = 1:6, 
+            .S3Class = "data.frame")
+    )
+  return(data_sets[[dataset_name]])
+}
+
 #' Returns the ids of the patients in the data structure
 #' @param data The data structure to interrogate
 #' @param sep The symbol used to separate elements in the sequence names

@@ -23,8 +23,9 @@ test_that("LANL_HLA_data Class Constructor works", {
 })
 
 test_that("read_patient_hla works", {
-  x <- read_lanl_hla(file.path(find.package('EpitopeMatcher', .libPaths()), 
-                                  'test_data/lanl_hla_test_file.csv'))
+#  x <- read_lanl_hla(file.path(find.package('EpitopeMatcher', .libPaths()), 
+#                                  'test_data/lanl_hla_test_file.csv'))
+  x <- get_test_lanl_hla_data()
   expect_that(x, is_a('LANL_HLA_data'))
-  expect_that(digest(x), equals("0eef046473e6caa3d518e4bb1780ee3e"))
+  expect_that(digest(x), equals("c8ffd415e9e5d74f9e068a8907590d74"))
 })
