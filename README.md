@@ -46,15 +46,15 @@ score_epitope()
 		log_epitope_found()
 ```
 
-### List of Data Structures
+### List of Classes
 
-#### ScoringJob
+#### Scoring_Job
 * attributes
-  - hla_genotype
-  - vector of query_sequence_names
+  - hla_genotype : character
+  - vector of query_sequence_names : character
 * methods  
-  - get_query_sequence_names
-  - get_epitope
-  - get_hla_details
+  - get_query_sequence_names() : vector of character
+  - get_epitope() : AAString
+  - get_hla_details() : data.frame
 
-#### EpitopePosition
+#### Epitope_Position
