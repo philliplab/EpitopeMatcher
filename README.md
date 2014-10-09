@@ -49,12 +49,12 @@ score_epitope()
 ### List of Data Structures
 
 #### ScoringJob
-1. attributes
- 1. hla_genotype
- 2. vector of query_sequence_names
-2. methods  
- 1. get_query_sequence_names
- 2. get_epitope
- 3. get_hla_details
+* attributes
+  - hla_genotype
+  - vector of query_sequence_names
+* methods  
+  - get_query_sequence_names
+  - get_epitope
+  - get_hla_details
 
 #### EpitopePosition
