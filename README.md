@@ -20,7 +20,7 @@ run_EpitopeMatcher_app()
 
 ## Design Notes
 
-### Main outline of the code
+### Outline showing execution order
 
 ```r
 match_epitopes()
@@ -45,3 +45,16 @@ score_epitope()
 		align_ref_epitope_to_query_seqs()
 		log_epitope_found()
 ```
+
+### List of Data Structures
+
+#### ScoringJob
+1. attributes
+.1. hla_genotype
+.2. vector of query_sequence_names
+2. methods  
+.1. get_query_sequence_names
+.2. get_epitope
+.3. get_hla_details
+
+#### EpitopePosition
