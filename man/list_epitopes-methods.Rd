@@ -3,7 +3,8 @@
 \name{list_epitopes}
 \alias{list_epitopes}
 \alias{list_epitopes,AAStringSet,Patient_HLA,LANL_HLA_data-method}
-\title{Lists all the hla genotypes that must be investigated}
+\title{Constructs a list of all epitopes and the patients in which they must be
+investigated.}
 \usage{
 list_epitopes(query_alignment, patient_hla, lanl_hla_data)
 
@@ -21,6 +22,7 @@ all the HLA genotypes each patient has.}
 the descriptions of the different HLA genotypes}
 }
 \description{
-Lists all the hla genotypes that must be investigated
+Contains epitope, hla_genotype, patient_id and some extra data from the lanl
+file
 }
 

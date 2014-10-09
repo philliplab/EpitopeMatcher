@@ -17,3 +17,31 @@ To run the web UI:
 library(EpitopeMatcher)
 run_EpitopeMatcher_app()
 ```
+
+## Design Notes
+
+### Main outline of the code
+
+```r
+match_epitopes()
+	list_scores_to_compute()
+	score_all_epitopes()
+	output_results()
+
+list_scores_to_compute()
+	match_patient_hla_to_query_alignment()
+	add_hla_information()
+
+score_all_epitopes()
+	for (job in …)
+		score_epitope()
+
+score_epitope()
+	find_epitope_in_ref()
+	if not found()
+		log_epitope_not_found()
+	if found()
+		get_query_sequences()
+		align_ref_epitope_to_query_seqs()
+		log_epitope_found()
+```

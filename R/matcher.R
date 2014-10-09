@@ -28,7 +28,8 @@ setMethod("get_matchable_patient_ids",
 function(query_alignment, patient_hla, ...){
   qa_ids <- get_patient_ids(query_alignment, ...)
   ph_ids <- get_patient_ids(patient_hla)
-  m_ids <- qa_ids[qa_ids %in% ph_ids]
+#  m_ids <- qa_ids[qa_ids %in% ph_ids]
+
   if (length(unique(qa_ids)) != length(unique(m_ids))){
     warning("Not all patients in query_alignment have hla genotypes specified.
             They will not be analyzed") }
@@ -62,7 +63,11 @@ function(query_alignment, patient_hla){
 
 )
 
-#' Lists all the hla genotypes that must be investigated
+#' Constructs a list of all epitopes and the patients in which they must be
+#' investigated.
+#'
+#' Contains epitope, hla_genotype, patient_id and some extra data from the lanl
+#' file
 #' @param query_alignment The query alignment
 #' @param patient_hla The data.frame (of class Patient_HLA) that contain lists
 #' all the HLA genotypes each patient has.
@@ -308,3 +313,7 @@ score_sequence_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
               error_log = error_log,
               msg = 'Scores computed successfully'))
 }
+
+
+
+
