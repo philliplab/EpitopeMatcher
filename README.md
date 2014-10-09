@@ -50,11 +50,11 @@ score_epitope()
 
 #### ScoringJob
 1. attributes
-  1. hla_genotype
-  2. vector of query_sequence_names
+ 1. hla_genotype
+ 2. vector of query_sequence_names
 2. methods  
-  1. get_query_sequence_names
-  2. get_epitope
-  3. get_hla_details
+ 1. get_query_sequence_names
+ 2. get_epitope
+ 3. get_hla_details
 
 #### EpitopePosition
