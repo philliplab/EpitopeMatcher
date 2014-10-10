@@ -5,12 +5,18 @@
 #' job.
 #'
 #' Three pieces of information is required for a scoring job to be valid:
-#' \begin{itemize}
+#' \itemize{
 #'   \item{hla_genotype - The name of the hla_genotype to investigate}
 #'   \item{query_sequence_names - A character vector of the names of the query
 #'   sequences in which this hla_genotype must be looked for}
 #'   \item{hla_details - A list of further details about this hla_genotype}
-#' \end{itemize}
+#' }
+#'
+#' The hla_details is forced to have the following values: "end_pos", 
+#' "epitope", "gene_name", "hla_genotype", "hxb2_dna_position", "organism", 
+#' "start_pos", "subprotein", and "sub_type". This is reasonable since the HLA
+#' data will always come from the LANL file and these details must be added to
+#' the results and error logs.
 #' 
 #' @rdname Scoring_Job
 #' @aliases Scoring_Job-class
@@ -36,4 +42,3 @@
     }
   }
 )
-

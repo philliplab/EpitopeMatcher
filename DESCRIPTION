@@ -8,9 +8,10 @@ Maintainer: Phillip Labuschagne <philliplab@gmail.com>
 Depends:
     digest,
     testthat,
-    shiny,
     Biostrings,
     methods
+Imports:
+    shiny
 License: GPL-3
 Collate:
     'lanl_hla_data.R'

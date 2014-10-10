@@ -1,4 +1,5 @@
 #' @import Biostrings digest methods shiny testthat
+#' @importFrom shiny runApp
 NULL
 
 #' The class for the data that describes which patients have which HLAs
