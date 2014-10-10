@@ -42,3 +42,13 @@
     }
   }
 )
+
+#' Matches the patient hla data to the query sequence to check which hla's must
+#' be checked for in which sequences.
+#' 
+#' It treats the patient_id column in the patient_hla data as a regular
+#' expression and performs the lookup to the query sequence names
+#' @export
+
+match_patient_hla_to_query_alignment <- function(){
+}

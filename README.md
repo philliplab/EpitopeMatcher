@@ -29,8 +29,17 @@ match_epitopes()
 	output_results()
 
 list_scores_to_compute()
-	match_patient_hla_to_query_alignment()
-	add_hla_information()
+	matched_patients = match_patient_hla_to_query_alignment()
+	build_scoring_jobs(matched_patients, lanl_hla_data)
+
+build_scoring_jobs(matched_patients, lanl_hla_data)
+  jobs = NULL
+  for (mp in matched_patients)
+    hla_details = get_hla_details(mp$..., lanl_hla_data)
+    jobs = c(jobs,
+             .Scoring_Job(hla_genotype,
+                          patients,
+                          hla_details))
 
 score_all_epitopes()
 	for (job in …)
