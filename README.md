@@ -30,7 +30,8 @@ match_epitopes()
 
 list_scores_to_compute()
 	matched_patients = match_patient_hla_to_query_alignment()
-	build_scoring_jobs(matched_patients, lanl_hla_data)
+  flat_lanl_hla = flatten_lanl_hla()
+	build_scoring_jobs(matched_patients, matched_hlas)
 
 build_scoring_jobs(matched_patients, lanl_hla_data)
   jobs = NULL

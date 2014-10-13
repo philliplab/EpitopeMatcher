@@ -19,4 +19,5 @@ Collate:
     'patient_HLA.R'
     'msa.R'
     'matcher.R'
+    'scoring_job.R'
     'shiny_app.R'
