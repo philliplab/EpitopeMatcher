@@ -1,0 +1,5 @@
+EpitopeMatcher v0.1
+-----------------------------------------------------------
+
+Fuzzy matching is now supported between the patient_hla and query_alignments
+as well as between the patient_hla and lanl_hla files.
