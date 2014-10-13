@@ -23,5 +23,9 @@ test_that('match_patient_hla_to_query_alignment works', {
   patient_hla <- get_test_patient_hla_data()
   lanl_hla <- get_test_lanl_hla_data()
   query_alignment <- get_test_query_alignment()
-  expect_that(1+1, equals(2))
+  x <- match_patient_hla_to_query_alignment(query_alignment, patient_hla)
+  expect_that(x[['A*3002']], equals("pat01|scribbles"))
+  expect_that(x[['B63']], equals(c("pat01|scribbles", 
+                                   "pat02|human|protein piece|>@booo \"\" -/.,!@#@#%^&*()",
+                                   "pat03")))
 })

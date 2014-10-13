@@ -13,6 +13,11 @@ alignment of the patient's viral sequences}
 \item{patient_hla}{The data.frame that specifies which query sequence to
 check against which hla genotypes}
 }
+\value{
+A list of vectors of query_sequence_names. The list is indexed by
+hla_genotype and the elements is a character vector listing all the query
+sequences that must be checked against the associated hla_genotype
+}
 \description{
 It treats the patient_id column in the patient_hla data as a regular
 expression and performs the lookup to the query sequence names
