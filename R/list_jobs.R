@@ -34,7 +34,7 @@
     if (length(object@hla_details) == 0){
       stop('At least some details must be supplied about the hla')
     }
-    required_details <- c("end_pos", "epitope", "gene_name", "hla_genotype", "hxb2_dna_position", 
+    required_details <- c("end_pos", "epitope", "gene_name", "hxb2_dna_position", 
                           "organism", "start_pos", "subprotein", "sub_type")
     details_supplied <- sort(names(object@hla_details))
     if (!all(details_supplied == required_details)){
@@ -110,18 +110,54 @@ flatten_lanl_hla <- function(lanl_hla){
   return(flat_lanl_hla)
 }
 
-#' Extracts an hla's details from the LANL file
+#' Builds scoring jobs from pre-processed inputs
+#' @param matched_patients As produced by
+#' \code{\link{match_patient_hla_to_query_alignment}}.
+#' @param flat_lanl_hla As produced by \code{\link{flatten_lanl_hla}}
+#' @export
+
+build_scoring_jobs <- function(matched_patients, flat_lanl_hla){
+  the_scoring_jobs <- list()
+  for (hla_genotype in names(matched_patients)){
+    hla_details <- flat_lanl_hla[flat_lanl_hla$hla_genotype == hla_genotype,
+                                 names(flat_lanl_hla) != "hla_genotype"]
+    if (nrow(hla_details) == 1){
+      query_sequence_names = matched_patients[[hla_genotype]]
+      the_scoring_jobs[[hla_genotype]] <- .Scoring_Job(hla_genotype = hla_genotype,
+        query_sequence_names = query_sequence_names,
+        hla_details = as.list(hla_details))
+    } else if (nrow(hla_details) == 0){
+        warning(paste0("No hla_details for ", hla_genotype))
+    } else {
+      stop(paste0("More than one set od details found for hla: ", hla_genotype))
+    }
+  }
+  return(the_scoring_jobs)
+}
+
+#' Processes the three input files (query_alignment, patient_hla and lanl_hla)
+#' in to a list of scoring jobs.
+#' 
+#' First the patient_hla data is matched to the query_alignment
+#' \code{\link{match_patient_hla_to_query_alignment}}, then the lanl_hla file
+#' is flattened \code{\link{flatten_lanl_hla}}, and finally, the jobs are built
+#' \code{\link{build_scoring_jobs}}.
 #'
-#' @return A list of data.frames of hla details. The list is indexed by
-#' hla_genotype and the data.frame contains a single row with the relevant
-#' details of the hla_genotype.
+#' This list of jobs can then be used to perform the comparisons.
 #'
+#' @return A list of Scoring_Jobs
+#'
+#' @param query_alignment An AAStringSet that contains the multiple sequence
+#' alignment of the patient's viral sequences
 #' @param patient_hla The data.frame that specifies which query sequence to
 #' check against which hla genotypes
 #' @param lanl_hla The data.frame (of class LANL_HLA_data) that contains
 #' the descriptions of the different HLA genotypes
 #' @export
 
-match_patient_hla_to_lanl_hla <- function(patient_hla, lanl_hla){
-
+list_scores_to_compute <- function(query_alignment, patient_hla, lanl_hla){
+  matched_patients <- match_patient_hla_to_query_alignment(query_alignment, patient_hla)
+  flat_lanl_hla <- flatten_lanl_hla(lanl_hla)
+  the_scoring_jobs <- build_scoring_jobs(matched_patients, flat_lanl_hla)
+  return(the_scoring_jobs)
 }
