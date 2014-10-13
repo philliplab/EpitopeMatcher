@@ -4,7 +4,8 @@ EpitopeMatcher
 A package that can be used to find out how well the epitopes in a patient's virus' will be
 recognized by the HLA's present in the patient.
 
-It can be install directly from github using devtools:
+It can be installed directly from github using devtools. In an R session issue
+these commands:
 ```r
 install.packages('devtools')
 library(devtools)
@@ -17,6 +18,12 @@ To run the web UI:
 library(EpitopeMatcher)
 run_EpitopeMatcher_app()
 ```
+
+To use EpitopeMatcher in an R session, see the help file of these functions:
+* read_lanl_hla
+* read_patient_hla
+* read_query_alignment
+* score_sequence_epitopes 
 
 ## Design Notes
 
