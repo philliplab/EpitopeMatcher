@@ -3,98 +3,6 @@
 #' @include lanl_hla_data.R
 NULL
 
-#' Returns the patient_ids that are in both the query_alignment and the
-#' patient_hla file. 
-#'
-#' Treats the patient_id column in the patient_hla file as a regular expression
-#' @param query_alignment The query alignment
-#' @param patient_hla The data.frame (of class Patient_HLA) that contain lists
-#' all the HLA genotypes each patient has.
-#' @param ... Extra arguments passed to the get_patient_ids method used on the
-#' query_alignment
-#' @rdname get_matchable_patient_ids-methods
-#' @export get_matchable_patient_ids
-setGeneric("get_matchable_patient_ids",
-           function(query_alignment, patient_hla, ...){
-             standardGeneric("get_matchable_patient_ids")
-           }
-)
-
-#' @rdname get_matchable_patient_ids-methods
-#' @aliases get_matchable_patient_ids
-setMethod("get_matchable_patient_ids", 
-          c('AAStringSet', 'Patient_HLA'),
-
-function(query_alignment, patient_hla, ...){
-  qa_ids <- get_patient_ids(query_alignment, ...)
-  ph_ids <- get_patient_ids(patient_hla)
-#  m_ids <- qa_ids[qa_ids %in% ph_ids]
-
-  if (length(unique(qa_ids)) != length(unique(m_ids))){
-    warning("Not all patients in query_alignment have hla genotypes specified.
-            They will not be analyzed") }
-  return(m_ids)
-}
-  
-)
-
-#' Lists all the hla genotypes that must be investigated
-#' @param query_alignment The query alignment
-#' @param patient_hla The data.frame (of class Patient_HLA) that contain lists
-#' all the HLA genotypes each patient has.
-#' @rdname list_hlas-methods
-#' @export list_hlas
-setGeneric("list_hlas",
-           function(query_alignment, patient_hla){
-             standardGeneric("list_hlas")
-           }
-)
-
-#' @rdname list_hlas-methods
-#' @aliases list_hlas
-setMethod("list_hlas", 
-          c('AAStringSet', 'Patient_HLA'),
-
-function(query_alignment, patient_hla){
-  m_ids <- get_matchable_patient_ids(query_alignment, patient_hla)
-  hla_genotypes <- patient_hla[patient_hla$patient_id %in% m_ids, 'hla_genotype']
-  return(hla_genotypes)
-}
-
-)
-
-#' Constructs a list of all epitopes and the patients in which they must be
-#' investigated.
-#'
-#' Contains epitope, hla_genotype, patient_id and some extra data from the lanl
-#' file
-#' @param query_alignment The query alignment
-#' @param patient_hla The data.frame (of class Patient_HLA) that contain lists
-#' all the HLA genotypes each patient has.
-#' @param lanl_hla_data The data.frame (of class LANL_HLA_data) that contains
-#' the descriptions of the different HLA genotypes
-#' @rdname list_epitopes-methods
-#' @export list_epitopes
-setGeneric("list_epitopes",
-           function(query_alignment, patient_hla, lanl_hla_data){
-             standardGeneric("list_epitopes")
-           }
-)
-
-#' @rdname list_epitopes-methods
-#' @aliases list_epitopes
-setMethod("list_epitopes", 
-          c('AAStringSet', 'Patient_HLA', 'LANL_HLA_data'),
-
-function(query_alignment, patient_hla, lanl_hla_data){
-  hlas <- list_hlas(query_alignment, patient_hla)
-
-  return(lanl_hla_data[lanl_hla_data$hla_genotype %in% hlas, 
-                       c('epitope', 'start_pos', 'end_pos', 'hla_genotype')])
-}
-
-)
-
 #' Finds the position of the epitope in the reference sequence
 #'
 #' It uses pairwiseAlignment with the default settings. See Biostrings manual
@@ -285,7 +193,8 @@ score_sequence_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
                 results = data.frame(note = 'Input Files Invalid'),
                 error_log = data.frame(note = 'Input Files Invalid')))
   }
-  epitopes <- list_epitopes(query_alignment, patient_hla, lanl_hla_data)
+  the_scoring_jobs <- list_scores_to_compute(query_alignment, patient_hla, lanl_hla_data)
+  epitopes <- unlist(lapply(the_scoring_jobs, get_epitope))
   results <- NULL
   error_log <- NULL
   for (i in 1:nrow(epitopes)){
@@ -313,7 +222,4 @@ score_sequence_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
               error_log = error_log,
               msg = 'Scores computed successfully'))
 }
-
-
-
 
