@@ -31,9 +31,13 @@ get_test_query_alignment <- function(dataset_name = 'base'){
 #' @aliases get_patient_ids
 setMethod("get_patient_ids", "AAStringSet",
           function(x, sep = '\\|', id_position = 1){
-            split_names <- strsplit(names(x), sep)
-            names_vector <- unlist(lapply(split_names, `[[`, id_position))
-            names_vector <- gsub("^ +", "", names_vector)
-            names_vector <- gsub(" +$", "", names_vector)
-            return(names_vector)
+            if (is.null(sep) | is.null(id_position)){
+              return (names(x))
+            } else {
+              split_names <- strsplit(names(x), sep)
+              names_vector <- unlist(lapply(split_names, `[[`, id_position))
+              names_vector <- gsub("^ +", "", names_vector)
+              names_vector <- gsub(" +$", "", names_vector)
+              return(names_vector)
+            }
           })

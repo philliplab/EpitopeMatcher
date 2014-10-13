@@ -4,10 +4,22 @@
 \title{Matches the patient hla data to the query sequence to check which hla's must
 be checked for in which sequences.}
 \usage{
-match_patient_hla_to_query_alignment()
+match_patient_hla_to_query_alignment(query_alignment, patient_hla)
+}
+\arguments{
+\item{query_alignment}{An AAStringSet that contains the multiple sequence
+alignment of the patient's viral sequences}
+
+\item{patient_hla}{The data.frame that specifies which query sequence to
+check against which hla genotypes}
 }
 \description{
 It treats the patient_id column in the patient_hla data as a regular
 expression and performs the lookup to the query sequence names
+}
+\details{
+A central issue is how to communicate the query sequence names / positions
+between the different functions. The preferred approach is to use the entire
+FASTA header for the sequence in question.
 }
 
