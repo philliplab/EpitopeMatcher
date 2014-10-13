@@ -17,15 +17,22 @@ test_that('Scoring_Job constructor works',{
   expect_that(y, is_a('Scoring_Job'))
 })
 
-
 test_that('match_patient_hla_to_query_alignment works', {
-  library(EpitopeMatcher)
   patient_hla <- get_test_patient_hla_data()
-  lanl_hla <- get_test_lanl_hla_data()
   query_alignment <- get_test_query_alignment()
   x <- match_patient_hla_to_query_alignment(query_alignment, patient_hla)
   expect_that(x[['A*3002']], equals("pat01|scribbles"))
   expect_that(x[['B63']], equals(c("pat01|scribbles", 
                                    "pat02|human|protein piece|>@booo \"\" -/.,!@#@#%^&*()",
                                    "pat03")))
+})
+
+test_that('match_patient_hla_to_lanl_hla works', {
+  library(EpitopeMatcher)
+  patient_hla <- get_test_patient_hla_data()
+  lanl_hla <- get_test_lanl_hla_data()
+
+  flat_lanl_hla <- flatten_lanl_hla(lanl_hla)
+  expect_that("MGARASVLSGGELD" %in% flat_lanl_hla[,1], is_false())
+  expect_that(sum("GELDRWEKI" == flat_lanl_hla[,1]), equals(2))
 })

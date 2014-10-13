@@ -77,3 +77,51 @@ match_patient_hla_to_query_alignment <- function(query_alignment, patient_hla){
   }
   return(matched_patients)
 }
+
+#' Flattens the LANL HLA file
+#'
+#' Sometimes the same hla has a number of different names. Hence the
+#' hla_genotype column in the lanl file must be processed before the matches
+#' can be made.
+#' 
+#' This function takes the LANL HLA file and transforms it so that each row
+#' correspond to one and only one hla. This means that row in which the
+#' 'hla_genotype' column is unpopulated gets discarded and that rows in which
+#' the 'hla_genotype' column contains the names of more than one hla_genotype
+#' (assumed to be seperated by commas) will be duplicated and each duplicate
+#' will be assigned to one hla_genotype.
+#' @param lanl_hla The data.frame (of class LANL_HLA_data) that contains
+#' the descriptions of the different HLA genotypes
+#' @export
+
+flatten_lanl_hla <- function(lanl_hla){
+  lanl_hla_genotypes <- strsplit(lanl_hla[,'hla_genotype'], ',')
+  flat_lanl_hla <- lanl_hla[0,]
+  for (i in seq_along(lanl_hla_genotypes)){
+    hla_genotypes <- strsplit(lanl_hla[i, 'hla_genotype'], ',')[[1]]
+    for (j in seq_along(hla_genotypes)){
+      hla_genotype <- gsub("^ +", "", hla_genotypes[j])
+      hla_genotype <- gsub(" +$", "", hla_genotype)
+
+      flat_lanl_hla <- rbind(flat_lanl_hla, lanl_hla[i,])
+      flat_lanl_hla$hla_genotype[nrow(flat_lanl_hla)] <- hla_genotype
+    }
+  }
+  return(flat_lanl_hla)
+}
+
+#' Extracts an hla's details from the LANL file
+#'
+#' @return A list of data.frames of hla details. The list is indexed by
+#' hla_genotype and the data.frame contains a single row with the relevant
+#' details of the hla_genotype.
+#'
+#' @param patient_hla The data.frame that specifies which query sequence to
+#' check against which hla genotypes
+#' @param lanl_hla The data.frame (of class LANL_HLA_data) that contains
+#' the descriptions of the different HLA genotypes
+#' @export
+
+match_patient_hla_to_lanl_hla <- function(patient_hla, lanl_hla){
+
+}
