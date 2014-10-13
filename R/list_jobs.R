@@ -48,7 +48,29 @@
 #' 
 #' It treats the patient_id column in the patient_hla data as a regular
 #' expression and performs the lookup to the query sequence names
+#' 
+#' A central issue is how to communicate the query sequence names / positions
+#' between the different functions. The preferred approach is to use the entire
+#' FASTA header for the sequence in question.
+#'
+#' @param query_alignment An AAStringSet that contains the multiple sequence
+#' alignment of the patient's viral sequences
+#' @param patient_hla The data.frame that specifies which query sequence to
+#' check against which hla genotypes
 #' @export
 
-match_patient_hla_to_query_alignment <- function(){
+match_patient_hla_to_query_alignment <- function(query_alignment, patient_hla){
+  q_pids <- get_patient_ids(query_alignment)
+  p_pids <- get_patient_ids(patient_hla)
+
+  matched_patients <- list()
+  for (i in 1:nrow(ph)){
+    p_pid <- ph[i,'patient_id']
+    hla <- ph[i,'hla_genotype']
+    query_sequence_ids <- grep(p_pid, q_pids)
+    query_sequence_names <- q_pids
+    matched_patients[[i]] <- list(hla_genotype = hla,
+                                  query_sequence_names = query_sequence_ids)
+  }
+  print(matched_patients)
 }

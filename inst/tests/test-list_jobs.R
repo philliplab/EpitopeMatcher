@@ -15,5 +15,13 @@ test_that('Scoring_Job constructor works',{
   y <- do.call(.Scoring_Job, job_details)
 
   expect_that(y, is_a('Scoring_Job'))
+})
 
+
+test_that('match_patient_hla_to_query_alignment works', {
+  library(EpitopeMatcher)
+  patient_hla <- get_test_patient_hla_data()
+  lanl_hla <- get_test_lanl_hla_data()
+  query_alignment <- get_test_query_alignment()
+  expect_that(1+1, equals(2))
 })

@@ -61,9 +61,19 @@ score_epitope()
 * attributes
   - hla_genotype : character
   - vector of query_sequence_names : character
+  - hla_details : list
 * methods  
   - get_query_sequence_names() : vector of character
   - get_epitope() : AAString
   - get_hla_details() : data.frame
 
 #### Epitope_Position
+
+### Design Choices
+
+1. The input data is named and used in this order:
+  - query_alignment
+  - patient_hla
+  - lanl_hla
+2. The way to refer to a query sequence is by it's full FASTA header. Not the
+   patient_id extracted from it nor it's position (index) in the alignment.
