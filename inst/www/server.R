@@ -67,7 +67,8 @@ shinyServer(function(input, output, session) {
                              
   output$epitope_score_status <- renderText(epitope_scores()$msg)
   output$epitope_score_results <- renderTable(epitope_scores()$results)
-  output$epitope_score_error_log <- renderTable(epitope_scores()$error_log)
+  output$epitopes_not_in_seq <- renderTable(epitope_scores()$error_log$epitopes_not_in_seq)
+  output$no_hla_details <- renderTable(epitope_scores()$error_log$no_hla_details)
 
   output$help_url <- renderText({
     if (tools:::httpdPort == 0L) 

@@ -193,10 +193,12 @@ score_sequence_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
                 results = data.frame(note = 'Input Files Invalid'),
                 error_log = data.frame(note = 'Input Files Invalid')))
   }
-  the_scoring_jobs <- list_scores_to_compute(query_alignment, patient_hla, lanl_hla_data)
+  x <- list_scores_to_compute(query_alignment, patient_hla, lanl_hla_data)
+  the_scoring_jobs <- x$result
+  error_log <- x$error_log
   epitopes <- unlist(lapply(the_scoring_jobs, get_epitope))
   results <- NULL
-  error_log <- NULL
+  epitopes_not_in_seq <- NULL
   for (i in seq_along(the_scoring_jobs)){
     epitope <- get_epitope(the_scoring_jobs[[i]])
     print(paste0(i, ' of ', length(epitopes), ': ', epitope))
@@ -206,7 +208,8 @@ score_sequence_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
     epitope_match <- compute_epitope_scores(epitope, query_alignment, 
                                             range_expansion)
     if (!is.null(epitope_match$error_log)){
-      error_log <- rbind(error_log, cbind(epitope_match$error_log, hla_details))
+      epitopes_not_in_seq <- rbind(epitopes_not_in_seq, 
+                                   cbind(epitope_match$error_log, hla_details))
     }
     alignment_score <- epitope_match$results
     if (!is.null(alignment_score)){
@@ -214,9 +217,9 @@ score_sequence_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
       results <- rbind(results, alignment_score)
     }
   }
+  error_log$epitopes_not_in_seq <- epitopes_not_in_seq
 
   return(list(results = results,
               error_log = error_log,
               msg = 'Scores computed successfully'))
 }
-
