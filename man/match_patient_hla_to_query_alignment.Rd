@@ -14,9 +14,8 @@ alignment of the patient's viral sequences}
 check against which hla genotypes}
 }
 \value{
-A list of vectors of query_sequence_names. The list is indexed by
-hla_genotype and the elements is a character vector listing all the query
-sequences that must be checked against the associated hla_genotype
+A list of lists. The inner lists contains the elements
+'hla_genotype' and 'query_sequence_names'
 }
 \description{
 It treats the patient_id column in the patient_hla data as a regular

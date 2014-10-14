@@ -4,10 +4,9 @@ test_that('match_patient_hla_to_query_alignment works', {
   patient_hla <- get_test_patient_hla_data()
   query_alignment <- get_test_query_alignment()
   x <- match_patient_hla_to_query_alignment(query_alignment, patient_hla)
-  expect_that(x[['A*3002']], equals("pat01|scribbles"))
-  expect_that(x[['B63']], equals(c("pat01|scribbles", 
-                                   "pat02|human|protein piece|>@booo \"\" -/.,!@#@#%^&*()",
-                                   "pat03")))
+  expect_that(x[['1']], is_a('list'))
+  expect_that(names(x[['2']]), equals(c("hla_genotype",
+                                        "query_sequence_names")))
 })
 
 test_that('flatten_lanl_hla works', {
@@ -27,7 +26,5 @@ test_that('list_scoring_jobs works', {
   lanl_hla <- get_test_lanl_hla_data()
   the_scoring_jobs <- list_scores_to_compute(query_alignment, patient_hla, lanl_hla)
   expect_that(the_scoring_jobs[[1]], is_a('Scoring_Job'))
-  expect_that(the_scoring_jobs[['B27']]@hla_details$epitope, equals('EKIRLRPGGKKYKL'))
-  expect_that(the_scoring_jobs[['B27']]@query_sequence_names, 
-              equals(c("pat01|scribbles", "pat03")))
+  expect_that(the_scoring_jobs[[1]]@hla_details$epitope, equals('RLSYNTVATLY'))
 })
