@@ -85,3 +85,11 @@ score_epitope()
   - lanl_hla
 2. The way to refer to a query sequence is by it's full FASTA header. Not the
    patient_id extracted from it nor it's position (index) in the alignment.
+3. Error Logging. Probably not the best design, but it should be good enough.
+   Let each function that should log errors return as output a list with
+   elements: 'msg', 'result', and 'error_logs' where error_logs is again a list
+   each of whom's elements is a data.frame that logs a specific type of error.
+   This design should allow the users to inspect the error logs in EXCEL quite
+   comfortably. A better design might be to produce traditional logs using a
+   standard logging library and then to process those logs at a later stage in
+   easy to analyze formats, but in the short term this is more work.
