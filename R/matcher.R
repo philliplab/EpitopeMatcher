@@ -15,7 +15,7 @@ NULL
 #' use 'global' if 'overlap' alignment cannot be found
 #' @export
 
-epitope_pos_in_ref <- function(epitope, query_alignment, alignment_type = 'overlap'){
+find_epitope_in_ref <- function(epitope, query_alignment, alignment_type = 'overlap'){
   if (class(epitope) == 'character'){
     epitope <- AAString(epitope)
   }
@@ -135,12 +135,12 @@ alignment_successful <- function(epitope, alignment){
 #' 
 #' @export
 
-compute_epitope_scores <- function(the_scoring_job, query_alignment, range_expansion = 0){
+score_epitope <- function(the_scoring_job, query_alignment, range_expansion = 0){
   epitope <- get_epitope(the_scoring_job)
   if (class(epitope) == 'character'){
     epitope <- AAString(epitope)
   }
-  ref_pos <- epitope_pos_in_ref(epitope, query_alignment)
+  ref_pos <- find_epitope_in_ref(epitope, query_alignment)
   if (alignment_successful(epitope, ref_pos$alignment)){
     eregion_in_refseq <- subject(ref_pos$alignment)
     sequence_substr <- substr(query_alignment, ref_pos$start_pos - range_expansion, 
@@ -162,7 +162,7 @@ compute_epitope_scores <- function(the_scoring_job, query_alignment, range_expan
       msg <- 'Success'
     }
   } else {
-    global_alignment <- epitope_pos_in_ref(epitope, query_alignment, alignment_type = 'global')
+    global_alignment <- find_epitope_in_ref(epitope, query_alignment, alignment_type = 'global')
     alignment <- global_alignment$alignment
     results <- NULL
     error_details <- data.frame(pattern = as.character(pattern(alignment)),
@@ -211,7 +211,7 @@ score_all_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
     print(paste0(i, ' of ', length(epitopes), ': ', epitope))
     
     # Main Computation
-    epitope_match <- compute_epitope_scores(the_scoring_jobs[[i]], query_alignment, 
+    epitope_match <- score_epitope(the_scoring_jobs[[i]], query_alignment, 
                                             range_expansion)
 
     # Results processing
