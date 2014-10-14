@@ -159,17 +159,21 @@ compute_epitope_scores <- function(the_scoring_job, query_alignment, range_expan
                                                   range_expansion, 
                                                   as.character(sequence_substr[[i]])))
       error_log <- NULL
+      msg <- 'Success'
     }
   } else {
     global_alignment <- epitope_pos_in_ref(epitope, query_alignment, alignment_type = 'global')
     alignment <- global_alignment$alignment
     results <- NULL
-    error_log <- data.frame(pattern = as.character(pattern(alignment)),
-                            subject = as.character(subject(alignment)),
-                            global_alignment_start = global_alignment$start_pos,
-                            global_alignment_end = global_alignment$end_pos)
+    error_details <- data.frame(pattern = as.character(pattern(alignment)),
+                                subject = as.character(subject(alignment)),
+                                global_alignment_start = global_alignment$start_pos,
+                                global_alignment_end = global_alignment$end_pos)
+    error_log <- list(epitopes_not_in_seq = error_details)
+    msg <- 'Failure'
   }
-  return(list(results = results,
+  return(list(msg = msg,
+              results = results,
               error_log = error_log))
 }
 
@@ -213,9 +217,10 @@ score_sequence_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
     # Results processing
     hla_details <- as.data.frame(get_hla_details(the_scoring_jobs[[i]]),
                                  stringsAsFactors = FALSE)
-    if (!is.null(epitope_match$error_log)){
+    if (!is.null(epitope_match$error_log$epitopes_not_in_seq)){
       epitopes_not_in_seq <- rbind(epitopes_not_in_seq, 
-                                   cbind(epitope_match$error_log, hla_details))
+                                   cbind(epitope_match$error_log$epitopes_not_in_seq, 
+                                         hla_details))
     }
     alignment_score <- epitope_match$results
     if (!is.null(alignment_score)){
