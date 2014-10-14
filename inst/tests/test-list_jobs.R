@@ -18,15 +18,13 @@ test_that('flatten_lanl_hla works', {
   expect_that(sum("GELDRWEKI" == flat_lanl_hla[,1]), equals(2))
 })
 
-#test_that('list_scoring_jobs works', {
-#          # I am not so sure about these tests. They require too much knowledge
-#          # of the Scoring_Job class?
-#  query_alignment <- get_test_query_alignment()
-#  patient_hla <- get_test_patient_hla_data()
-#  lanl_hla <- get_test_lanl_hla_data()
-#  the_scoring_jobs <- list_scores_to_compute(query_alignment, patient_hla, lanl_hla)
-#  expect_that(the_scoring_jobs[[1]], is_a('Scoring_Job'))
-#  expect_that(the_scoring_jobs[['B27']]@hla_details$epitope, equals('EKIRLRPGGKKYKL'))
-#  expect_that(the_scoring_jobs[['B27']]@query_sequence_names, 
-#              equals(c("pat01|scribbles", "pat03")))
-#})
+test_that('list_scoring_jobs works', {
+          # I am not so sure about these tests. They require too much knowledge
+          # of the Scoring_Job class?
+  query_alignment <- get_test_query_alignment()
+  patient_hla <- get_test_patient_hla_data()
+  lanl_hla <- get_test_lanl_hla_data()
+  the_scoring_jobs <- list_scores_to_compute(query_alignment, patient_hla, lanl_hla)
+  expect_that(the_scoring_jobs[[1]], is_a('Scoring_Job'))
+  expect_that(the_scoring_jobs[[1]]@hla_details$epitope, equals('RLSYNTVATLY'))
+})

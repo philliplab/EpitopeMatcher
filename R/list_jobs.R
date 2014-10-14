@@ -77,19 +77,23 @@ flatten_lanl_hla <- function(lanl_hla){
 
 build_scoring_jobs <- function(matched_patients, flat_lanl_hla){
   the_scoring_jobs <- list()
-  for (hla_genotype in names(matched_patients)){
+  k <- 0
+  for (i in seq_along(matched_patients)){
+    hla_genotype <- matched_patients[[i]]$hla_genotype
+    query_sequence_names = matched_patients[[i]]$query_sequence_names 
     hla_details <- flat_lanl_hla[flat_lanl_hla$hla_genotype == hla_genotype,
                                  names(flat_lanl_hla) != "hla_genotype"]
-    if (nrow(hla_details) == 1){
-      query_sequence_names = matched_patients[[hla_genotype]]
-      the_scoring_jobs[[hla_genotype]] <- .Scoring_Job(hla_genotype = hla_genotype,
-        query_sequence_names = query_sequence_names,
-        hla_details = as.list(hla_details))
-    } else if (nrow(hla_details) == 0){
+    # now loop over the hla_details
+    if (nrow(hla_details) == 0){
         warning(paste0("No hla_details for ", hla_genotype))
-    } else {
-      stop(paste0("More than one set od details found for hla: ", hla_genotype))
     }
+    for (j in 1:nrow(hla_details)){
+      k <- k + 1
+      hla_detail_row <- hla_details[j,]
+      the_scoring_jobs[[k]] <- .Scoring_Job(hla_genotype = hla_genotype,
+        query_sequence_names = query_sequence_names,
+        hla_details = as.list(hla_detail_row))
+    } 
   }
   return(the_scoring_jobs)
 }
