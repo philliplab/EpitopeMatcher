@@ -197,9 +197,9 @@ score_sequence_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
   epitopes <- unlist(lapply(the_scoring_jobs, get_epitope))
   results <- NULL
   error_log <- NULL
-  for (i in 1:nrow(epitopes)){
-    epitope <- epitopes$epitope[i]
-    print(paste0(i, ' of ', length(epitopes$epitope), ': ', epitope))
+  for (i in seq_along(the_scoring_jobs)){
+    epitope <- epitopes[i]
+    print(paste0(i, ' of ', length(epitopes), ': ', epitope))
     epitope_info <- data.frame(epitope = epitope,
                                hla_genotype = epitopes$hla_genotype[i],
                                lanl_start_pos = epitopes$start_pos[i],

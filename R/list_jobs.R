@@ -85,14 +85,15 @@ build_scoring_jobs <- function(matched_patients, flat_lanl_hla){
     # now loop over the hla_details
     if (nrow(hla_details) == 0){
         warning(paste0("No hla_details for ", hla_genotype))
+    } else {
+      for (j in 1:nrow(hla_details)){
+        k <- k + 1
+        hla_detail_row <- hla_details[j,]
+        the_scoring_jobs[[k]] <- .Scoring_Job(hla_genotype = hla_genotype,
+          query_sequence_names = query_sequence_names,
+          hla_details = as.list(hla_detail_row))
+      } 
     }
-    for (j in 1:nrow(hla_details)){
-      k <- k + 1
-      hla_detail_row <- hla_details[j,]
-      the_scoring_jobs[[k]] <- .Scoring_Job(hla_genotype = hla_genotype,
-        query_sequence_names = query_sequence_names,
-        hla_details = as.list(hla_detail_row))
-    } 
   }
   return(the_scoring_jobs)
 }
