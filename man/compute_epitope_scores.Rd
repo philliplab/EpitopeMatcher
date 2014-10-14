@@ -4,11 +4,10 @@
 \title{Computes the similarities between the epitope and the sequences in the
 alignment}
 \usage{
-compute_epitope_scores(epitope, query_alignment, range_expansion = 0)
+compute_epitope_scores(the_scoring_job, query_alignment, range_expansion = 0)
 }
 \arguments{
-\item{epitope}{The epitope to find in the sequence. Either a character
-string or an AAString}
+\item{the_scoring_job}{A scoring job as a object of type 'Scoring_Job'}
 
 \item{query_alignment}{The query alignment}
 

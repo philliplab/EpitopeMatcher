@@ -81,8 +81,7 @@ alignment_successful <- function(epitope, alignment){
 #' Computes the similarities between the epitope and the sequences in the
 #' alignment
 #'
-#' @param epitope The epitope to find in the sequence. Either a character
-#' string or an AAString
+#' @param the_scoring_job A scoring job as a object of type 'Scoring_Job'
 #' @param query_alignment The query alignment
 #' @param range_expansion After the epitope is found in the reference
 #' seqeuence, search in each of the query sequences for the same epitope, but
@@ -136,7 +135,8 @@ alignment_successful <- function(epitope, alignment){
 #' 
 #' @export
 
-compute_epitope_scores <- function(epitope, query_alignment, range_expansion = 0){
+compute_epitope_scores <- function(the_scoring_job, query_alignment, range_expansion = 0){
+  epitope <- get_epitope(the_scoring_job)
   if (class(epitope) == 'character'){
     epitope <- AAString(epitope)
   }
@@ -200,13 +200,17 @@ score_sequence_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
   results <- NULL
   epitopes_not_in_seq <- NULL
   for (i in seq_along(the_scoring_jobs)){
+    # Data Prep
     epitope <- get_epitope(the_scoring_jobs[[i]])
     print(paste0(i, ' of ', length(epitopes), ': ', epitope))
+    
+    # Main Computation
+    epitope_match <- compute_epitope_scores(the_scoring_jobs[[i]], query_alignment, 
+                                            range_expansion)
+
+    # Results processing
     hla_details <- as.data.frame(get_hla_details(the_scoring_jobs[[i]]),
                                  stringsAsFactors = FALSE)
-    
-    epitope_match <- compute_epitope_scores(epitope, query_alignment, 
-                                            range_expansion)
     if (!is.null(epitope_match$error_log)){
       epitopes_not_in_seq <- rbind(epitopes_not_in_seq, 
                                    cbind(epitope_match$error_log, hla_details))
