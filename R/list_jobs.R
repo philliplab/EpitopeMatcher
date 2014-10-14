@@ -76,15 +76,18 @@ flatten_lanl_hla <- function(lanl_hla){
 
 build_scoring_jobs <- function(matched_patients, flat_lanl_hla){
   the_scoring_jobs <- list()
+  no_hla_details <- data.frame(hla_genotype = character(0),
+                               stringsAsFactors = FALSE)
   k <- 0
   for (i in seq_along(matched_patients)){
     hla_genotype <- matched_patients[[i]]$hla_genotype
     query_sequence_names = matched_patients[[i]]$query_sequence_names 
     hla_details <- flat_lanl_hla[flat_lanl_hla$hla_genotype == hla_genotype,
                                  names(flat_lanl_hla) != "hla_genotype"]
-    # now loop over the hla_details
     if (nrow(hla_details) == 0){
-        warning(paste0("No hla_details for ", hla_genotype))
+      no_hla_details <- rbind(no_hla_details, 
+                              data.frame(hla_genotype = hla_genotype,
+                                         stringsAsFactors = FALSE))
     } else {
       for (j in 1:nrow(hla_details)){
         k <- k + 1
@@ -95,7 +98,14 @@ build_scoring_jobs <- function(matched_patients, flat_lanl_hla){
       } 
     }
   }
-  return(the_scoring_jobs)
+  if (length(the_scoring_jobs) > 0){
+    msg <- "Success"
+  } else {
+    msg <- "Failure"
+  }
+  return(list(msg = msg,
+              result = the_scoring_jobs,
+              error_logs = list(no_hla_details = no_hla_details)))
 }
 
 #' Processes the three input files (query_alignment, patient_hla and lanl_hla)

@@ -87,7 +87,7 @@ score_epitope()
    patient_id extracted from it nor it's position (index) in the alignment.
 3. Error Logging. Probably not the best design, but it should be good enough.
    Let each function that should log errors return as output a list with
-   elements: 'msg', 'result', and 'error_logs' where error_logs is again a list
+   elements: 'msg', 'result', and 'error_logs' where 'error_logs' is again a list
    each of whom's elements is a data.frame that logs a specific type of error.
    This design should allow the users to inspect the error logs in EXCEL quite
    comfortably. A better design might be to produce traditional logs using a
