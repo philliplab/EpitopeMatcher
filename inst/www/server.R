@@ -61,7 +61,7 @@ shinyServer(function(input, output, session) {
       ph <- read_data()$ph$data_set
       ln <- read_data()$ln$data_set
       qa <- read_data()$qa$data_set
-      return(score_sequence_epitopes(qa, ph, ln))
+      return(score_all_epitopes(qa, ph, ln))
     })
   })
                              

@@ -190,7 +190,7 @@ compute_epitope_scores <- function(the_scoring_job, query_alignment, range_expan
 #' expand the range with this number of amino acids
 #' @export
 
-score_sequence_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
+score_all_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
                                     range_expansion = 5){
   if ((class(query_alignment) != 'AAStringSet') |
     (class(patient_hla) != 'Patient_HLA') |
