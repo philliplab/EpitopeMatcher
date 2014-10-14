@@ -31,7 +31,8 @@ match_patient_hla_to_query_alignment <- function(query_alignment, patient_hla){
     hla <- patient_hla[i,'hla_genotype']
     query_sequence_ids <- grep(p_pid, q_pids)
     query_sequence_names <- q_pids_long[query_sequence_ids]
-    matched_patients[[hla]] <- query_sequence_names
+    matched_patients[[as.character(i)]] <- list(hla_genotype = hla,
+                                                query_sequence_names = query_sequence_names)
   }
   return(matched_patients)
 }
