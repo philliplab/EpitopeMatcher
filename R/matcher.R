@@ -198,22 +198,19 @@ score_sequence_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
   results <- NULL
   error_log <- NULL
   for (i in seq_along(the_scoring_jobs)){
-    epitope <- epitopes[i]
+    epitope <- get_epitope(the_scoring_jobs[[i]])
     print(paste0(i, ' of ', length(epitopes), ': ', epitope))
-    epitope_info <- data.frame(epitope = epitope,
-                               hla_genotype = epitopes$hla_genotype[i],
-                               lanl_start_pos = epitopes$start_pos[i],
-                               lanl_end_pos = epitopes$end_pos[i],
-                               stringsAsFactors = FALSE)
+    hla_details <- as.data.frame(get_hla_details(the_scoring_jobs[[i]]),
+                                 stringsAsFactors = FALSE)
     
     epitope_match <- compute_epitope_scores(epitope, query_alignment, 
                                             range_expansion)
     if (!is.null(epitope_match$error_log)){
-      error_log <- rbind(error_log, cbind(epitope_match$error_log, epitope_info))
+      error_log <- rbind(error_log, cbind(epitope_match$error_log, hla_details))
     }
     alignment_score <- epitope_match$results
     if (!is.null(alignment_score)){
-      alignment_score <- cbind(alignment_score, epitope_info)
+      alignment_score <- cbind(alignment_score, hla_details)
       results <- rbind(results, alignment_score)
     }
   }

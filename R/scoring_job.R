@@ -64,3 +64,26 @@ function(the_scoring_job){
 }
   
 )
+
+#' Returns the hla details associated with a scoring_job
+#'
+#' @param the_scoring_job The scoring job whose details must be extracted
+#' @rdname get_hla_details-methods
+#' @export get_hla_details
+
+setGeneric("get_hla_details",
+           function(the_scoring_job){
+             standardGeneric("get_hla_details")
+           }
+)
+
+#' @rdname get_hla_details-methods
+#' @aliases get_hla_details
+setMethod("get_hla_details", 
+          c('Scoring_Job'),
+
+function(the_scoring_job){
+  return(the_scoring_job@hla_details)
+}
+  
+)

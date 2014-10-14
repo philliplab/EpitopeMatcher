@@ -29,7 +29,7 @@
 #' @export
 
 read_lanl_hla <- function(file_name){
-  x <- read.csv(file_name,
+  lanl_hla <- read.csv(file_name,
                 stringsAsFactors = FALSE)
   column_renames <- list('1' = list(source = 'Epitope',
                                     target = 'epitope',
@@ -60,11 +60,15 @@ read_lanl_hla <- function(file_name){
                                     col_num = 9)
                                     )
   for (i in seq_along(column_renames)){
-    if (names(x)[column_renames[[i]]$col_num] == column_renames[[i]]$source){
-      names(x)[column_renames[[i]]$col_num] <- column_renames[[i]]$target
+    if (names(lanl_hla)[column_renames[[i]]$col_num] == column_renames[[i]]$source){
+      names(lanl_hla)[column_renames[[i]]$col_num] <- column_renames[[i]]$target
     }
   }
-  return(.LANL_HLA_data(x))
+
+  lanl_hla$epitope <- gsub(" *", "", lanl_hla$epitope)
+  lanl_hla$epitope <- gsub("\\?", "", lanl_hla$epitope)
+
+  return(.LANL_HLA_data(lanl_hla))
 }
 
 #' A function that returns a test lanl hla genotype dataset
