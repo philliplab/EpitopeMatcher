@@ -11,9 +11,8 @@
 #' between the different functions. The preferred approach is to use the entire
 #' FASTA header for the sequence in question.
 #' 
-#' @return A list of vectors of query_sequence_names. The list is indexed by
-#' hla_genotype and the elements is a character vector listing all the query
-#' sequences that must be checked against the associated hla_genotype
+#' @return A list of lists. The inner lists contains the elements
+#' 'hla_genotype' and 'query_sequence_names' 
 #'
 #' @param query_alignment An AAStringSet that contains the multiple sequence
 #' alignment of the patient's viral sequences
