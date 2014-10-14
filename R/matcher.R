@@ -146,8 +146,10 @@ compute_epitope_scores <- function(the_scoring_job, query_alignment, range_expan
     sequence_substr <- substr(query_alignment, ref_pos$start_pos - range_expansion, 
                               ref_pos$end_pos + range_expansion)
     sequence_substr <- lapply(sequence_substr, AAString)
+    sequences_to_score <- match(the_scoring_job@query_sequence_names, names(query_alignment))
     results <- NULL
-    for (i in 1:length(sequence_substr)){
+    #for (i in 1:length(sequence_substr)){
+    for (i in sequences_to_score){
       pair_alignment <- pairwiseAlignment(subject = sequence_substr[[i]], 
                                           pattern = eregion_in_refseq, 
                                           type = 'overlap')
