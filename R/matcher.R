@@ -60,13 +60,18 @@ find_epitope_in_ref <- function(epitope, query_alignment, alignment_type = 'over
   return(x)
 }
 
-#' A function that indicates if an alignment was successful
+#' A function that indicates if an epitope was found in the reference sequence.
+#'
+#' An epitope is seen as not found if the alignment between the epitope and the
+#' reference does not contain the same number of bases as the epitope. This
+#' should maybe be relaxed in the future.
+#'
 #' @param epitope The epitope that was searched for in the reference
 #' @param alignment The alignment to check - usually the output from
 #' pairwiseAlignment
 #' @export
 
-alignment_successful <- function(epitope, alignment){
+epitope_found <- function(epitope, alignment){
   pat <- as.character(pattern(alignment))
   subj <- as.character(subject(alignment))
   epitope <- as.character(epitope)
@@ -141,7 +146,7 @@ score_epitope <- function(the_scoring_job, query_alignment, range_expansion = 0)
     epitope <- AAString(epitope)
   }
   ref_pos <- find_epitope_in_ref(epitope, query_alignment)
-  if (alignment_successful(epitope, ref_pos$alignment)){
+  if (epitope_found(epitope, ref_pos$alignment)){
     eregion_in_refseq <- subject(ref_pos$alignment)
     sequence_substr <- substr(query_alignment, ref_pos$start_pos - range_expansion, 
                               ref_pos$end_pos + range_expansion)
@@ -230,7 +235,6 @@ score_all_epitopes <- function(the_scoring_jobs, query_alignment, range_expansio
   epitopes_not_in_seq <- NULL
 
   for (i in seq_along(the_scoring_jobs)){
-    # Data Prep
     epitope <- get_epitope(the_scoring_jobs[[i]])
     print(paste0(i, ' of ', length(the_scoring_jobs), ': ', epitope))
     
