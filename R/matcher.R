@@ -177,8 +177,13 @@ score_epitope <- function(the_scoring_job, query_alignment, range_expansion = 0)
               error_log = error_log))
 }
 
-#' Scores how well the epitopes in a patient's virus' sequences will be recognized by 
-#' the patient's HLA genotype.
+#' Computes similarities between certain epitopes and sequences
+#'
+#' A query alignment and a file specifying which hla_genotypes should be
+#' checked for different patients are first compared to construct a list of
+#' scores that must be computed. This list is then passed to the
+#' score_all_epitopes function which computes the scores. The results and error
+#' logs are then returned as output.
 #'
 #' @param query_alignment The query alignment
 #' @param patient_hla The data.frame (of class Patient_HLA) that contain lists
@@ -190,7 +195,7 @@ score_epitope <- function(the_scoring_job, query_alignment, range_expansion = 0)
 #' expand the range with this number of amino acids
 #' @export
 
-score_all_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
+match_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
                                     range_expansion = 5){
   if ((class(query_alignment) != 'AAStringSet') |
     (class(patient_hla) != 'Patient_HLA') |
@@ -234,3 +239,4 @@ score_all_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
               error_log = error_log,
               msg = 'Scores computed successfully'))
 }
+
