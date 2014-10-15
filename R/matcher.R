@@ -204,16 +204,35 @@ match_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
                 results = data.frame(note = 'Input Files Invalid'),
                 error_log = data.frame(note = 'Input Files Invalid')))
   }
+
   x <- list_scores_to_compute(query_alignment, patient_hla, lanl_hla_data)
   the_scoring_jobs <- x$result
-  error_log <- x$error_log
-  epitopes <- unlist(lapply(the_scoring_jobs, get_epitope))
+  list_scores_error_log <- x$error_log
+  rm(x)
+
+  x <- score_all_epitopes(the_scoring_jobs, query_alignment, range_expansion)
+  return(list(results = x$results,
+              error_log = c(list_scores_error_log, x$error_log),
+              msg = x$msg))
+}
+
+#' Given a list of scoring jobs, compute the similarities
+#' @param the_scoring_jobs A list of scoring_jobs
+#' @param query_alignment The query alignment
+#' @param range_expansion After the epitope is found in the reference
+#' seqeuence, search in each of the query sequences for the same epitope, but
+#' expand the range with this number of amino acids
+#' @export
+
+score_all_epitopes <- function(the_scoring_jobs, query_alignment, range_expansion){
+  error_log <- list()
   results <- NULL
   epitopes_not_in_seq <- NULL
+
   for (i in seq_along(the_scoring_jobs)){
     # Data Prep
     epitope <- get_epitope(the_scoring_jobs[[i]])
-    print(paste0(i, ' of ', length(epitopes), ': ', epitope))
+    print(paste0(i, ' of ', length(the_scoring_jobs), ': ', epitope))
     
     # Main Computation
     epitope_match <- score_epitope(the_scoring_jobs[[i]], query_alignment, 
@@ -239,4 +258,3 @@ match_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
               error_log = error_log,
               msg = 'Scores computed successfully'))
 }
-
