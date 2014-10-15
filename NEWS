@@ -1,3 +1,10 @@
+EpitopeMatcher v0.2
+-----------------------------------------------------------
+Rename functions and data structures to have more meaningful names.
+
+Only compute similarity scores for those sequence / epitope combinations where
+it is exlicitly requested.
+
 EpitopeMatcher v0.1
 -----------------------------------------------------------
 
