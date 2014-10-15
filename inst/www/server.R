@@ -61,13 +61,14 @@ shinyServer(function(input, output, session) {
       ph <- read_data()$ph$data_set
       ln <- read_data()$ln$data_set
       qa <- read_data()$qa$data_set
-      return(score_sequence_epitopes(qa, ph, ln))
+      return(match_epitopes(qa, ph, ln))
     })
   })
                              
   output$epitope_score_status <- renderText(epitope_scores()$msg)
   output$epitope_score_results <- renderTable(epitope_scores()$results)
-  output$epitope_score_error_log <- renderTable(epitope_scores()$error_log)
+  output$epitopes_not_in_seq <- renderTable(epitope_scores()$error_log$epitopes_not_in_seq)
+  output$no_hla_details <- renderTable(epitope_scores()$error_log$no_hla_details)
 
   output$help_url <- renderText({
     if (tools:::httpdPort == 0L) 

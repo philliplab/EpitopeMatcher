@@ -30,7 +30,8 @@ shinyUI(fluidPage(
         tabPanel("LANL HLA File", tableOutput("lanl_hla")),
         tabPanel("Query Alignment", verbatimTextOutput("query_alignment")),
         tabPanel("Results", tableOutput("epitope_score_results")),
-        tabPanel("Error Log", tableOutput("epitope_score_error_log")),
+        tabPanel("Epitopes Not Found", tableOutput("epitopes_not_in_seq")),
+        tabPanel("No Details About HLA", tableOutput("no_hla_details")),
         tabPanel("Help", textOutput("help_url"))
         )
     )

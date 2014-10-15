@@ -25,6 +25,6 @@ test_that('list_scoring_jobs works', {
   patient_hla <- get_test_patient_hla_data()
   lanl_hla <- get_test_lanl_hla_data()
   the_scoring_jobs <- list_scores_to_compute(query_alignment, patient_hla, lanl_hla)
-  expect_that(the_scoring_jobs[[1]], is_a('Scoring_Job'))
-  expect_that(the_scoring_jobs[[1]]@hla_details$epitope, equals('RLSYNTVATLY'))
+  expect_that(the_scoring_jobs[['result']][[1]], is_a('Scoring_Job'))
+  expect_that(the_scoring_jobs[['result']][[1]]@hla_details$epitope, equals('RLSYNTVATLY'))
 })
