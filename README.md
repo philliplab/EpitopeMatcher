@@ -7,9 +7,11 @@ recognized by the HLA's present in the patient.
 It can be installed directly from github using devtools. In an R session issue
 these commands:
 ```r
+source("http://bioconductor.org/biocLite.R")
+biocLite("Biostrings")
 install.packages('devtools')
 library(devtools)
-install_github('EpitopeMatcher', 'philliplab')
+install_github(repo = 'EpitopeMatcher', username='philliplab')
 library(EpitopeMatcher)
 ```
 
