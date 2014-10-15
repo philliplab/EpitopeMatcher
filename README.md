@@ -4,11 +4,14 @@ EpitopeMatcher
 A package that can be used to find out how well the epitopes in a patient's virus' will be
 recognized by the HLA's present in the patient.
 
-It can be install directly from github using devtools:
+It can be installed directly from github using devtools. In an R session issue
+these commands:
 ```r
+source("http://bioconductor.org/biocLite.R")
+biocLite("Biostrings")
 install.packages('devtools')
 library(devtools)
-install_github('EpitopeMatcher', 'philliplab')
+install_github(repo = 'EpitopeMatcher', username='philliplab')
 library(EpitopeMatcher)
 ```
 
@@ -17,6 +20,12 @@ To run the web UI:
 library(EpitopeMatcher)
 run_EpitopeMatcher_app()
 ```
+
+To use EpitopeMatcher in an R session, see the help file of these functions:
+* read_lanl_hla
+* read_patient_hla
+* read_query_alignment
+* score_sequence_epitopes 
 
 ## Design Notes
 
@@ -78,3 +87,11 @@ score_epitope()
   - lanl_hla
 2. The way to refer to a query sequence is by it's full FASTA header. Not the
    patient_id extracted from it nor it's position (index) in the alignment.
+3. Error Logging. Probably not the best design, but it should be good enough.
+   Let each function that should log errors return as output a list with
+   elements: 'msg', 'result', and 'error_logs' where 'error_logs' is again a list
+   each of whom's elements is a data.frame that logs a specific type of error.
+   This design should allow the users to inspect the error logs in EXCEL quite
+   comfortably. A better design might be to produce traditional logs using a
+   standard logging library and then to process those logs at a later stage in
+   easy to analyze formats, but in the short term this is more work.

@@ -15,7 +15,7 @@ NULL
 #' use 'global' if 'overlap' alignment cannot be found
 #' @export
 
-epitope_pos_in_ref <- function(epitope, query_alignment, alignment_type = 'overlap'){
+find_epitope_in_ref <- function(epitope, query_alignment, alignment_type = 'overlap'){
   if (class(epitope) == 'character'){
     epitope <- AAString(epitope)
   }
@@ -60,13 +60,18 @@ epitope_pos_in_ref <- function(epitope, query_alignment, alignment_type = 'overl
   return(x)
 }
 
-#' A function that indicates if an alignment was successful
+#' A function that indicates if an epitope was found in the reference sequence.
+#'
+#' An epitope is seen as not found if the alignment between the epitope and the
+#' reference does not contain the same number of bases as the epitope. This
+#' should maybe be relaxed in the future.
+#'
 #' @param epitope The epitope that was searched for in the reference
 #' @param alignment The alignment to check - usually the output from
 #' pairwiseAlignment
 #' @export
 
-alignment_successful <- function(epitope, alignment){
+epitope_found <- function(epitope, alignment){
   pat <- as.character(pattern(alignment))
   subj <- as.character(subject(alignment))
   epitope <- as.character(epitope)
@@ -81,8 +86,7 @@ alignment_successful <- function(epitope, alignment){
 #' Computes the similarities between the epitope and the sequences in the
 #' alignment
 #'
-#' @param epitope The epitope to find in the sequence. Either a character
-#' string or an AAString
+#' @param the_scoring_job A scoring job as a object of type 'Scoring_Job'
 #' @param query_alignment The query alignment
 #' @param range_expansion After the epitope is found in the reference
 #' seqeuence, search in each of the query sequences for the same epitope, but
@@ -136,18 +140,21 @@ alignment_successful <- function(epitope, alignment){
 #' 
 #' @export
 
-compute_epitope_scores <- function(epitope, query_alignment, range_expansion = 0){
+score_epitope <- function(the_scoring_job, query_alignment, range_expansion = 0){
+  epitope <- get_epitope(the_scoring_job)
   if (class(epitope) == 'character'){
     epitope <- AAString(epitope)
   }
-  ref_pos <- epitope_pos_in_ref(epitope, query_alignment)
-  if (alignment_successful(epitope, ref_pos$alignment)){
+  ref_pos <- find_epitope_in_ref(epitope, query_alignment)
+  if (epitope_found(epitope, ref_pos$alignment)){
     eregion_in_refseq <- subject(ref_pos$alignment)
     sequence_substr <- substr(query_alignment, ref_pos$start_pos - range_expansion, 
                               ref_pos$end_pos + range_expansion)
     sequence_substr <- lapply(sequence_substr, AAString)
+    sequences_to_score <- match(the_scoring_job@query_sequence_names, names(query_alignment))
     results <- NULL
-    for (i in 1:length(sequence_substr)){
+    #for (i in 1:length(sequence_substr)){
+    for (i in sequences_to_score){
       pair_alignment <- pairwiseAlignment(subject = sequence_substr[[i]], 
                                           pattern = eregion_in_refseq, 
                                           type = 'overlap')
@@ -157,22 +164,31 @@ compute_epitope_scores <- function(epitope, query_alignment, range_expansion = 0
                                                   range_expansion, 
                                                   as.character(sequence_substr[[i]])))
       error_log <- NULL
+      msg <- 'Success'
     }
   } else {
-    global_alignment <- epitope_pos_in_ref(epitope, query_alignment, alignment_type = 'global')
+    global_alignment <- find_epitope_in_ref(epitope, query_alignment, alignment_type = 'global')
     alignment <- global_alignment$alignment
     results <- NULL
-    error_log <- data.frame(pattern = as.character(pattern(alignment)),
-                            subject = as.character(subject(alignment)),
-                            global_alignment_start = global_alignment$start_pos,
-                            global_alignment_end = global_alignment$end_pos)
+    error_details <- data.frame(pattern = as.character(pattern(alignment)),
+                                subject = as.character(subject(alignment)),
+                                global_alignment_start = global_alignment$start_pos,
+                                global_alignment_end = global_alignment$end_pos)
+    error_log <- list(epitopes_not_in_seq = error_details)
+    msg <- 'Failure'
   }
-  return(list(results = results,
+  return(list(msg = msg,
+              results = results,
               error_log = error_log))
 }
 
-#' Scores how well the epitopes in a patient's virus' sequences will be recognized by 
-#' the patient's HLA genotype.
+#' Computes similarities between certain epitopes and sequences
+#'
+#' A query alignment and a file specifying which hla_genotypes should be
+#' checked for different patients are first compared to construct a list of
+#' scores that must be computed. This list is then passed to the
+#' score_all_epitopes function which computes the scores. The results and error
+#' logs are then returned as output.
 #'
 #' @param query_alignment The query alignment
 #' @param patient_hla The data.frame (of class Patient_HLA) that contain lists
@@ -184,7 +200,7 @@ compute_epitope_scores <- function(epitope, query_alignment, range_expansion = 0
 #' expand the range with this number of amino acids
 #' @export
 
-score_sequence_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
+match_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
                                     range_expansion = 5){
   if ((class(query_alignment) != 'AAStringSet') |
     (class(patient_hla) != 'Patient_HLA') |
@@ -193,33 +209,56 @@ score_sequence_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
                 results = data.frame(note = 'Input Files Invalid'),
                 error_log = data.frame(note = 'Input Files Invalid')))
   }
-  the_scoring_jobs <- list_scores_to_compute(query_alignment, patient_hla, lanl_hla_data)
-  epitopes <- unlist(lapply(the_scoring_jobs, get_epitope))
+
+  x <- list_scores_to_compute(query_alignment, patient_hla, lanl_hla_data)
+  the_scoring_jobs <- x$result
+  list_scores_error_log <- x$error_log
+  rm(x)
+
+  x <- score_all_epitopes(the_scoring_jobs, query_alignment, range_expansion)
+  return(list(results = x$results,
+              error_log = c(list_scores_error_log, x$error_log),
+              msg = x$msg))
+}
+
+#' Given a list of scoring jobs, compute the similarities
+#' @param the_scoring_jobs A list of scoring_jobs
+#' @param query_alignment The query alignment
+#' @param range_expansion After the epitope is found in the reference
+#' seqeuence, search in each of the query sequences for the same epitope, but
+#' expand the range with this number of amino acids
+#' @export
+
+score_all_epitopes <- function(the_scoring_jobs, query_alignment, range_expansion){
+  error_log <- list()
   results <- NULL
-  error_log <- NULL
-  for (i in 1:nrow(epitopes)){
-    epitope <- epitopes$epitope[i]
-    print(paste0(i, ' of ', length(epitopes$epitope), ': ', epitope))
-    epitope_info <- data.frame(epitope = epitope,
-                               hla_genotype = epitopes$hla_genotype[i],
-                               lanl_start_pos = epitopes$start_pos[i],
-                               lanl_end_pos = epitopes$end_pos[i],
-                               stringsAsFactors = FALSE)
+  epitopes_not_in_seq <- NULL
+
+  for (i in seq_along(the_scoring_jobs)){
+    epitope <- get_epitope(the_scoring_jobs[[i]])
+    print(paste0(i, ' of ', length(the_scoring_jobs), ': ', epitope))
     
-    epitope_match <- compute_epitope_scores(epitope, query_alignment, 
+    # Main Computation
+    epitope_match <- score_epitope(the_scoring_jobs[[i]], query_alignment, 
                                             range_expansion)
-    if (!is.null(epitope_match$error_log)){
-      error_log <- rbind(error_log, cbind(epitope_match$error_log, epitope_info))
+
+    # Results processing
+    hla_details <- as.data.frame(get_hla_details(the_scoring_jobs[[i]]),
+                                 stringsAsFactors = FALSE)
+    if (!is.null(epitope_match$error_log$epitopes_not_in_seq)){
+      epitopes_not_in_seq <- rbind(epitopes_not_in_seq, 
+                                   cbind(epitope_match$error_log$epitopes_not_in_seq, 
+                                         hla_details))
     }
     alignment_score <- epitope_match$results
     if (!is.null(alignment_score)){
-      alignment_score <- cbind(alignment_score, epitope_info)
+      alignment_score <- cbind(alignment_score, hla_details)
       results <- rbind(results, alignment_score)
     }
   }
+  error_log$epitopes_not_in_seq <- epitopes_not_in_seq
 
   return(list(results = results,
               error_log = error_log,
               msg = 'Scores computed successfully'))
 }
-
