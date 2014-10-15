@@ -15,11 +15,7 @@ score_epitope(the_scoring_job, query_alignment, range_expansion = 0)
 seqeuence, search in each of the query sequences for the same epitope, but
 expand the range with this number of amino acids}
 }
-\description{
-Computes the similarities between the epitope and the sequences in the
-alignment
-}
-\details{
+\value{
 The output from this function is a list with two data.frames. The first is
 the results data.frame that contains these columns:
 \itemize{
@@ -27,7 +23,7 @@ the results data.frame that contains these columns:
  \item{score - The similarity score produced by the alignment}
  \item{score_type - The type of similarity score as returned by pairwiseAlignment}
  \item{eregion_in_refseq - The region of the reference sequence that was attempted to be aligned to the query sequence as returned by pairwiseAlignment}
- \item{candidate_substr - The candidate substring that was obtained by expanding the coordinates found in the reference sequence by 5 AAs on each side (unless at the end or beginning of the sequence)}
+ \item{candidate_substr - The candidate substring that was obtained by expanding the coordinates found in the reference sequence by 'range_expansion' AAs on each side (unless at the end or beginning of the sequence)}
  \item{matched_substr - The part of the candidate substring that was matched to the epitope as returned by pairwiseAlignment}
  \item{comparison - A comparison between the epitope and the query sequence indicating where there were mismatches}
  \item{pid - The percentage of amino acids that were identical (Percentage IDentity) between the epitope and query sequences}
@@ -66,5 +62,9 @@ these columns:
   }
  }
 }
+}
+\description{
+Computes the similarities between the epitope and the sequences in the
+alignment
 }
 

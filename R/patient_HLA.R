@@ -1,4 +1,4 @@
-#' @import Biostrings digest methods shiny testthat
+#' @import Biostrings digest methods testthat
 #' @importFrom shiny runApp
 NULL
 

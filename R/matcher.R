@@ -5,14 +5,16 @@ NULL
 
 #' Finds the position of the epitope in the reference sequence
 #'
-#' It uses pairwiseAlignment with the default settings. See Biostrings manual
+#' It uses pairwiseAlignment with the default settings. See Biostrings manual.
 #'
-#' Lots of things to test and investigate that can improve this function.
+#' Lots of things to test and investigate that can potentially improve this
+#' function.
+#'
 #' @param epitope The epitope to find in the sequence. Either a character
 #' string or an AAString
 #' @param query_alignment The query alignment
 #' @param alignment_type The type of alignment to try. Defaults to 'overlap'
-#' use 'global' if 'overlap' alignment cannot be found
+#' use 'global' if 'overlap' alignment cannot be found. See Biostrings manual.
 #' @export
 
 find_epitope_in_ref <- function(epitope, query_alignment, alignment_type = 'overlap'){
@@ -31,10 +33,24 @@ find_epitope_in_ref <- function(epitope, query_alignment, alignment_type = 'over
               alignment = alignment))
 }
 
-#' Internal function used to compute the comparison between the epitope
-#' and the patients sequences
-#' Under development - The design for this portion of the code is not yet
-#' finalized
+#' Internal function lists information about the alignment between the epitope
+#' and the query sequence.
+#' 
+#' @param sequence_substr_name The name of the sequence in the query alignment
+#' that the substring that was compared to the epitope came from.
+#' @param pair_alignment The pairwise alignment between the epitope and the
+#' substring from the query sequence.
+#' @param start_pos The starting position where the epitope was found in the
+#' reference sequence.
+#' @param end_pos The end position where the epitope was found in the reference
+#' sequence.
+#' @param range_expansion After the epitope is found in the reference
+#' seqeuence, search in each of the query sequences for the same epitope, but
+#' expand the range with this number of amino acids
+#' @param candidate_substr The candidate substring that was obtained by
+#' expanding the coordinates found in the reference sequence by
+#' 'range_expansion' AAs on each
+#' side (unless at the end or beginning of the sequence)
 #' @export
 
 .sequence_comparison_stats <- function(sequence_substr_name, pair_alignment, start_pos, 
@@ -91,14 +107,14 @@ epitope_found <- function(epitope, alignment){
 #' @param range_expansion After the epitope is found in the reference
 #' seqeuence, search in each of the query sequences for the same epitope, but
 #' expand the range with this number of amino acids
-#' @details The output from this function is a list with two data.frames. The first is
+#' @return The output from this function is a list with two data.frames. The first is
 #' the results data.frame that contains these columns:
 #' \itemize{
 #'  \item{sequence_id - The sequence description from the FASTA file}
 #'  \item{score - The similarity score produced by the alignment}
 #'  \item{score_type - The type of similarity score as returned by pairwiseAlignment}
 #'  \item{eregion_in_refseq - The region of the reference sequence that was attempted to be aligned to the query sequence as returned by pairwiseAlignment}
-#'  \item{candidate_substr - The candidate substring that was obtained by expanding the coordinates found in the reference sequence by 5 AAs on each side (unless at the end or beginning of the sequence)}
+#'  \item{candidate_substr - The candidate substring that was obtained by expanding the coordinates found in the reference sequence by 'range_expansion' AAs on each side (unless at the end or beginning of the sequence)}
 #'  \item{matched_substr - The part of the candidate substring that was matched to the epitope as returned by pairwiseAlignment}
 #'  \item{comparison - A comparison between the epitope and the query sequence indicating where there were mismatches}
 #'  \item{pid - The percentage of amino acids that were identical (Percentage IDentity) between the epitope and query sequences}
@@ -153,7 +169,6 @@ score_epitope <- function(the_scoring_job, query_alignment, range_expansion = 0)
     sequence_substr <- lapply(sequence_substr, AAString)
     sequences_to_score <- match(the_scoring_job@query_sequence_names, names(query_alignment))
     results <- NULL
-    #for (i in 1:length(sequence_substr)){
     for (i in sequences_to_score){
       pair_alignment <- pairwiseAlignment(subject = sequence_substr[[i]], 
                                           pattern = eregion_in_refseq, 
@@ -222,6 +237,9 @@ match_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
 }
 
 #' Given a list of scoring jobs, compute the similarities
+#'
+#' This function is mostly just a wrapper for \code{\link{score_epitope}}.
+#'
 #' @param the_scoring_jobs A list of scoring_jobs
 #' @param query_alignment The query alignment
 #' @param range_expansion After the epitope is found in the reference

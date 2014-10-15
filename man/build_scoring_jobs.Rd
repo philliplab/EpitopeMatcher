@@ -12,6 +12,6 @@ build_scoring_jobs(matched_patients, flat_lanl_hla)
 \item{flat_lanl_hla}{As produced by \code{\link{flatten_lanl_hla}}}
 }
 \description{
-Builds scoring jobs from pre-processed inputs
+Called by \code{\link{list_scores_to_compute }}
 }
 

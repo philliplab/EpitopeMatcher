@@ -12,12 +12,13 @@ string or an AAString}
 \item{query_alignment}{The query alignment}
 
 \item{alignment_type}{The type of alignment to try. Defaults to 'overlap'
-use 'global' if 'overlap' alignment cannot be found}
+use 'global' if 'overlap' alignment cannot be found. See Biostrings manual.}
 }
 \description{
-It uses pairwiseAlignment with the default settings. See Biostrings manual
+It uses pairwiseAlignment with the default settings. See Biostrings manual.
 }
 \details{
-Lots of things to test and investigate that can improve this function.
+Lots of things to test and investigate that can potentially improve this
+function.
 }
 

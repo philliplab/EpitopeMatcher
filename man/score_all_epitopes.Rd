@@ -15,6 +15,6 @@ seqeuence, search in each of the query sequences for the same epitope, but
 expand the range with this number of amino acids}
 }
 \description{
-Given a list of scoring jobs, compute the similarities
+This function is mostly just a wrapper for \code{\link{score_epitope}}.
 }
 

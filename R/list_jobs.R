@@ -1,15 +1,11 @@
 # This file contains all the code that matches the input files to each other
 # and generate a list of the scoring jobs that must be executed
 
-#' Matches the patient hla data to the query sequence to check which hla's must
+#' Matches the patient_hla data to the query sequence to check which hla's must
 #' be checked for in which sequences.
 #' 
 #' It treats the patient_id column in the patient_hla data as a regular
-#' expression and performs the lookup to the query sequence names
-#' 
-#' A central issue is how to communicate the query sequence names / positions
-#' between the different functions. The preferred approach is to use the entire
-#' FASTA header for the sequence in question.
+#' expression and performs the lookup to the query sequence names.
 #' 
 #' @return A list of lists. The inner lists contains the elements
 #' 'hla_genotype' and 'query_sequence_names' 
@@ -48,6 +44,7 @@ match_patient_hla_to_query_alignment <- function(query_alignment, patient_hla){
 #' the 'hla_genotype' column contains the names of more than one hla_genotype
 #' (assumed to be seperated by commas) will be duplicated and each duplicate
 #' will be assigned to one hla_genotype.
+#'
 #' @param lanl_hla The data.frame (of class LANL_HLA_data) that contains
 #' the descriptions of the different HLA genotypes
 #' @export
@@ -69,6 +66,9 @@ flatten_lanl_hla <- function(lanl_hla){
 }
 
 #' Builds scoring jobs from pre-processed inputs
+#'
+#' Called by \code{\link{list_scores_to_compute }}
+#'
 #' @param matched_patients As produced by
 #' \code{\link{match_patient_hla_to_query_alignment}}.
 #' @param flat_lanl_hla As produced by \code{\link{flatten_lanl_hla}}
