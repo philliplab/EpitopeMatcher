@@ -37,7 +37,8 @@
                           "organism", "start_pos", "subprotein", "sub_type")
     details_supplied <- sort(names(object@hla_details))
     if (!all(details_supplied == required_details)){
-      stop("Incorrect hla details supplied")
+      stop(paste("Incorrect hla details supplied", 
+                 paste(details_supplied, sep = ', ', collapse = ', ')))
     }
   }
 )
