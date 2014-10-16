@@ -36,7 +36,7 @@
     required_details <- c("end_pos", "epitope", "gene_name", "hxb2_dna_position", 
                           "organism", "start_pos", "subprotein", "sub_type")
     details_supplied <- sort(names(object@hla_details))
-    if (!all(details_supplied == required_details)){
+    if (!all(details_supplied %in% required_details)){
       stop(paste("Incorrect hla details supplied", 
                  paste(details_supplied, sep = ', ', collapse = ', ')))
     }
