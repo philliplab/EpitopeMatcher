@@ -8,7 +8,7 @@ It can be installed directly from github using devtools. In an R session issue
 these commands:
 ```r
 source("http://bioconductor.org/biocLite.R")
-biocLite("Biostrings")
+biocLite("Biostrings", ask=FALSE)
 install.packages('devtools')
 library(devtools)
 install_github(repo = 'EpitopeMatcher', username='philliplab')
