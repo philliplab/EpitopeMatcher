@@ -9,7 +9,7 @@ these commands:
 ```r
 source("http://bioconductor.org/biocLite.R")
 biocLite("Biostrings", ask=FALSE)
-install.packages('devtools')
+install.packages('devtools', repo = 'http://cran.rstudio.com')
 library(devtools)
 install_github(repo = 'EpitopeMatcher', username='philliplab')
 library(EpitopeMatcher)
