@@ -71,6 +71,7 @@ shinyServer(function(input, output, session) {
   output$no_hla_details <- renderTable(epitope_scores()$error_log$no_hla_details)
 
   output$help_url <- renderText({
+    options(help.ports = 5437 + 0:9)
     if (tools:::httpdPort == 0L) 
       tools::startDynamicHelp()
     if (tools:::httpdPort <= 0L)
