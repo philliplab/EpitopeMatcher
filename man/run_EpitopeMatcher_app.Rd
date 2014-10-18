@@ -3,7 +3,7 @@
 \alias{run_EpitopeMatcher_app}
 \title{Runs the shiny app for this package}
 \usage{
-run_EpitopeMatcher_app()
+run_EpitopeMatcher_app(port = NULL)
 }
 \description{
 Runs the shiny app for this package
