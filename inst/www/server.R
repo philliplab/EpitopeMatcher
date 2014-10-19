@@ -71,14 +71,13 @@ shinyServer(function(input, output, session) {
   output$no_hla_details <- renderTable(epitope_scores()$error_log$no_hla_details)
 
   output$help_url <- renderText({
-    options(help.ports = 5437)
-    if (tools:::httpdPort == 0L) 
-      tools::startDynamicHelp()
-    if (tools:::httpdPort <= 0L)
+    status <- .Call(tools:::startHTTPD, "0.0.0.0", 5437)
+    if (status != 0L) {
       return("help system could not be started")
-    else
-      return(paste0("http://", session$clientData$url_hostname, ":", tools:::httpdPort, 
+    } else {
+      return(paste0("http://", session$clientData$url_hostname, ":", 5437, 
         "/library/EpitopeMatcher/html/00Index.html"))
+    }
   })
 
   output$download_results <- downloadHandler(
