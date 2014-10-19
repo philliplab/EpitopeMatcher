@@ -2,7 +2,7 @@
 #' 
 #' @export
 
-run_EpitopeMatcher_app <- function(port = NULL){
+run_EpitopeMatcher_app <- function(port = 5436){
   packageDir <- find.package('EpitopeMatcher')
   shinyAppDir <- file.path(packageDir, "www") 
   if (is.null(port)){
