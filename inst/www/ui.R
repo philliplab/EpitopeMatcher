@@ -32,7 +32,7 @@ shinyUI(fluidPage(
         tabPanel("Results", tableOutput("epitope_score_results")),
         tabPanel("Epitopes Not Found", tableOutput("epitopes_not_in_seq")),
         tabPanel("No Details About HLA", tableOutput("no_hla_details")),
-        tabPanel("Help", textOutput("help_url"))
+        tabPanel("Help", htmlOutput("help_url"))
         )
     )
   )

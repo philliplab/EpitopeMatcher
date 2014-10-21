@@ -70,13 +70,13 @@ shinyServer(function(input, output, session) {
   output$epitopes_not_in_seq <- renderTable(epitope_scores()$error_log$epitopes_not_in_seq)
   output$no_hla_details <- renderTable(epitope_scores()$error_log$no_hla_details)
 
-  output$help_url <- renderText({
+  output$help_url <- renderUI({
     status <- .Call(tools:::startHTTPD, "0.0.0.0", 5437)
     if (status != 0L) {
-      return("help system could not be started")
+      return(HTML("<strong>help system could not be started<strong>"))
     } else {
-      return(paste0("http://", session$clientData$url_hostname, ":", 5437, 
-        "/library/EpitopeMatcher/html/00Index.html"))
+      return(HTML(paste0('<a href="http://', session$clientData$url_hostname, ':', 5437, 
+        '/library/EpitopeMatcher/html/00Index.html">Click for help</a>')))
     }
   })
 
