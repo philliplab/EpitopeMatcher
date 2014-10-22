@@ -2,6 +2,8 @@ library(shiny)
 
 shinyUI(fluidPage(
 
+  tags$link(rel = "stylesheet", type = "text/css", href="no_wrap_tables.css"),
+
   titlePanel("Epitope Matcher"),
 
   sidebarLayout(
