@@ -71,12 +71,26 @@ shinyServer(function(input, output, session) {
   output$no_hla_details <- renderTable(epitope_scores()$error_log$no_hla_details)
 
   output$help_url <- renderUI({
-    status <- .Call(tools:::startHTTPD, "0.0.0.0", 5437)
+    help_port <- 5437
+    status <- .Call(tools:::startHTTPD, "0.0.0.0", help_port)
     if (status != 0L) {
-      return(HTML("<strong>help system could not be started<strong>"))
+      return(HTML("<strong>Help system could not be started! Contact package maintainer.<strong>"))
     } else {
-      return(HTML(paste0('<a href="http://', session$clientData$url_hostname, ':', 5437, 
-        '/library/EpitopeMatcher/html/00Index.html">Click for help</a>')))
+      help_link <- paste0('<a href="http://', session$clientData$url_hostname, ':', help_port, 
+                          '/library/EpitopeMatcher/html/00Index.html">Click for Detailed Package Help</a>')
+      return(HTML(paste(h3('Help for EpitopeMatcher web app'),
+                        p("Upload your input files using the menu on the left hand side. The files
+                          are required to be in a specific format. You can see more details about
+                          the formats in the detailed help of the R package which is available in
+                          the link below. The help of the functions read_lanl_hla, 
+                          read_patient_hla, and read_query_alignment (should) contain more
+                          information about the required input formats."),
+                        p("EpitopeMatcher can also be used inside an interactive R session. See
+                          the help page for the 'match_epitopes' function for more details/"),
+                        p("More information about the output formats can be found in the help page
+                          for the score_epitope function."),
+                        help_link,
+                        sep = '\n\n')))
     }
   })
 

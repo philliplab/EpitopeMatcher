@@ -3,7 +3,7 @@ Title: Epitope Matcher
 Description: A package that can be used to find out how well the epitopes in a
     patient's virus' will be recognized by the HLA's present in the patient.
 Version: 0.1
-Author: philliplab@gmail.com
+Author: Phillip Labuschagne <philliplab@gmail.com>
 Maintainer: Phillip Labuschagne <philliplab@gmail.com>
 Depends:
     digest,
@@ -13,6 +13,7 @@ Depends:
 Imports:
     shiny
 License: GPL-3
+URL: https://github.com/philliplab/EpitopeMatcher
 Collate:
     'lanl_hla_data.R'
     'list_jobs.R'
