@@ -61,7 +61,7 @@ shinyServer(function(input, output, session) {
 
       # create progress object and ensure that it gets closed.
       progress <- shiny::Progress$new()
-      progress$set(message = "Computing Epitpope Scores", value = 0)
+      progress$set(message = "Computing: ", value = 0)
       on.exit(progress$close())
 
       # Create a closure to update progress.
