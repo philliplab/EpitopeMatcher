@@ -4,7 +4,7 @@
 \title{Computes similarities between certain epitopes and sequences}
 \usage{
 match_epitopes(query_alignment, patient_hla, lanl_hla_data,
-  range_expansion = 5)
+  range_expansion = 5, update_progress_bar = NULL)
 }
 \arguments{
 \item{query_alignment}{The query alignment}
@@ -18,6 +18,10 @@ the descriptions of the different HLA genotypes}
 \item{range_expansion}{After the epitope is found in the reference
 seqeuence, search in each of the query sequences for the same epitope, but
 expand the range with this number of amino acids}
+
+\item{update_progress_bar}{A closure passed in from a reactive shiny
+expression that allows a progress bar to be updated when using the shiny web
+ui.}
 }
 \description{
 A query alignment and a file specifying which hla_genotypes should be

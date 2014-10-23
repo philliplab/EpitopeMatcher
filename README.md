@@ -15,8 +15,8 @@ source("http://bioconductor.org/biocLite.R")
 biocLite("Biostrings", ask=FALSE)
 install.packages('devtools')
 library(devtools)
-install_github(repo = 'EpitopeMatcher', username='philliplab')
-library(EpitopeMatcher)
+install_github('rstudio/shiny')
+install_github('philliplab/EpitopeMatcher')
 ```
 
 To run the web UI:
