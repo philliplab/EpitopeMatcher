@@ -19,6 +19,9 @@ install_github(repo = 'EpitopeMatcher', username='philliplab')
 library(EpitopeMatcher)
 ```
 
+Alternatively it can also be obtained using docker:
+* https://registry.hub.docker.com/u/philliplab/epitopematcher/
+
 To run the web UI:
 ```r
 library(EpitopeMatcher)
@@ -29,7 +32,7 @@ To use EpitopeMatcher in an R session, see the help file of these functions:
 * read_lanl_hla
 * read_patient_hla
 * read_query_alignment
-* score_sequence_epitopes 
+* match_epitopes 
 
 ## Design Notes
 
