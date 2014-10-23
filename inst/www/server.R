@@ -90,6 +90,9 @@ shinyServer(function(input, output, session) {
                         p("More information about the output formats can be found in the help page
                           for the score_epitope function."),
                         help_link,
+                        p("If the link above does not work, you can access the help by starting
+                          an R session and typing help(package = 'EpitopeMatcher') into the
+                          prompt and hitting enter"),
                         sep = '\n\n')))
     }
   })
