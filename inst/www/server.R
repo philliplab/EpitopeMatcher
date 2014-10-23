@@ -58,10 +58,29 @@ shinyServer(function(input, output, session) {
       if (!read_data()$success){
         return(list(msg = 'No Scores Computed yet'))
       }
+
+      # create progress object and ensure that it gets closed.
+      progress <- shiny::Progress$new()
+      progress$set(message = "Computing: ", value = 0)
+      on.exit(progress$close())
+
+      # Create a closure to update progress.
+      # Each time this is called:
+      # - If `value` is NULL, it will move the progress bar 1/100 of the remaining
+      #   distance. If non-NULL, it will set the progress to that value.
+      # - It also accepts optional detail text.
+      update_progress_bar <- function(value = NULL, detail = NULL) {
+        if (is.null(value)) {
+          value <- progress$getValue()
+          value <- value + (progress$getMax() - value) / 100
+        }
+        progress$set(value = value, detail = detail)
+      }
+
       ph <- read_data()$ph$data_set
       ln <- read_data()$ln$data_set
       qa <- read_data()$qa$data_set
-      return(match_epitopes(qa, ph, ln))
+      return(match_epitopes(qa, ph, ln, update_progress_bar = update_progress_bar))
     })
   })
                              

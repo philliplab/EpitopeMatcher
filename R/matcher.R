@@ -213,10 +213,13 @@ score_epitope <- function(the_scoring_job, query_alignment, range_expansion = 0)
 #' @param range_expansion After the epitope is found in the reference
 #' seqeuence, search in each of the query sequences for the same epitope, but
 #' expand the range with this number of amino acids
+#' @param update_progress_bar A closure passed in from a reactive shiny
+#' expression that allows a progress bar to be updated when using the shiny web
+#' ui.
 #' @export
 
 match_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
-                                    range_expansion = 5){
+                           range_expansion = 5, update_progress_bar = NULL){
   if ((class(query_alignment) != 'AAStringSet') |
     (class(patient_hla) != 'Patient_HLA') |
     (class(lanl_hla_data) != 'LANL_HLA_data')){
@@ -225,12 +228,18 @@ match_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
                 error_log = data.frame(note = 'Input Files Invalid')))
   }
 
+  if (is.function(update_progress_bar)) {
+    update_progress_bar(value = 0, detail = 'Job List')
+  }
   x <- list_scores_to_compute(query_alignment, patient_hla, lanl_hla_data)
+
   the_scoring_jobs <- x$result
   list_scores_error_log <- x$error_log
   rm(x)
 
-  x <- score_all_epitopes(the_scoring_jobs, query_alignment, range_expansion)
+  x <- score_all_epitopes(the_scoring_jobs, query_alignment, range_expansion,
+                          update_progress_bar = update_progress_bar)
+
   return(list(results = x$results,
               error_log = c(list_scores_error_log, x$error_log),
               msg = x$msg))
@@ -245,9 +254,13 @@ match_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
 #' @param range_expansion After the epitope is found in the reference
 #' seqeuence, search in each of the query sequences for the same epitope, but
 #' expand the range with this number of amino acids
+#' @param update_progress_bar A closure passed in from a reactive shiny
+#' expression that allows a progress bar to be updated when using the shiny web
+#' ui.
 #' @export
 
-score_all_epitopes <- function(the_scoring_jobs, query_alignment, range_expansion){
+score_all_epitopes <- function(the_scoring_jobs, query_alignment, range_expansion, 
+                               update_progress_bar = NULL){
   error_log <- list()
   results <- NULL
   epitopes_not_in_seq <- NULL
@@ -255,6 +268,9 @@ score_all_epitopes <- function(the_scoring_jobs, query_alignment, range_expansio
   for (i in seq_along(the_scoring_jobs)){
     epitope <- get_epitope(the_scoring_jobs[[i]])
     print(paste0(i, ' of ', length(the_scoring_jobs), ': ', epitope))
+    if (is.function(update_progress_bar)) {
+      update_progress_bar(value = i/length(the_scoring_jobs), detail = epitope)
+    }
     
     # Main Computation
     epitope_match <- score_epitope(the_scoring_jobs[[i]], query_alignment, 
