@@ -185,7 +185,8 @@ score_epitope <- function(the_scoring_job, query_alignment, range_expansion = 0)
     global_alignment <- find_epitope_in_ref(epitope, query_alignment, alignment_type = 'global')
     alignment <- global_alignment$alignment
     results <- NULL
-    error_details <- data.frame(pattern = as.character(pattern(alignment)),
+    error_details <- data.frame(alignment_score = score(alignment),
+                                pattern = as.character(pattern(alignment)),
                                 subject = as.character(subject(alignment)),
                                 global_alignment_start = global_alignment$start_pos,
                                 global_alignment_end = global_alignment$end_pos)
@@ -290,7 +291,7 @@ score_all_epitopes <- function(the_scoring_jobs, query_alignment, range_expansio
       results <- rbind(results, alignment_score)
     }
   }
-  error_log$epitopes_not_in_seq <- epitopes_not_in_seq
+  error_log$epitopes_not_in_seq <- epitopes_not_in_seq[order(epitopes_not_in_seq$alignment_score),]
 
   return(list(results = results,
               error_log = error_log,
