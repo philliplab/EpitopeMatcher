@@ -2,7 +2,13 @@
 NULL
 
 #' Reads in the query alignment
-#' @param file_name Name of the file
+#'
+#' This function currently just calls readAAStringSet in the Biostrings
+#' package. See that function for more details.
+#'
+#' Must be a valid FASTA file.
+#'
+#' @param file_name Name of the fasta file
 #' @export
 
 read_query_alignment <- function(file_name){

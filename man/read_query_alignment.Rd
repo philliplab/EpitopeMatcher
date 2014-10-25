@@ -6,9 +6,13 @@
 read_query_alignment(file_name)
 }
 \arguments{
-\item{file_name}{Name of the file}
+\item{file_name}{Name of the fasta file}
 }
 \description{
-Reads in the query alignment
+This function currently just calls readAAStringSet in the Biostrings
+package. See that function for more details.
+}
+\details{
+Must be a valid FASTA file.
 }
 
