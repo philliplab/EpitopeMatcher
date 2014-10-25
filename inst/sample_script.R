@@ -1,11 +1,12 @@
 library(EpitopeMatcher)
-library(devtools)
-load_all('..')
-file_name <- file.path('~/projects/EpitopeMatcher/patient_hla_file.csv')
+#library(devtools)
+#load_all('..')
+data_dir <- '~/projects/EpitopeMatcher'
+file_name <- file.path(data_dir, 'patient_hla_file.csv')
 ph <- read_patient_hla(file_name )
-file_name <- file.path('~/projects/EpitopeMatcher/ctl_summary.csv')
+file_name <- file.path(data_dir, 'ctl_summary.csv')
 ln <- read_lanl_hla(file_name )
-file_name <- file.path('~/projects/EpitopeMatcher/query_alignment.FASTA')
+file_name <- file.path(data_dir, 'query_alignment.FASTA')
 qa <- read_query_alignment(file_name )
 
 query_alignment <- qa
