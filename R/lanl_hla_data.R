@@ -24,7 +24,26 @@
   }
 )
 
-#' A function that reads a patient HLA genotype specification file
+#' A function that reads a HLA genotype specification file
+#'
+#' This file is typically obtained from
+#' http://www.hiv.lanl.gov/content/immunology/tables/tables.html.
+#'
+#' The file must have the following columns:
+#' \itemize{
+#'  \item{Epitope}
+#'  \item{Protein}
+#'  \item{HXB2.start}
+#'  \item{HXB2.end}
+#'  \item{Subprotein}
+#'  \item{HXB2.DNA.Contig}
+#'  \item{Subtype}
+#'  \item{Species}
+#'  \item{HLA}
+#' }
+#' 
+#' The input format should be made more flexible in the future. 
+#'
 #' @param file_name Name of the file
 #' @export
 
