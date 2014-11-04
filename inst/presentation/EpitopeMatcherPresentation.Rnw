@@ -1,0 +1,215 @@
+\documentclass{beamer}
+\usetheme{Boadilla}
+\usepackage{graphicx}
+\useoutertheme{infolinesphil}
+\usepackage{multicol}
+
+
+\newcommand\myheading[1]{%
+  \par\bigskip
+  {\Large\bfseries#1}\par\smallskip}
+
+\begin{document}
+
+\title{EpitopeMatcher}
+\author[Phillip Labuschagne]{Phillip Labuschagne}
+\institute[SANBI]{\includegraphics[height=4cm, width=4cm]{pictures/SANBI.jpg}}
+\date{\today}
+
+\maketitle
+
+<<initial_setup, include=FALSE>>=
+# Ignore this section
+library(xtable)
+options(width = 35)
+opts_chunk$set(fig.path='figure/beamer-',fig.align='center',fig.show='hold',size='footnotesize')
+opts_chunk$set(out.width='.65\\linewidth')
+opts_chunk$set(fig.height = 4)
+opts_chunk$set(fig.width = 4)
+@
+
+\section{Overview}
+
+\begin{frame}[fragile]{Outline}
+  \tableofcontents
+\end{frame}
+
+\section{Problem Statement}
+
+\begin{frame}[fragile]{Problem Statement}
+
+  A person's immune system has certain HLA genotypes.
+
+  \vspace{5mm}
+
+  These genotypes recognize certain epitopes in a virus' sequence.
+
+  \vspace{5mm}
+
+  The immune sequence will attack the virus at these sites causing mutation.
+
+  \vspace{5mm}
+
+  Investigate the mutation at these specific sites.
+
+\end{frame}
+
+\begin{frame}[fragile]{Solution Design - Part 1}
+
+  Receive input from the user:
+  
+  \vspace{5mm}
+
+  \begin{itemize}
+    \item Which patient's have which HLAs.
+    \item What epitope can which HLA attack?
+    \item An alignment of the virus sequences in a patient from different time points to a reference sequence. (Vaccine insert or viral sequence from early timepoint)
+  \end{itemize}
+
+  \vspace{5mm}
+
+  Wrangle the data (it comes in bad formats).
+
+\end{frame}
+
+\begin{frame}[fragile]{Solution Design - Part 2}
+
+  \begin{itemize}
+    \item For each HLA:
+      \begin{itemize}
+        \item Find the epitope associated with it
+        \item Find the epitope in the reference sequence (Partial matching using Pairwise alignment)
+        \item Find the bases in the query sequences that are in that same positions as the epitope in the reference sequence.
+        \item Compare the bases from the query sequence to the epitope from the reference.
+        \item Report the results of the match.
+        \item Log an error if anything goes wrong.
+      \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Demo}
+\end{frame}
+
+\section{R}
+
+\begin{frame}[fragile]{R}
+
+\begin{itemize}
+    \item Very mature Statistical Language.
+    \item Thousands of packages.
+    \item Extremely active on github (even though most of R dev happens with svn).
+    \item Two different approaches to bioinfomatics:
+      \begin{itemize}
+        \item CRAN - Bunch of packages loosely organized with task views (Genetics, Phylogenetics)
+        \item BioConductor - massive stand alone bioinformatics project
+      \end{itemize}
+    \item Not the best programming language... (R Inferno by Patrick Burns)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{R Libraries}
+
+  Two different 'base' packages for using sequence data:
+  
+  \vspace{5mm}
+
+  \begin{itemize}
+    \item seqinr
+    \item BioStrings
+  \end{itemize}
+  
+  \vspace{5mm}
+
+  I chose to use BioStrings basically just because I recognized the author's name...
+
+  \vspace{5mm}
+
+  The package provides an interface to highly efficient datastructures defined in C.
+
+\end{frame}
+
+
+\section{Packaging}
+
+\begin{frame}
+
+  R is designed to be extended through the development of packages.
+
+  \vspace{5mm}
+
+  Packages units of code that contain functions, data, tests, documentation and tutorials.
+
+  \vspace{5mm}
+
+  There is an R package called devtools() that makes packaging very easy. You set up an extremely minimal set of
+  files and folders and run the following sequence of commands:
+
+<<devtools_commands, echo=TRUE, eval=FALSE>>=
+
+document()
+
+build()
+
+install()
+
+test()
+
+@
+
+  devtools was used to package EpitopeMatcher.
+
+\end{frame}
+
+\section{Version Control}
+
+\begin{frame}
+
+  Keeping track of different versions of code is critical when working in a team.
+
+  \vspace{5mm}
+
+  We use git and Github.
+
+  \vspace{5mm}
+
+  The Github page for the project is currently https://github.com/philliplab/EpitopeMatcher.
+
+  \vspace{5mm}
+
+  Github will render a README.md file below the code, making a 'nice' landing page.
+
+  \vspace{5mm}
+
+  I experimented with git-flow, but it was too much overhead.
+
+\end{frame}
+
+\section{Web UI}
+
+\begin{frame}
+
+  I use shiny.
+
+  \vspace{5mm}
+
+  A free open source project by RStudio.
+
+  \vspace{5mm}
+
+  It allows the creation of an interactive website by only writing R code.
+
+  \vspace{5mm}
+
+  But you usually run into its limits fast and have to customize some CSS / javascript yourself.
+
+  \vspace{5mm}
+
+  Great for little stand alone apps, but for something bigger you need shiny enterprise server at \$10 000 per year. (Or ninja skills)
+
+\end{frame}
+
+
+\end{document}
+
