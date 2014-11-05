@@ -28,13 +28,35 @@ opts_chunk$set(fig.height = 4)
 opts_chunk$set(fig.width = 4)
 @
 
-\section{Overview}
+\begin{frame}[fragile]{Overview}
 
-\begin{frame}[fragile]{Outline}
-  \tableofcontents
+  This presentation is more about the Development Approach than the actual problem or solution.
+
+  \vspace{5mm}
+
+  Specifically, we want to ask for advice about duplicating this approach in Python.
+
+  \vspace{5mm}
+
+  Outline:
+
+  \begin{itemize}
+
+    \item Problem Statement + Solution
+
+    \item Language Choice: R
+    \item Libraries Chosen: BioStrings
+    \item Packaging Approach
+    \item Documentation: roxygen
+    \item Version Control: Github
+    \item WebUI: shiny
+    \item Testing: testthat
+    \item Deployment: R package + Dockerhub + SANBI Server
+
+  \end{itemize}
+  
+
 \end{frame}
-
-\section{Problem Statement}
 
 \begin{frame}[fragile]{Problem Statement}
 
@@ -91,15 +113,13 @@ opts_chunk$set(fig.width = 4)
 \begin{frame}[fragile]{Demo}
 \end{frame}
 
-\section{R}
-
-\begin{frame}[fragile]{R}
+\begin{frame}[fragile]{Implementation: Language Choice - R}
 
 \begin{itemize}
     \item Very mature Statistical Language.
     \item Thousands of packages.
-    \item Extremely active on github (even though most of R dev happens with svn).
-    \item Two different approaches to bioinfomatics:
+    \item Extremely active on github (even though most(?) of core R dev happens with svn).
+    \item Two different approaches to bioinfomatics in R:
       \begin{itemize}
         \item CRAN - Bunch of packages loosely organized with task views (Genetics, Phylogenetics)
         \item BioConductor - massive stand alone bioinformatics project
@@ -116,8 +136,8 @@ opts_chunk$set(fig.width = 4)
   \vspace{5mm}
 
   \begin{itemize}
-    \item seqinr
-    \item BioStrings
+    \item seqinr (CRAN)
+    \item BioStrings (BioConductor)
   \end{itemize}
   
   \vspace{5mm}
@@ -128,10 +148,12 @@ opts_chunk$set(fig.width = 4)
 
   The package provides an interface to highly efficient datastructures defined in C.
 
+  \vspace{5mm}
+
+  Basic data structures are an XString and an XStringSet for DNA or AA.
+
 \end{frame}
 
-
-\section{Packaging}
 
 \begin{frame}
 
@@ -139,7 +161,7 @@ opts_chunk$set(fig.width = 4)
 
   \vspace{5mm}
 
-  Packages units of code that contain functions, data, tests, documentation and tutorials.
+  Packages are units that contain functions (and classes/methods), data, tests, documentation and tutorials.
 
   \vspace{5mm}
 
@@ -162,9 +184,49 @@ test()
 
 \end{frame}
 
-\section{Version Control}
+\begin{frame}[fragile]{Documentation}
 
-\begin{frame}
+  Two different documentation solutions were used:
+  \begin{itemize}
+    \item README.md on github
+    \item roxygen generation of R help pages
+  \end{itemize}
+
+  R has a system for documenting packages.
+
+  You write help files for each function and data set in a latex like syntax and put it in the man/ folder.
+
+  R then allows the user to access the help through two approaches:
+  \begin{itemize}
+    \item A commandline interface much like a man page
+    \item An http server that serves the pages and then you access them with your browser
+  \end{itemize}
+
+\end{frame}
+\begin{frame}[fragile]{Documentation}
+
+  I don't like the original R solution to documentation:
+  \begin{itemize}
+    \item Difficult syntax.
+    \item Extra files and folders - added complexity.
+    \item Code and documentation is not covientiently co-located, so easy to edit one and forget to update the other.
+  \end{itemize}
+
+  roxygen allows you to put special comments in your code and then generates the man pages for you.
+
+<<roxygen_example, echo=TRUE, eval=FALSE>>=
+
+#' My function
+
+#' @param x A description of x
+
+#' @export
+
+@
+
+\end{frame}
+
+\begin{frame}[fragile]{Version Control}
 
   Keeping track of different versions of code is critical when working in a team.
 
@@ -186,9 +248,7 @@ test()
 
 \end{frame}
 
-\section{Web UI}
-
-\begin{frame}
+\begin{frame}[fragile]{Web UI}
 
   I use shiny.
 
@@ -210,6 +270,104 @@ test()
 
 \end{frame}
 
+\begin{frame}[fragile]{Testing}
+
+  Probably the most confusing part about software development for me.
+
+  \vspace{5mm}
+
+  Lots of conflicting ideas. For everyting from TDD to not testing at all you will find some blog post that explains why this approach is correct...
+
+  \vspace{5mm}
+
+  Some of my opinions about testing in a scientific context:
+  
+  \vspace{5mm}
+
+  \begin{itemize}
+
+    \item Some level of testing is required.
+
+    \item A little bit of automated test is really useful. It keeps an eye on the important things for you to make sure you don't break them.
+      
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Testing}
+
+  Some of my opinions about testing in a scientific context:
+  
+  \vspace{5mm}
+
+  \begin{itemize}
+
+    \item A comprehensive testing suite gets in the way
+      
+      \begin{itemize}  
+
+         \item Usually the problem we are trying to solve is a moving target.
+
+         \item Lots of code we write is actually for the purpose of figuring out what the problem we are trying to solve is.
+
+         \item This means freaquently change large portions of the code.
+
+         \item Then you also have to change all the code that test your code (easily double the amount of work)
+  
+      \end{itemize}
+
+    \item So I aim for a tiny amount of tests that test some:
+      
+      \begin{itemize}
+         \item Critical milestones in my program.
+         \item Pieces of code that caused lots of problems.
+      \end{itemize}
+      
+  \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Testing}
+
+<<testing_sample, echo=TRUE, eval=FALSE>>=
+
+  x <- AAStringSet(structure(c( "MG", "MG", "MG", "MG"), 
+      .Names = c("17h00,hxb2 ,sdklfj", 
+                 "45h34,pat01,scribbles", 
+                 ",pat02", 
+                 "hello, pat03")))
+  ids <- get_patient_ids(x, ',', 2)
+  expect_that("hxb2" %in% ids, is_true())
+  expect_that("hxb2 " %in% ids, is_false())
+  expect_that("pat02" %in% ids, is_true())
+  expect_that("hello" %in% ids, is_true())
+
+@
+
+\end{frame}
+
+\begin{frame}[fragile]{Deployment}
+
+  Always a huge mission to get your code working on linux, windows, mac, some server running SLES...
+
+  My current deployment solutions (in order of ease) are:
+
+  \begin{itemize}
+    \item R package
+    \item docker
+    \item web server (with Peter + Long this is probably now the easiest solution)
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Deploy an R package}
+
+  Ideally submit the package to CRAN / BioConductor.
+
+  But, Github is so convenient, that it usually just gets stuck there.
+
+\end{frame}
 
 \end{document}
 
