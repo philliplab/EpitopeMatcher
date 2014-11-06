@@ -8,6 +8,11 @@ NULL
 #'
 #' Must be a valid FASTA file.
 #'
+#' The FASTA headers must be in some delimited form with a special character
+#' used for delimiting different fields. Further more, the patient id must
+#' always be in the same column in the FASTA header. For example:
+#' PATID_TIME_PID_CONSENSUSDETAILS
+#'
 #' @param file_name Name of the fasta file
 #' @export
 
