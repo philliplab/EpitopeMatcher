@@ -41,22 +41,21 @@ opts_chunk$set(fig.width = 4)
   Outline:
 
   \begin{itemize}
-
     \item Problem Statement + Solution
 
     \item Language Choice: R
     \item Libraries Chosen: BioStrings
-    \item Packaging Approach
-    \item Documentation: roxygen
+    \item Packaging Approach: devtools
+    \item Documentation: roxygen2
     \item Version Control: Github
     \item WebUI: shiny
     \item Testing: testthat
     \item Deployment: R package + Dockerhub + SANBI Server
-
   \end{itemize}
-  
 
 \end{frame}
+
+\section{Problem and Solution}
 
 \begin{frame}[fragile]{Problem Statement}
 
@@ -113,6 +112,8 @@ opts_chunk$set(fig.width = 4)
 \begin{frame}[fragile]{Demo}
 \end{frame}
 
+\section{R}
+
 \begin{frame}[fragile]{Implementation: Language Choice - R}
 
 \begin{itemize}
@@ -154,8 +155,9 @@ opts_chunk$set(fig.width = 4)
 
 \end{frame}
 
+\section{Packaging}
 
-\begin{frame}
+\begin{frame}[fragile]{Packaging: devtools}
 
   R is designed to be extended through the development of packages.
 
@@ -184,17 +186,23 @@ test()
 
 \end{frame}
 
+\section{Documentation}
+
 \begin{frame}[fragile]{Documentation}
 
   Two different documentation solutions were used:
   \begin{itemize}
     \item README.md on github
-    \item roxygen generation of R help pages
+    \item roxygen2 generation of R help pages
   \end{itemize}
 
   R has a system for documenting packages.
 
-  You write help files for each function and data set in a latex like syntax and put it in the man/ folder.
+  \vspace{5mm}
+
+  You write help files for each function and data set in a latex like syntax and put it in the man folder.
+
+  \vspace{5mm}
 
   R then allows the user to access the help through two approaches:
   \begin{itemize}
@@ -207,12 +215,12 @@ test()
 
   I don't like the original R solution to documentation:
   \begin{itemize}
-    \item Difficult syntax.
+    \item 'Difficult' syntax. (Markdown spoilt me...)
     \item Extra files and folders - added complexity.
     \item Code and documentation is not covientiently co-located, so easy to edit one and forget to update the other.
   \end{itemize}
 
-  roxygen allows you to put special comments in your code and then generates the man pages for you.
+  roxygen2 allows you to put special comments in your code and then generates the man pages for you.
 
 <<roxygen_example, echo=TRUE, eval=FALSE>>=
 
@@ -351,7 +359,11 @@ test()
 
   Always a huge mission to get your code working on linux, windows, mac, some server running SLES...
 
-  My current deployment solutions (in order of ease) are:
+  \vspace{5mm}
+
+  My current deployment solutions are:
+
+  \vspace{5mm}
 
   \begin{itemize}
     \item R package
@@ -365,7 +377,43 @@ test()
 
   Ideally submit the package to CRAN / BioConductor.
 
+  \vspace{5mm}
+
   But, Github is so convenient, that it usually just gets stuck there.
+
+\end{frame}
+
+\begin{frame}[fragile]{Deploy with Docker}
+
+  I think of docker as a scaled down virtual machine.
+
+  \vspace{5mm}
+
+  Use dockerhub to allow people to download a scaled down virtual machine that run the program you want to deploy.
+
+  \vspace{5mm}
+
+  Automated builds work really well.
+
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Deploy with a web server}
+
+  Instead of shipping code to other people, host a website where they can do their computations.
+
+  \vspace{5mm}
+
+  Shiny comes with a community server written in Node.js.
+
+  \vspace{5mm}
+
+  Run that on a VM you get from Long / Peter.
+
+  \vspace{5mm}
+
+  Then email one of them and ask them to work their magic.
 
 \end{frame}
 

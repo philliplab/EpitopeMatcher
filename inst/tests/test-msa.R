@@ -14,12 +14,15 @@ test_that("get_patient_ids work", {
   expect_that("pat02" %in% ids, is_true())
 
   x <- AAStringSet(structure(c( "MG", "MG", "MG", "MG"), 
-      .Names = c("17h00,hxb2 ,sdklfj", "45h34,pat01,scribbles", 
-                 ",pat02", "hello, pat03")))
+      .Names = c("17h00,hxb2 ,sdklfj", 
+                 "45h34,pat01,scribbles", 
+                 ",pat02", 
+                 "hello, pat03")))
   ids <- get_patient_ids(x, ',', 2)
   expect_that("hxb2" %in% ids, is_true())
   expect_that("hxb2 " %in% ids, is_false())
   expect_that("pat02" %in% ids, is_true())
+  expect_that("hello" %in% ids, is_true())
 
   ids <- get_patient_ids(x, sep = NULL)
   expect_that("17h00,hxb2 ,sdklfj" %in% ids, is_true())
