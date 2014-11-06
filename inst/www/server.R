@@ -80,7 +80,8 @@ shinyServer(function(input, output, session) {
       ph <- read_data()$ph$data_set
       ln <- read_data()$ln$data_set
       qa <- read_data()$qa$data_set
-      return(match_epitopes(qa, ph, ln, update_progress_bar = update_progress_bar))
+      return(match_epitopes(qa, ph, ln, update_progress_bar = update_progress_bar,
+                            substitutionMatrix = input$substitutionMatrix))
     })
   })
                              
