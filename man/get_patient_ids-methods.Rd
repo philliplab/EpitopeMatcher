@@ -21,6 +21,7 @@ get_patient_ids(x, sep = "\\\\|", id_position = 1)
 character, which element of the resulting vector contains the patient id?}
 }
 \description{
-Returns the ids of the patients in the data structure
+It parses the FASTA header when called on a XStringSet object using the sep
+and id_position arguments.
 }
 

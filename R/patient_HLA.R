@@ -67,6 +67,10 @@ get_test_patient_hla_data <- function(dataset_name = 'base'){
 }
 
 #' Returns the ids of the patients in the data structure
+#'
+#' It parses the FASTA header when called on a XStringSet object using the sep
+#' and id_position arguments.
+#'
 #' @param x The data structure to interrogate
 #' @param sep The symbol used to separate elements in the sequence names
 #' @param id_position After the sequence name has been split on the 'sep'
