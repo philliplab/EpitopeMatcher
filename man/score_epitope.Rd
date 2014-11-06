@@ -4,7 +4,8 @@
 \title{Computes the similarities between the epitope and the sequences in the
 alignment}
 \usage{
-score_epitope(the_scoring_job, query_alignment, range_expansion = 0)
+score_epitope(the_scoring_job, query_alignment, range_expansion = 0,
+  substitutionMatrix = "BLOSUM50")
 }
 \arguments{
 \item{the_scoring_job}{A scoring job as a object of type 'Scoring_Job'}
@@ -14,6 +15,10 @@ score_epitope(the_scoring_job, query_alignment, range_expansion = 0)
 \item{range_expansion}{After the epitope is found in the reference
 seqeuence, search in each of the query sequences for the same epitope, but
 expand the range with this number of amino acids}
+
+\item{substitutionMatrix}{substitution matrix representing the fixed substitution
+scores for an alignment. It cannot be used in conjunction with ‘patternQuality’
+and ‘subjectQuality’ arguments.}
 }
 \value{
 The output from this function is a list with two data.frames. The first is

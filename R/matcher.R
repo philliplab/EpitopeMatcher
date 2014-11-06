@@ -17,14 +17,17 @@ NULL
 #' use 'global' if 'overlap' alignment cannot be found. See Biostrings manual.
 #' @export
 
-find_epitope_in_ref <- function(epitope, query_alignment, alignment_type = 'overlap'){
+find_epitope_in_ref <- function(epitope, query_alignment, 
+                                alignment_type = 'overlap', 
+                                substitutionMatrix = "BLOSUM50"){
   if (class(epitope) == 'character'){
     epitope <- AAString(epitope)
   }
 
   ref_seq <- query_alignment[[1]]
 
-  alignment <- pairwiseAlignment(pattern = epitope, subject = ref_seq, type = alignment_type)
+  alignment <- pairwiseAlignment(pattern = epitope, subject = ref_seq, 
+                                 type = alignment_type)
   start_pos <- start(Views(alignment))
   end_pos <- end(Views(alignment))
   aln_score <- score(alignment)
@@ -107,6 +110,9 @@ epitope_found <- function(epitope, alignment){
 #' @param range_expansion After the epitope is found in the reference
 #' seqeuence, search in each of the query sequences for the same epitope, but
 #' expand the range with this number of amino acids
+#' @param substitutionMatrix substitution matrix representing the fixed substitution 
+#' scores for an alignment. It cannot be used in conjunction with ‘patternQuality’ 
+#' and ‘subjectQuality’ arguments.
 #' @return The output from this function is a list with two data.frames. The first is
 #' the results data.frame that contains these columns:
 #' \itemize{
@@ -156,7 +162,8 @@ epitope_found <- function(epitope, alignment){
 #' 
 #' @export
 
-score_epitope <- function(the_scoring_job, query_alignment, range_expansion = 0){
+score_epitope <- function(the_scoring_job, query_alignment, range_expansion = 0,
+                          substitutionMatrix = "BLOSUM50"){
   epitope <- get_epitope(the_scoring_job)
   if (class(epitope) == 'character'){
     epitope <- AAString(epitope)
@@ -170,9 +177,10 @@ score_epitope <- function(the_scoring_job, query_alignment, range_expansion = 0)
     sequences_to_score <- match(the_scoring_job@query_sequence_names, names(query_alignment))
     results <- NULL
     for (i in sequences_to_score){
-      pair_alignment <- pairwiseAlignment(subject = sequence_substr[[i]], 
-                                          pattern = eregion_in_refseq, 
-                                          type = 'overlap')
+      pair_alignment <- pairwiseAlignment(subject = gsub("-", "", sequence_substr[[i]]), 
+                                          pattern = gsub("-", "", eregion_in_refseq), 
+                                          type = 'overlap',
+                                          substitutionMatrix = substitutionMatrix)
       results <- rbind(results,
                        .sequence_comparison_stats(names(sequence_substr)[i], pair_alignment, 
                                                   ref_pos$start_pos, ref_pos$end_pos,

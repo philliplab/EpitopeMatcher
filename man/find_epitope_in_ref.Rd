@@ -3,7 +3,8 @@
 \alias{find_epitope_in_ref}
 \title{Finds the position of the epitope in the reference sequence}
 \usage{
-find_epitope_in_ref(epitope, query_alignment, alignment_type = "overlap")
+find_epitope_in_ref(epitope, query_alignment, alignment_type = "overlap",
+  substitutionMatrix = "BLOSUM50")
 }
 \arguments{
 \item{epitope}{The epitope to find in the sequence. Either a character
