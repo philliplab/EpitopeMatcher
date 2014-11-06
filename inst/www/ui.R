@@ -11,6 +11,10 @@ shinyUI(fluidPage(
       fileInput("patient_hla", label = h3("Patient HLA genotypes")),
       fileInput("lanl_hla", label = h3("LANL HLA genotype database")),
       fileInput("query_alignment", label = h3("Query Alignment (FASTA)")),
+      selectInput("substitutionMatrix", label = h3("Substitution Matrix"),
+                  choices = c('None', 'BLOSUM45', 'BLOSUM50', 'BLOSUM62', 'BLOSUM80', 'BLOSUM100',
+                              'PAM30', 'PAM40', 'PAM70', 'PAM120', 'PAM250'),
+                  selected = 'None'),
       actionButton('goButton', 'Compute Scores'),
       downloadButton('download_results', 'Download Results'),
       downloadButton('download_error_log', 'Download Error Log')

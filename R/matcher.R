@@ -18,8 +18,7 @@ NULL
 #' @export
 
 find_epitope_in_ref <- function(epitope, query_alignment, 
-                                alignment_type = 'overlap', 
-                                substitutionMatrix = "BLOSUM50"){
+                                alignment_type = 'overlap'){
   if (class(epitope) == 'character'){
     epitope <- AAString(epitope)
   }
@@ -225,10 +224,17 @@ score_epitope <- function(the_scoring_job, query_alignment, range_expansion = 0,
 #' @param update_progress_bar A closure passed in from a reactive shiny
 #' expression that allows a progress bar to be updated when using the shiny web
 #' ui.
+#' @param substitutionMatrix substitution matrix representing the fixed substitution 
+#' scores for an alignment. It cannot be used in conjunction with ‘patternQuality’ 
+#' and ‘subjectQuality’ arguments.
 #' @export
 
 match_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
-                           range_expansion = 5, update_progress_bar = NULL){
+                           range_expansion = 5, update_progress_bar = NULL,
+                               substitutionMatrix = "BLOSUM50"){
+  if (substitutionMatrix == 'None'){
+    substitutionMatrix <- NULL
+  }
   if ((class(query_alignment) != 'AAStringSet') |
     (class(patient_hla) != 'Patient_HLA') |
     (class(lanl_hla_data) != 'LANL_HLA_data')){
@@ -247,7 +253,8 @@ match_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
   rm(x)
 
   x <- score_all_epitopes(the_scoring_jobs, query_alignment, range_expansion,
-                          update_progress_bar = update_progress_bar)
+                          update_progress_bar = update_progress_bar, 
+                          substitutionMatrix = substitutionMatrix)
 
   return(list(results = x$results,
               error_log = c(list_scores_error_log, x$error_log),
@@ -266,10 +273,14 @@ match_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
 #' @param update_progress_bar A closure passed in from a reactive shiny
 #' expression that allows a progress bar to be updated when using the shiny web
 #' ui.
+#' @param substitutionMatrix substitution matrix representing the fixed substitution 
+#' scores for an alignment. It cannot be used in conjunction with ‘patternQuality’ 
+#' and ‘subjectQuality’ arguments.
 #' @export
 
 score_all_epitopes <- function(the_scoring_jobs, query_alignment, range_expansion, 
-                               update_progress_bar = NULL){
+                               update_progress_bar = NULL,
+                               substitutionMatrix = "BLOSUM50"){
   error_log <- list()
   results <- NULL
   epitopes_not_in_seq <- NULL
@@ -283,7 +294,7 @@ score_all_epitopes <- function(the_scoring_jobs, query_alignment, range_expansio
     
     # Main Computation
     epitope_match <- score_epitope(the_scoring_jobs[[i]], query_alignment, 
-                                            range_expansion)
+                                   range_expansion, substitutionMatrix = substitutionMatrix)
 
     # Results processing
     hla_details <- as.data.frame(get_hla_details(the_scoring_jobs[[i]]),

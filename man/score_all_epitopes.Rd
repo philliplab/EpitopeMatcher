@@ -4,7 +4,7 @@
 \title{Given a list of scoring jobs, compute the similarities}
 \usage{
 score_all_epitopes(the_scoring_jobs, query_alignment, range_expansion,
-  update_progress_bar = NULL)
+  update_progress_bar = NULL, substitutionMatrix = "BLOSUM50")
 }
 \arguments{
 \item{the_scoring_jobs}{A list of scoring_jobs}
@@ -18,6 +18,10 @@ expand the range with this number of amino acids}
 \item{update_progress_bar}{A closure passed in from a reactive shiny
 expression that allows a progress bar to be updated when using the shiny web
 ui.}
+
+\item{substitutionMatrix}{substitution matrix representing the fixed substitution
+scores for an alignment. It cannot be used in conjunction with ‘patternQuality’
+and ‘subjectQuality’ arguments.}
 }
 \description{
 This function is mostly just a wrapper for \code{\link{score_epitope}}.

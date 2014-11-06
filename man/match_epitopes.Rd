@@ -4,7 +4,8 @@
 \title{Computes similarities between certain epitopes and sequences}
 \usage{
 match_epitopes(query_alignment, patient_hla, lanl_hla_data,
-  range_expansion = 5, update_progress_bar = NULL)
+  range_expansion = 5, update_progress_bar = NULL,
+  substitutionMatrix = "BLOSUM50")
 }
 \arguments{
 \item{query_alignment}{The query alignment}
@@ -22,6 +23,10 @@ expand the range with this number of amino acids}
 \item{update_progress_bar}{A closure passed in from a reactive shiny
 expression that allows a progress bar to be updated when using the shiny web
 ui.}
+
+\item{substitutionMatrix}{substitution matrix representing the fixed substitution
+scores for an alignment. It cannot be used in conjunction with ‘patternQuality’
+and ‘subjectQuality’ arguments.}
 }
 \description{
 A query alignment and a file specifying which hla_genotypes should be
