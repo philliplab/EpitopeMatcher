@@ -79,7 +79,9 @@ read_lanl_hla <- function(file_name){
                                     col_num = 9)
                                     )
   for (i in seq_along(column_renames)){
-    if (names(lanl_hla)[column_renames[[i]]$col_num] == column_renames[[i]]$source){
+    file_col_name <- tolower(names(lanl_hla)[column_renames[[i]]$col_num])
+    rename_source <- tolower(column_renames[[i]]$source)
+    if (file_col_name == rename_source){
       names(lanl_hla)[column_renames[[i]]$col_num] <- column_renames[[i]]$target
     }
   }
