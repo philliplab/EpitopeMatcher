@@ -44,6 +44,14 @@ shinyServer(function(input, output, session) {
     return(data_sets)
   })
 
+  load_substitutionMatrix <- reactive({
+    if (input$substitutionMatrix == 'BETWEEN10'){
+      data(BETWEEN10)
+      return(BETWEEN10)
+    }
+    return(input$substitutionMatrix)
+  })
+
   output$patient_hla_file_details <- renderPrint(print(read_data()$ph$msg))
   output$lanl_hla_file_details <- renderPrint(print(read_data()$ln$msg))
   output$query_alignment_file_details <- renderPrint(print(read_data()$qa$msg))
@@ -81,7 +89,7 @@ shinyServer(function(input, output, session) {
       ln <- read_data()$ln$data_set
       qa <- read_data()$qa$data_set
       return(match_epitopes(qa, ph, ln, update_progress_bar = update_progress_bar,
-                            substitutionMatrix = input$substitutionMatrix))
+                            substitutionMatrix = load_substitutionMatrix()))
     })
   })
                              

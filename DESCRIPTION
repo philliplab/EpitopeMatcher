@@ -15,6 +15,7 @@ Imports:
 License: GPL-3
 URL: https://github.com/philliplab/EpitopeMatcher
 Collate:
+    'data_documentation.R'
     'lanl_hla_data.R'
     'list_jobs.R'
     'patient_HLA.R'
