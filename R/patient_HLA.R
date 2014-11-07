@@ -15,10 +15,10 @@ NULL
   contains = 'data.frame',
 
   validity = function(object){
-    if (names(object)[1] != 'patient_id'){
+    if (tolower(names(object)[1]) != 'patient_id'){
       stop("incorrent column names. First Column must be patient_id")
     }
-    if (names(object)[2] != 'hla_genotype'){
+    if (tolower(names(object)[2]) != 'hla_genotype'){
       stop("incorrent column names. Second Column must be hla_genotype")
     }
     if (nrow(object) == 0){
