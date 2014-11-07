@@ -49,6 +49,14 @@ shinyServer(function(input, output, session) {
       data(BETWEEN10)
       return(BETWEEN10)
     }
+    if (input$substitutionMatrix == 'BETWEEN38'){
+      data(BETWEEN38)
+      return(BETWEEN38)
+    }
+    if (input$substitutionMatrix == 'WITHIN5'){
+      data(WITHIN5)
+      return(WITHIN5)
+    }
     return(input$substitutionMatrix)
   })
 
