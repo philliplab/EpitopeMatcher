@@ -4,6 +4,19 @@ NULL
 
 #' The class for the data that describes which patients have which HLAs
 #' 
+#' It is an extension of data.frame and has these columns:
+#' \itemize{
+#'  \item{patient_id}
+#'  \item{hla_genotype}
+#' }
+#'
+#' The value of the patient_id column gets treated as a regular expression
+#' when it is matched to the FASTA headers in the query_alignment. If the value is
+#' set to .* then the hla_genotype corresponding to this entry will be matched
+#' to all the sequences in the query alignment.
+#' 
+#' The hla_genotype column should be a name from the LANL table.
+#'
 #' @rdname Patient_HLA
 #' @aliases Patient_HLA-class
 #' @exportClass Patient_HLA
@@ -27,23 +40,14 @@ NULL
   }
 )
 
-#' A function that reads a patient HLA genotype specification file
+#' A function that reads a patient HLA genotype specification file.
 #'
-#' The file must have two columns:
-#' \itemize{
-#'  \item{patient_id}
-#'  \item{hla_genotype}
-#' }
+#' The function will convert the file into an object of class Patient_HLA.
+#' See the class documentation for more details about the format:
+#' \code{\link{.Patient_HLA}}
 #'
-#' The value of the patient_id column gets treated as a regular expression
-#' and is matched to the FASTA headers in the query_alignment. If the value is
-#' set to .* then the hla_genotype corresponding to this entry will be matched
-#' to all the sequences in the query alignment.
-#' 
-#' The hla_genotype column should be a name from the LANL table.
 #' @param file_name Name of the file
 #' @export
-
 read_patient_hla <- function(file_name){
   x <- read.csv(file_name,
                 stringsAsFactors = FALSE)

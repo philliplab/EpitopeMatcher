@@ -5,6 +5,18 @@
 \alias{Patient_HLA-class}
 \title{The class for the data that describes which patients have which HLAs}
 \description{
-The class for the data that describes which patients have which HLAs
+It is an extension of data.frame and has these columns:
+\itemize{
+ \item{patient_id}
+ \item{hla_genotype}
+}
+}
+\details{
+The value of the patient_id column gets treated as a regular expression
+when it is matched to the FASTA headers in the query_alignment. If the value is
+set to .* then the hla_genotype corresponding to this entry will be matched
+to all the sequences in the query alignment.
+
+The hla_genotype column should be a name from the LANL table.
 }
 
