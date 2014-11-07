@@ -113,7 +113,7 @@ shinyServer(function(input, output, session) {
       return(HTML("<strong>Help system could not be started! Contact package maintainer.<strong>"))
     } else {
       help_link <- paste0('<a href="https://github.com/philliplab/EpitopeMatcher/raw/master/',
-                          'inst/package_manual.pdf">Click for Detailed Package Help</a>')
+                          'inst/EpitopeMatcher_manual.pdf">Click for Detailed Package Help</a>')
       return(HTML(paste(h3('Help for EpitopeMatcher web app'),
                         p("Upload your input files using the menu on the left hand side. The files
                           are required to be in a specific format. You can see more details about
