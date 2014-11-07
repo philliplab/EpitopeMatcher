@@ -1,10 +1,26 @@
 #' The class for the data from LANL that describe the HLA genotype's epitopes
+#'
+#' This class is an extension of the data.frame class placing some extra
+#' restrictions on the data format. This data is typically obtained from
+#' http://www.hiv.lanl.gov/content/immunology/tables/tables.html.
+#'
+#' The data.frame has the following columns:
+#' \itemize{
+#'  \item{Epitope}
+#'  \item{Protein}
+#'  \item{HXB2.start}
+#'  \item{HXB2.end}
+#'  \item{Subprotein}
+#'  \item{HXB2.DNA.Contig}
+#'  \item{Subtype}
+#'  \item{Species}
+#'  \item{HLA}
+#' }
 #' 
 #' @rdname LANL_HLA_data
 #' @aliases LANL_HLA_data-class
 #' @exportClass LANL_HLA_data
 #' @export .LANL_HLA_data
-
 .LANL_HLA_data <- setClass(
   Class = 'LANL_HLA_data',
   representation = representation(),
@@ -26,23 +42,9 @@
 
 #' A function that reads a HLA genotype specification file
 #'
-#' This file is typically obtained from
-#' http://www.hiv.lanl.gov/content/immunology/tables/tables.html.
-#'
-#' The file must have the following columns:
-#' \itemize{
-#'  \item{Epitope}
-#'  \item{Protein}
-#'  \item{HXB2.start}
-#'  \item{HXB2.end}
-#'  \item{Subprotein}
-#'  \item{HXB2.DNA.Contig}
-#'  \item{Subtype}
-#'  \item{Species}
-#'  \item{HLA}
-#' }
-#' 
-#' The input format should be made more flexible in the future. 
+#' This function converts the file into an object of class LANL_HLA. See the
+#' documentation of that function for more details:
+#' \code{\link{.LANL_HLA_data}}
 #'
 #' @param file_name Name of the file
 #' @export

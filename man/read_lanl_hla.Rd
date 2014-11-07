@@ -9,23 +9,8 @@ read_lanl_hla(file_name)
 \item{file_name}{Name of the file}
 }
 \description{
-This file is typically obtained from
-http://www.hiv.lanl.gov/content/immunology/tables/tables.html.
-}
-\details{
-The file must have the following columns:
-\itemize{
- \item{Epitope}
- \item{Protein}
- \item{HXB2.start}
- \item{HXB2.end}
- \item{Subprotein}
- \item{HXB2.DNA.Contig}
- \item{Subtype}
- \item{Species}
- \item{HLA}
-}
-
-The input format should be made more flexible in the future.
+This function converts the file into an object of class LANL_HLA. See the
+documentation of that function for more details:
+\code{\link{.LANL_HLA_data}}
 }
 
