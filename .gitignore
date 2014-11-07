@@ -1,12 +1,3 @@
 *.swp
 *.swo
 *.Rprofile
-*.aux
-*.nav
-*.out
-*.pdf
-*.snm
-*.tex
-*.toc
-*.vrb
-EpitopeMatcherPresentation.log
