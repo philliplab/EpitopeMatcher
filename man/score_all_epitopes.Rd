@@ -20,8 +20,8 @@ expression that allows a progress bar to be updated when using the shiny web
 ui.}
 
 \item{substitutionMatrix}{substitution matrix representing the fixed substitution
-scores for an alignment. It cannot be used in conjunction with ‘patternQuality’
-and ‘subjectQuality’ arguments.}
+scores for an alignment. It cannot be used in conjunction with
+\emph{patternQuality} and \emph{subjectQuality} arguments.}
 }
 \description{
 This function is mostly just a wrapper for \code{\link{score_epitope}}.

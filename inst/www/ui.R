@@ -33,12 +33,12 @@ shinyUI(fluidPage(
                  h5("Epitope score computation status:"),
                  textOutput("epitope_score_status")
                  ),
-        tabPanel("Patient HLA File", tableOutput("patient_hla")),
-        tabPanel("LANL HLA File", tableOutput("lanl_hla")),
+        tabPanel("Patient HLA File", dataTableOutput("patient_hla")),
+        tabPanel("LANL HLA File", dataTableOutput("lanl_hla")),
         tabPanel("Query Alignment", verbatimTextOutput("query_alignment")),
-        tabPanel("Results", tableOutput("epitope_score_results")),
-        tabPanel("Epitopes Not Found", tableOutput("epitopes_not_in_seq")),
-        tabPanel("No Details About HLA", tableOutput("no_hla_details")),
+        tabPanel("Results", dataTableOutput("epitope_score_results")),
+        tabPanel("Epitopes Not Found", dataTableOutput("epitopes_not_in_seq")),
+        tabPanel("No Details About HLA", dataTableOutput("no_hla_details")),
         tabPanel("Help", htmlOutput("help_url"))
         )
     )

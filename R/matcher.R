@@ -274,8 +274,8 @@ match_epitopes <- function(query_alignment, patient_hla, lanl_hla_data,
 #' expression that allows a progress bar to be updated when using the shiny web
 #' ui.
 #' @param substitutionMatrix substitution matrix representing the fixed substitution 
-#' scores for an alignment. It cannot be used in conjunction with ‘patternQuality’ 
-#' and ‘subjectQuality’ arguments.
+#' scores for an alignment. It cannot be used in conjunction with
+#' \emph{patternQuality} and \emph{subjectQuality} arguments.
 #' @export
 
 score_all_epitopes <- function(the_scoring_jobs, query_alignment, range_expansion, 

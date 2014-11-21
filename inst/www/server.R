@@ -64,8 +64,8 @@ shinyServer(function(input, output, session) {
   output$lanl_hla_file_details <- renderPrint(print(read_data()$ln$msg))
   output$query_alignment_file_details <- renderPrint(print(read_data()$qa$msg))
 
-  output$patient_hla <- renderTable(read_data()$ph$data_set)
-  output$lanl_hla <- renderTable(read_data()$ln$data_set)
+  output$patient_hla <- renderDataTable(read_data()$ph$data_set)
+  output$lanl_hla <- renderDataTable(read_data()$ln$data_set)
   output$query_alignment <- renderPrint(read_data()$qa$data_set)
 
   epitope_scores <- reactive({
@@ -102,9 +102,9 @@ shinyServer(function(input, output, session) {
   })
                              
   output$epitope_score_status <- renderText(epitope_scores()$msg)
-  output$epitope_score_results <- renderTable(epitope_scores()$results)
-  output$epitopes_not_in_seq <- renderTable(epitope_scores()$error_log$epitopes_not_in_seq)
-  output$no_hla_details <- renderTable(epitope_scores()$error_log$no_hla_details)
+  output$epitope_score_results <- renderDataTable(epitope_scores()$results)
+  output$epitopes_not_in_seq <- renderDataTable(epitope_scores()$error_log$epitopes_not_in_seq)
+  output$no_hla_details <- renderDataTable(epitope_scores()$error_log$no_hla_details)
 
   output$help_url <- renderUI({
     help_port <- 5437
