@@ -16,5 +16,6 @@ test_that('Scoring_Job constructor and accessors work',{
 
   expect_that(y, is_a('Scoring_Job'))
   expect_that(get_epitope(y), equals("MGARASVLSGGELD"))
+  expect_that(get_hla_genotype(y), equals("B67"))
 })
 

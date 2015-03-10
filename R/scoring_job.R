@@ -66,6 +66,29 @@ function(the_scoring_job){
   
 )
 
+#' Returns the hla genotype associated with a scoring_job
+#'
+#' @param the_scoring_job The scoring job which epitope must be extracted
+#' @rdname get_hla_genotype-methods
+#' @export get_hla_genotype
+
+setGeneric("get_hla_genotype",
+           function(the_scoring_job){
+             standardGeneric("get_hla_genotype")
+           }
+)
+
+#' @rdname get_hla_genotype-methods
+#' @aliases get_hla_genotype
+setMethod("get_hla_genotype", 
+          c('Scoring_Job'),
+
+function(the_scoring_job){
+  return(the_scoring_job@hla_genotype)
+}
+  
+)
+
 #' Returns the hla details associated with a scoring_job
 #'
 #' @param the_scoring_job The scoring job whose details must be extracted
