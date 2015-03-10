@@ -299,6 +299,7 @@ score_all_epitopes <- function(the_scoring_jobs, query_alignment, range_expansio
     # Results processing
     hla_details <- as.data.frame(get_hla_details(the_scoring_jobs[[i]]),
                                  stringsAsFactors = FALSE)
+    hla_details$hla_genotype <- get_hla_genotype(the_scoring_jobs[[i]])
     if (!is.null(epitope_match$error_log$epitopes_not_in_seq)){
       epitopes_not_in_seq <- rbind(epitopes_not_in_seq, 
                                    cbind(epitope_match$error_log$epitopes_not_in_seq, 
