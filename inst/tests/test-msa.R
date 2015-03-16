@@ -3,7 +3,7 @@ context("MSA")
 test_that("read_query_alignment works", {
   x <- get_test_query_alignment()
   expect_that(x, is_a('AAStringSet'))
-  expect_that(digest(x), equals("05a81adefb3c71c3e873bae3bf6ad546"))
+  expect_that(digest(x), equals("f185347860033b93d61716969c19209e"))
 })
 
 test_that("get_patient_ids work", {

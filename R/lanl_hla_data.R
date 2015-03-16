@@ -90,6 +90,10 @@ read_lanl_hla <- function(file_name){
 
   lanl_hla$epitope <- gsub(" *", "", lanl_hla$epitope)
   lanl_hla$epitope <- gsub("\\?", "", lanl_hla$epitope)
+  if (length(grep('datalastupdate', lanl_hla$epitope[1], ignore.case=T)) != 0){
+    lanl_hla <- lanl_hla[-1,]
+    row.names(lanl_hla) <- 1:nrow(lanl_hla)
+  }
 
   return(.LANL_HLA_data(lanl_hla))
 }

@@ -311,7 +311,16 @@ score_all_epitopes <- function(the_scoring_jobs, query_alignment, range_expansio
       results <- rbind(results, alignment_score)
     }
   }
-  error_log$epitopes_not_in_seq <- epitopes_not_in_seq[order(epitopes_not_in_seq$alignment_score),]
+  if (is.null(epitopes_not_in_seq$alignment_score)){
+#    error_log$epitopes_not_in_seq <- data.frame(alignment_score = numeric(0),
+#                                pattern = character(0),
+#                                subject = character(0),
+#                                global_alignment_start = numeric(0),
+#                                global_alignment_end = numeric(0))
+    error_log$epitopes_not_in_seq <- NULL
+  } else {
+    error_log$epitopes_not_in_seq <- epitopes_not_in_seq[order(epitopes_not_in_seq$alignment_score),]
+  }
 
   return(list(results = results,
               error_log = error_log,
