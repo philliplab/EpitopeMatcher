@@ -2,3 +2,5 @@
 .gitignore
 .git
 .*.swp
+^.*\.Rproj$
+^\.Rproj\.user$
