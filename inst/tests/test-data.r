@@ -8,5 +8,5 @@ test_that('the correct test data files are supplied', {
   expect_that(digest(x), equals("c8ffd415e9e5d74f9e068a8907590d74"))
 
   x <- get_test_query_alignment()
-  expect_that(digest(x), equals("f185347860033b93d61716969c19209e"))
+  expect_that(digest(x), equals("49892fc52f9dc19bbbaf41227450ff20"))
 })
