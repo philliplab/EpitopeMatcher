@@ -25,3 +25,4 @@ Collate:
     'scoring_job.R'
     'shiny_app.R'
 RoxygenNote: 7.1.1
+Encoding: UTF-8
