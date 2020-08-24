@@ -21,5 +21,7 @@ Collate:
     'patient_HLA.R'
     'msa.R'
     'matcher.R'
+    'misc.R'
     'scoring_job.R'
     'shiny_app.R'
+RoxygenNote: 7.1.1
