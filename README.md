@@ -20,13 +20,9 @@ Next, install devtools' depedancies with apt-get:
 sudo apt-get install libssl-dev libxml2-dev libcurl4-gnutls-dev
 ```
 
-Then, from within R, install devtools:
+Then, from within R, install devtools and the BioConductor dependencies:
 ```{r}
 install.packages('devtools', repo = 'http://cran.rstudio.com/')
-```
-
-Install the BioConductor dependencies:
-```r
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
