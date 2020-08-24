@@ -108,7 +108,11 @@ shinyServer(function(input, output, session) {
 
   output$help_url <- renderUI({
     help_port <- 5437
-    status <- .Call(tools:::startHTTPD, "0.0.0.0", help_port)
+    server_start <- try(tools:::startHTTPD, silent = T)
+    if (class(server_start) == 'try-error'){
+      server_start <- try(tools:::C_startHTTPD, silent = T)
+    }
+    status <- .Call(server_start, "0.0.0.0", help_port)
     if (status != 0L) {
       return(HTML("<strong>Help system could not be started! Contact package maintainer.<strong>"))
     } else {
