@@ -4,20 +4,43 @@ EpitopeMatcher
 A package that can be used to find out how well the epitopes in a patient's virus' will be
 recognized by the HLA's present in the patient.
 
-It can be installed directly from github using devtools. In an R session issue
-these commands:
+## Installation Instructions for Ubuntu
+
+Make sure you have a recent version of R. Follow
+the instructions in the following link to set up the correct repositiory for apt:
+http://stackoverflow.com/questions/10476713/how-to-upgrade-r-in-ubuntu. 
+
+Make sure that both r-base and r-base-dev is installed
+```{sh}
+sudo apt-get install r-base r-base-dev
+```
+
+Next, install devtools' depedancies with apt-get:
+```{sh}
+sudo apt-get install libssl-dev libxml2-dev libcurl4-gnutls-dev
+```
+
+Then, from within R, install devtools:
+```{r}
+install.packages('devtools', repo = 'http://cran.rstudio.com/')
+```
+
+Install the BioConductor dependencies:
 ```r
-local({r <- getOption("repos")
-       r["CRAN"] <- "http://cran.rstudio.com" 
-       options(repos=r)
-})
-source("http://bioconductor.org/biocLite.R")
-biocLite("Biostrings", ask=FALSE)
-install.packages('devtools')
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("Biostrings")
+```
+
+Finally install the latest version of shiny and then EpitopeMatcher:
+```r
 library(devtools)
 install_github('rstudio/shiny')
 install_github('philliplab/EpitopeMatcher')
 ```
+
+## Using EpitopeMatcher
 
 To run the web UI:
 ```r
