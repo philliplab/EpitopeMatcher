@@ -118,6 +118,8 @@ shinyServer(function(input, output, session) {
     } else {
       help_link <- paste0('<a href="https://github.com/philliplab/EpitopeMatcher/raw/master/',
                           'inst/EpitopeMatcher_manual.pdf">Click for Detailed Package Help</a>')
+      test_data_link <- paste0('<a href="https://github.com/philliplab/EpitopeMatcher/raw/master/',
+                               'inst/test_data/EpitopeMatcher_test_data.zip"> Click to Download Test Data</a>')
       return(HTML(paste(h3('Help for EpitopeMatcher web app'),
                         p("Upload your input files using the menu on the left hand side. The files
                           are required to be in a specific format. You can see more details about
@@ -133,6 +135,8 @@ shinyServer(function(input, output, session) {
                         p("If the link above does not work, you can access the help by starting
                           an R session and typing help(package = 'EpitopeMatcher') into the
                           prompt and hitting enter"),
+                        p("Test data can be obtained from the following link:"),
+                        test_data_link,
                         sep = '\n\n')))
     }
   })
