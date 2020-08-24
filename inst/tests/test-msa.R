@@ -9,9 +9,9 @@ test_that("read_query_alignment works", {
 test_that("get_patient_ids work", {
   x <- get_test_query_alignment()
   ids <- get_patient_ids(x)
-  expect_that("hxb2" %in% ids, is_true())
-  expect_that("hxb2 " %in% ids, is_false())
-  expect_that("pat02" %in% ids, is_true())
+  expect_true("hxb2" %in% ids)
+  expect_false("hxb2 " %in% ids)
+  expect_true("pat02" %in% ids)
 
   x <- AAStringSet(structure(c( "MG", "MG", "MG", "MG"), 
       .Names = c("17h00,hxb2 ,sdklfj", 
@@ -19,11 +19,11 @@ test_that("get_patient_ids work", {
                  ",pat02", 
                  "hello, pat03")))
   ids <- get_patient_ids(x, ',', 2)
-  expect_that("hxb2" %in% ids, is_true())
-  expect_that("hxb2 " %in% ids, is_false())
-  expect_that("pat02" %in% ids, is_true())
-  expect_that("hello" %in% ids, is_false())
+  expect_true("hxb2" %in% ids)
+  expect_false("hxb2 " %in% ids)
+  expect_true("pat02" %in% ids)
+  expect_false("hello" %in% ids)
 
   ids <- get_patient_ids(x, sep = NULL)
-  expect_that("17h00,hxb2 ,sdklfj" %in% ids, is_true())
+  expect_true("17h00,hxb2 ,sdklfj" %in% ids)
 })

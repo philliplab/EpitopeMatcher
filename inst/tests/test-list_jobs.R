@@ -14,7 +14,7 @@ test_that('flatten_lanl_hla works', {
   lanl_hla <- get_test_lanl_hla_data()
 
   flat_lanl_hla <- flatten_lanl_hla(lanl_hla)
-  expect_that("MGARASVLSGGELD" %in% flat_lanl_hla[,1], is_false())
+  expect_false("MGARASVLSGGELD" %in% flat_lanl_hla[,1])
   expect_that(sum("GELDRWEKI" == flat_lanl_hla[,1]), equals(2))
 })
 

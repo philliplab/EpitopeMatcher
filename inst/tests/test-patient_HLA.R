@@ -17,7 +17,7 @@ test_that("read_patient_hla works", {
 test_that("get_patient_ids works", {
   x <- get_test_patient_hla_data()
   ids <- get_patient_ids(x)
-  expect_that("pat01" %in% ids, is_true())
-  expect_that("pat0[13]" %in% ids, is_true())
-  expect_that("B27" %in% ids, is_false())
+  expect_true("pat01" %in% ids)
+  expect_true("pat0[13]" %in% ids)
+  expect_false("B27" %in% ids)
 })
