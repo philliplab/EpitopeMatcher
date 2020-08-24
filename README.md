@@ -25,6 +25,17 @@ library(EpitopeMatcher)
 run_EpitopeMatcher_app()
 ```
 
+To get some test data:
+```r
+library(EpitopeMatcher)
+get_set_of_test_data()
+```
+This will produce 3 sample files:
+
+- test_patient_hla_genotypes.csv as produced by get_test_patient_hla_data() which contains the details of the patient's HLA genotype.
+- test_lanl_hla_data.csv as produced by get_test_lanl_hla_data() which contains the details of the hla genotypes (location in the genome, epitope etc).
+- test_query_alignment.fasta as produced by get_test_query_alignment() which contains an alignment of sequences of the patient's quasispecies to HXB2.
+
 To use EpitopeMatcher in an R session, see the help file of these functions:
 * read_lanl_hla
 * read_patient_hla
