@@ -81,7 +81,7 @@ function examples {
     echo "   etm rscript hello-world.r"
     echo "   etm serve"
     echo "   etm get-test-set"
-    echo "   etm info"    
+    echo "   etm info"
     echo ""
 }
 
@@ -95,13 +95,13 @@ function advanced_examples {
 
 
 function build {
-    cd "${repo_dir}/docker"
-    docker build -t "${default_image}" .
+    cd "${repo_dir}/container"
+    podman build -t "${default_image}" .
 }
 
 
 function run {
-    docker run --rm --user $(id -u):$(id -g) -it -p "${default_port_forward}" \
+    podman run --rm -it -p "${default_port_forward}" \
         --workdir "${project_dir}" -v "${project_dir}:${project_dir}" \
         --entrypoint "${default_entrypoint}" "${default_image}" "$@"
 }
@@ -129,7 +129,7 @@ function resolve_repo {
 }
 
 
-## ETM Global variables 
+## ETM Global variables
 repo_dir="$(resolve_repo)"
 project_dir="$(pwd)"
 default_image="etm:latest"
@@ -137,7 +137,7 @@ default_host_port=5436
 default_container_port=5436
 default_port_forward="${default_host_port}:${default_container_port}"
 default_entrypoint="Rscript"
-  
+
 case "$1" in
     -h | --help)
     help
@@ -146,7 +146,7 @@ case "$1" in
     build)
     build
     ;;
-         
+
     run)
     shift
     run "$*"
