@@ -194,11 +194,13 @@ case "$1" in
     ;;
 
     serve)
-    run -e "library(EpitopeMatcher); run_EpitopeMatcher_app();"
+    chosen_entrypoint="Rscript -e"
+    run "library(EpitopeMatcher); run_EpitopeMatcher_app();"
     ;;
 
     get-test-set)
-    run -e "library(EpitopeMatcher); get_set_of_test_data();"
+    chosen_entrypoint="Rscript -e"
+    run "library(EpitopeMatcher); get_set_of_test_data();"
     ;;
 
     info)
