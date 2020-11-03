@@ -9,25 +9,29 @@ There are two ways to install EpitopeMatcher:
 - Use podman which is a container system build on docker. (this is the easy way)
 - Install it into your OS like 'normal' software.
 
-## Installation using podman
+## Installation using podman/docker
 
 Install podman on your computer: https://podman.io/getting-started/installation
+
+Optionally [follow rootless mode instructions](https://github.com/containers/podman/blob/master/docs/tutorials/rootless_tutorial.md) if you are a root user and want regular users of your system to be able to run EpitopeMatcher environments securely on their own.
+
+Note: Podman is completely optional if you already have Docker installed. Podman will however take presidence if both are installed.
 
 Clone the EpitopeMatcher repo:
 ```{sh}
 git clone https://github.com/philliplab/EpitopeMatcher
 ```
 
-Use the `edm` script to build the container and serve the shiny app:
+Use the <ins>**E**</ins>pi<ins>**t**</ins>ope<ins>**M**</ins>atcher (`etm`) script to build the container and serve the shiny app:
 
 ```{sh}
 cd EpitopeMatcher
-./edm -h
-./edm build
-./edm serve
+./etm -h
+./etm build
+./etm serve
 ```
 
-Big thanks to Dean Kayton (https://github.com/dnk8n) for contributing the container file and `edm` script.
+Big thanks to Dean Kayton (https://github.com/dnk8n) for contributing the container file and `etm` script.
 
 ## Installation Instructions for Ubuntu
 
