@@ -4,6 +4,31 @@ EpitopeMatcher
 A package that can be used to find out how well the epitopes in a patient's virus' will be
 recognized by the HLA's present in the patient.
 
+There are two ways to install EpitopeMatcher:
+
+- Use podman which is a container system build on docker. (this is the easy way)
+- Install it into your OS like 'normal' software.
+
+## Installation using podman
+
+Install podman on your computer: https://podman.io/getting-started/installation
+
+Clone the EpitopeMatcher repo:
+```{sh}
+git clone https://github.com/philliplab/EpitopeMatcher
+```
+
+Use the `edm` script to build the container and serve the shiny app:
+
+```{sh}
+cd EpitopeMatcher
+./edm -h
+./edm build
+./edm serve
+```
+
+Big thanks to Dean Kayton (https://github.com/dnk8n) for contribution the container file and `edm` script.
+
 ## Installation Instructions for Ubuntu
 
 Make sure you have a recent version of R. Follow
