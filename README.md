@@ -27,7 +27,7 @@ cd EpitopeMatcher
 ./edm serve
 ```
 
-Big thanks to Dean Kayton (https://github.com/dnk8n) for contribution the container file and `edm` script.
+Big thanks to Dean Kayton (https://github.com/dnk8n) for contributing the container file and `edm` script.
 
 ## Installation Instructions for Ubuntu
 
