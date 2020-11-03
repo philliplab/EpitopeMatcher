@@ -1,0 +1,217 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+
+function help {
+    description
+    usage
+    commands
+    options
+    notes
+    examples
+    advanced_examples
+    exit 0
+}
+
+
+function description {
+    #     -------------------------------------------------------------------------------
+    echo -e "\033[1mEpitope Matcher\033[0m"
+    echo "A package that can be used to find out how well the epitopes in a patient's"
+    echo "virus' will be recognized by the HLA's present in the patient."
+    echo ""
+}
+
+
+function usage {
+    #     -------------------------------------------------------------------------------
+    echo "Usage:"
+    echo "   etm -h | --help"
+    echo "   etm info"
+    echo "   etm build [--image]"
+    echo "   etm run [--image] [--env] [--publish] [--entrypoint] <command>"
+    echo "   etm r [--image] [--env] [--publish] <command>"
+    echo "   etm rscript [--image] [--env] [--publish] <path>"
+    echo "   etm serve [--image] [--env] [--publish]"
+    echo "   etm get-test-set [--image] [--env]"
+    echo ""
+}
+
+
+function commands {
+    #     -------------------------------------------------------------------------------
+    echo "Commands:"
+    echo "   build                       Build container image"
+    echo "   run                         Run containerized command against entrypoint"
+    echo "   r                           Run containerized R command"
+    echo "   rscript                     Run containerized R script"
+    echo "   serve                       Serve web application"
+    echo "   get-test-set                Download test set to ${project_dir}"
+    echo "   info                        Print information about environment"
+    echo ""
+}
+
+
+function options {
+    #     -------------------------------------------------------------------------------
+    echo "Options:"
+    echo "   -h --help                   Show this screen"
+    echo "   -i --image=<name:tag>       [Not Available] Image [default: ${default_image}]"
+    echo "   -p --publish=<host:guest>   [Not Available] Port forward [default: ${default_port_forward}]"
+    echo "   -e --env=<key:val>          [Not Available] Environment"
+    echo "   --entrypoint=<str>          [Not Available] Entrypoint [default: ${default_entrypoint}]"
+    echo ""
+}
+
+
+function notes {
+    #     -------------------------------------------------------------------------------
+    echo "Notes:"
+    echo "   - To run from any location, symlink ${repo_dir}/etm to a directory on your PATH"
+    echo "   - Files are only accessible from ${project_dir} down"
+    echo ""
+}
+
+
+function examples {
+    #        -------------------------------------------------------------------------------
+    echo    "Examples:"
+    echo    "   etm build"
+    echo -e "   etm run bash  \033[33m# Drop into bash shell\033[0m"
+    echo -e "   etm run echo Hello World!  \033[33m# No quotes needed for single line command\033[0m"
+    echo -e "   etm run 'echo Hello World!; echo Hello World again!'  \033[33m# Single quotes needed for multi line command\033[0m"
+    echo -e "   etm run bash hello-world.sh  \033[33m# Specify a program to run a script\033[0m"
+    echo -e "   etm run ./hello-world.sh  \033[33m# Run an executable script containing appropriate shebang\033[0m"
+    echo -e "   etm run R  \033[33m# Drop into R shell\033[0m"
+    echo -e "   etm run \"Rscript -e '1 + 1'\"  \033[33m# Careful consideration of quoting required in this case, rather use convenience command for R\033[0m"
+    echo -e "   etm run Rscript hello-world.r  \033[33m# Specify a program to run a script\033[0m"
+    echo -e "   etm run ./hello-world.r  \033[33m# Run an executable script containing appropriate shebang\033[0m"
+    echo -e "   etm r 1 + 1  \033[33m# Run R single-line command\033[0m"
+    echo -e "   etm r 'print(\"Hello World!\"); print(\"Hello World again!\");'  \033[33m# Run R multi-line command\033[0m"
+    echo -e "   etm rscript hello-world.r  \033[33m# Run a script with Rscript\033[0m"
+    echo    "   etm serve"
+    echo    "   etm get-test-set"
+    echo    "   etm info"
+    echo ""
+}
+
+
+function advanced_examples {
+    #     -------------------------------------------------------------------------------
+    echo "Advanced Examples:"
+    echo "   [Not Available] etm build -i etm-dev:0.01a"
+    echo "   [Not Available] etm run -i etm-dev:0.01a -e name=World --entrypoint 'bash -c' 'echo Hello \${name}!'"
+}
+
+
+function build {
+    cd "${repo_dir}/container"
+    "${container_engine}" build -t "${default_image}" .
+}
+
+
+function run {
+    "${container_engine}" run --rm -it -p "${default_port_forward}" \
+        --workdir "${project_dir}" -v "${project_dir}:${project_dir}" \
+        "${default_image}" ${chosen_entrypoint} "$@"
+}
+
+
+function info {
+    echo -e "\033[1mEpitope Matcher Information\033[0m"
+    echo "container_engine: ${container_engine}"
+    echo "repo_dir: ${repo_dir}"
+    echo "project_dir: ${project_dir}"
+    echo "default_image: ${default_image}"
+    echo "default_port_forward: ${default_port_forward}"
+    echo "default_entrypoint: ${default_entrypoint}"
+}
+
+
+function resolve_repo {
+    ## Copied from https://stackoverflow.com/a/697552/1782641
+    SELF_PATH=$(cd -P -- "$(dirname -- "$0")" && pwd -P) && SELF_PATH=$SELF_PATH/$(basename -- "$0")
+    while [[ -h $SELF_PATH ]]; do
+        DIR=$(dirname -- "$SELF_PATH")
+        SYM=$(readlink "$SELF_PATH")
+        SELF_PATH=$(cd "$DIR" && cd "$(dirname -- "$SYM")" && pwd)/$(basename -- "$SYM")
+    done
+    echo "$(dirname ${SELF_PATH})"
+}
+
+
+function set_container_engine {
+    # Prefer podman, fall back to docker
+    if ! command -v podman &> /dev/null
+    then
+        if ! command -v docker &> /dev/null
+        then
+            >&2 echo "Error. Requirement not satisfied. Either podman or docker must be installed." 
+            exit 1
+        else
+            echo docker
+        fi
+    else
+        echo podman
+    fi
+}
+
+## ETM Global variables
+container_engine="${container_engine:-$(set_container_engine)}"
+repo_dir="$(resolve_repo)"
+project_dir="$(pwd)"
+default_image="etm:latest"
+default_host_port=5436
+default_container_port=5436
+default_port_forward="${default_host_port}:${default_container_port}"
+default_entrypoint="sh -c"
+
+case "$1" in
+    -h | --help)
+    help
+    ;;
+
+    build)
+    build
+    ;;
+
+    run)
+    shift
+    chosen_entrypoint="${chosen_entrypoint:-${default_entrypoint}}"
+    run "$*"
+    ;;
+
+    r)
+    shift
+    chosen_entrypoint="Rscript -e"
+    run "$*"
+    ;;
+
+    rscript)
+    shift
+    chosen_entrypoint="Rscript"
+    run "$*"
+    ;;
+
+    serve)
+    chosen_entrypoint="Rscript -e"
+    run "library(EpitopeMatcher); run_EpitopeMatcher_app();"
+    ;;
+
+    get-test-set)
+    chosen_entrypoint="Rscript -e"
+    run "library(EpitopeMatcher); get_set_of_test_data();"
+    ;;
+
+    info)
+    info
+    ;;
+
+    *)
+    echo "\`$0 $@\` is an invalid command, see usage below"
+    echo ""
+    usage
+    exit 1
+    ;;
+
+esac
